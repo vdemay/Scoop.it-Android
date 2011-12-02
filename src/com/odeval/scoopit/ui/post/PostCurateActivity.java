@@ -2,13 +2,21 @@ package com.odeval.scoopit.ui.post;
 
 import java.net.URLEncoder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.odeval.scoopit.Constants;
@@ -17,6 +25,8 @@ import com.odeval.scoopit.OAuth.OAuthFlowApp;
 import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.image.ImageLoader;
 import com.odeval.scoopit.model.Post;
+import com.odeval.scoopit.model.Topic;
+import com.odeval.scoopit.ui.list.adapater.CuratedPostListAdapter;
 
 public class PostCurateActivity extends Activity {
     private Post post;
@@ -48,12 +58,12 @@ public class PostCurateActivity extends Activity {
         });	
         ((Button)findViewById(R.id.curate)).setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        		doCuratePost(post);
+        		curatePost(post);
         	}
         });	
         ((Button)findViewById(R.id.discard)).setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        		doDeletePost(post);
+        		deletePost(post);
         	}
         });	
     }
@@ -72,13 +82,73 @@ public class PostCurateActivity extends Activity {
     	}
         imageLoader.DisplayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));    	
     }
+    
+    ProgressDialog progress;
+    
+    private void curatePost(final Post post) {
+        new AsyncTask<Void, Void, Post>() {
 
-    private void doCuratePost(Post post) {
+            @Override
+            protected void onPreExecute() {
+                progress = ProgressDialog.show(PostCurateActivity.this, "Please Wait", "Curating post...", true);
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Post doInBackground(Void... params) {
+            	try {
+            		return doCuratePost(post);
+            	} catch (JSONException e) {
+					e.printStackTrace();
+				}
+            	return null;
+            }
+
+            @Override
+            protected void onPostExecute(Post result) {
+                super.onPostExecute(result);
+                progress.hide();
+            }
+
+        }.execute();
+
+    }
+
+    private void deletePost(final Post post) {
+        new AsyncTask<Void, Void, Post>() {
+
+            @Override
+            protected void onPreExecute() {
+                progress = ProgressDialog.show(PostCurateActivity.this, "Please Wait", "Deleting post...", true);
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Post doInBackground(Void... params) {
+            	doDeletePost(post);
+            	return post;
+            }
+
+            @Override
+            protected void onPostExecute(Post result) {
+                super.onPostExecute(result);
+                progress.hide();
+            }
+
+        }.execute();
+
+    	
+    }
+
+    private Post doCuratePost(Post post) throws JSONException {
         String jsonOutput = NetworkingUtils.sendRestfullRequest(Constants.POST_ACTION_REQUEST + "?id="
                 + post.getId() + "&action=accept&imageUrl=" + URLEncoder.encode(post.getImageUrls().get(currentImage)),
                 OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(this)));
         System.out.println("jsonOutput : " + jsonOutput);
-
+        JSONObject jsonPost = new JSONObject(jsonOutput);
+        Post ret = new Post();
+        ret.popupateFromJsonObject(jsonPost);
+        return ret;
     }
     private void doDeletePost(Post post) {
         String jsonOutput = NetworkingUtils.sendRestfullRequest(Constants.POST_ACTION_REQUEST + "?id="
