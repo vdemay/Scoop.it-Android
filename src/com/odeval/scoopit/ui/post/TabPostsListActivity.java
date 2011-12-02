@@ -3,31 +3,27 @@ package com.odeval.scoopit.ui.post;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import oauth.signpost.OAuth;
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-
-import com.odeval.scoopit.Constants;
-import com.odeval.scoopit.R;
-import com.odeval.scoopit.helper.NetworkingUtils;
-import com.odeval.scoopit.model.Post;
-import com.odeval.scoopit.model.Topic;
-import com.odeval.scoopit.ui.list.adapater.CurablePostListAdapter;
-import com.odeval.scoopit.ui.list.adapater.CuratedPostListAdapter;
-import com.odeval.scoopit.ui.topic.CuratedTopicListActivity;
-
 import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
+
+import com.odeval.scoopit.Constants;
+import com.odeval.scoopit.R;
+import com.odeval.scoopit.OAuth.OAuthFlowApp;
+import com.odeval.scoopit.helper.NetworkingUtils;
+import com.odeval.scoopit.model.Post;
+import com.odeval.scoopit.model.Topic;
+import com.odeval.scoopit.ui.list.adapater.CurablePostListAdapter;
+import com.odeval.scoopit.ui.list.adapater.CuratedPostListAdapter;
 
 public class TabPostsListActivity extends TabActivity implements OnTabChangeListener {
 
@@ -50,6 +46,7 @@ public class TabPostsListActivity extends TabActivity implements OnTabChangeList
                 R.id.tab_post_curated_list));
 
         mTabHost.setCurrentTab(0);
+        
     }
     
     @Override
@@ -78,7 +75,7 @@ public class TabPostsListActivity extends TabActivity implements OnTabChangeList
                     curableTopicLoaded = true;
                     String jsonOutput = NetworkingUtils.sendRestfullRequest(Constants.CURATED_POST_REQUEST + "?id="
                             + topicId,
-                            getConsumer(PreferenceManager.getDefaultSharedPreferences(TabPostsListActivity.this)));
+                            OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(TabPostsListActivity.this)));
                     System.out.println("jsonOutput : " + jsonOutput);
                     JSONObject jsonResponse;
                     jsonResponse = new JSONObject(jsonOutput);
@@ -134,7 +131,7 @@ public class TabPostsListActivity extends TabActivity implements OnTabChangeList
                     curatedTopicLoaded = true;
                     String jsonOutput = NetworkingUtils.sendRestfullRequest(Constants.CURABLE_POST_REQUEST + "&id="
                             + topicId,
-                            getConsumer(PreferenceManager.getDefaultSharedPreferences(TabPostsListActivity.this)));
+                            OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(TabPostsListActivity.this)));
                     System.out.println("jsonOutput : " + jsonOutput);
                     JSONObject jsonResponse;
                     jsonResponse = new JSONObject(jsonOutput);
@@ -153,19 +150,21 @@ public class TabPostsListActivity extends TabActivity implements OnTabChangeList
                 super.onPostExecute(result);
                 progress.hide();
                 // populate
-                ListView lv = (ListView) findViewById(R.id.tab_post_curable_list);
+                final ListView lv = (ListView) findViewById(R.id.tab_post_curable_list);
                 lv.setAdapter(new CurablePostListAdapter(TabPostsListActivity.this,
                         result.getCurablePosts()));
+                lv.setOnItemClickListener(new OnItemClickListener() {
+                	public void onItemClick(AdapterView< ? > parent, View view, int position, long id) {
+                		Post p = (Post) lv.getAdapter().getItem(position);
+                        
+                        Intent i = new Intent(TabPostsListActivity.this, PostCurateActivity.class);
+                        i.putExtra("post", p);
+                        TabPostsListActivity.this.startActivity(i);
+                		
+                	}
+                });
             }
 
         }.execute();
-    }
-
-    private OAuthConsumer getConsumer(SharedPreferences prefs) {
-        String token = prefs.getString(OAuth.OAUTH_TOKEN, "");
-        String secret = prefs.getString(OAuth.OAUTH_TOKEN_SECRET, "");
-        OAuthConsumer consumer = new CommonsHttpOAuthConsumer(Constants.CONSUMER_KEY, Constants.CONSUMER_SECRET);
-        consumer.setTokenWithSecret(token, secret);
-        return consumer;
     }
 }

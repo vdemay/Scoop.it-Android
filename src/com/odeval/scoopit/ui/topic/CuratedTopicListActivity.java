@@ -1,16 +1,11 @@
 package com.odeval.scoopit.ui.topic;
 
-import oauth.signpost.OAuth;
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.odeval.scoopit.Constants;
+import com.odeval.scoopit.OAuth.OAuthFlowApp;
 import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.model.Topic;
 import com.odeval.scoopit.model.User;
@@ -50,7 +46,7 @@ public class CuratedTopicListActivity extends ListActivity {
             protected User doInBackground(Void... params) {
 
                 try {
-                    String jsonOutput = NetworkingUtils.sendRestfullRequest(Constants.PROFILE_REQUEST, getConsumer(PreferenceManager.getDefaultSharedPreferences(CuratedTopicListActivity.this)));
+                    String jsonOutput = NetworkingUtils.sendRestfullRequest(Constants.PROFILE_REQUEST, OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(CuratedTopicListActivity.this)));
                     System.out.println("jsonOutput : " + jsonOutput);
                     JSONObject jsonResponse;
                     jsonResponse = new JSONObject(jsonOutput);
@@ -89,12 +85,4 @@ public class CuratedTopicListActivity extends ListActivity {
     
     }
     
-    private OAuthConsumer getConsumer(SharedPreferences prefs) {
-        String token = prefs.getString(OAuth.OAUTH_TOKEN, "");
-        String secret = prefs.getString(OAuth.OAUTH_TOKEN_SECRET, "");
-        OAuthConsumer consumer = new CommonsHttpOAuthConsumer(Constants.CONSUMER_KEY, Constants.CONSUMER_SECRET);
-        consumer.setTokenWithSecret(token, secret);
-        return consumer;
-    }
-
 }

@@ -14,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.odeval.scoopit.Constants;
+import com.odeval.scoopit.PrivateConstants;
 import com.odeval.scoopit.R;
 import com.odeval.scoopit.ui.topic.CuratedTopicListActivity;
 
@@ -39,7 +40,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         try {
             System.setProperty("debug", "true");
-            this.consumer = new CommonsHttpOAuthConsumer(Constants.CONSUMER_KEY, Constants.CONSUMER_SECRET);
+            this.consumer = new CommonsHttpOAuthConsumer(PrivateConstants.CONSUMER_KEY, PrivateConstants.CONSUMER_SECRET);
             this.consumer.setMessageSigner(new HmacSha1MessageSigner());
 
             this.provider = new CommonsHttpOAuthProvider(Constants.REQUEST_URL, Constants.ACCESS_URL,
