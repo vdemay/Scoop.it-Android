@@ -1,7 +1,5 @@
 package com.odeval.scoopit.OAuth;
 
-import com.odeval.scoopit.Constants;
-
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
 import android.content.Context;
@@ -9,6 +7,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.odeval.scoopit.Constants;
 
 /**
  * An asynchronous task that communicates with Google to 

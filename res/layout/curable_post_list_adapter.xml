@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -8,18 +8,23 @@
     
     <ImageView
     	android:id="@+id/list_adapter_post_image"
-    	android:layout_width="50dp"
-    	android:layout_height="50dp"
+    	android:layout_width="64dip"
+    	android:layout_height="64dip"
     	android:src="@drawable/default_icon"
-    	android:paddingTop="2dp"/>
+    	android:paddingTop="2dp"
+    	android:layout_alignParentLeft="true"
+    	android:layout_alignParentTop="true"
+    	/>
     	
    	 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_toRightOf="@id/list_adapter_post_image"
 	    android:orientation="vertical"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:gravity="center_horizontal"
 	    android:paddingTop="2dp"
 	    android:paddingBottom="2dp"
+		android:id="@+id/textLayout"
 	    >
 	    <TextView
 	    	android:id="@+id/list_adapter_post_title"
@@ -34,5 +39,49 @@
 	    	android:layout_height="wrap_content"
 	    	android:paddingLeft="5dp"
 	    	/>
-	    </LinearLayout>
-</LinearLayout>
+	</LinearLayout>
+   	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"		
+		android:layout_below="@id/textLayout"
+		android:layout_toRightOf="@id/list_adapter_post_image"
+		android:padding="5dip"
+		android:gravity="right"
+		android:focusable="false"
+		android:focusableInTouchMode="false"
+		>
+   	   	<Button 
+   	   	    android:layout_width="60dip"
+   	   	    android:layout_height="wrap_content"
+   	   	    android:text="accept"
+			android:padding="5dip"
+			android:background="@drawable/rcgreen"
+			android:layout_gravity="left"
+			android:gravity="center"
+			android:textStyle="bold"
+			android:id="@+id/btn_accept"
+   	   	    />
+   	   	<Button 
+   	   	    android:layout_width="60dip"
+   	   	    android:layout_height="wrap_content"
+			android:layout_marginLeft="30dip"
+   	   	    android:text="delete"
+			android:padding="5dip"
+			android:background="@drawable/rcred"
+			android:gravity="center"
+			android:textStyle="bold"
+			android:id="@+id/btn_delete"
+   	   	    />
+   	   	<Button 
+   	   	    android:layout_width="60dip"
+   	   	    android:layout_height="wrap_content"
+			android:layout_marginLeft="30dip"
+   	   	    android:text="edit"
+			android:padding="5dip"
+			android:background="@drawable/rcblue"
+			android:gravity="center"
+			android:textStyle="bold"
+			android:id="@+id/btn_edit"
+   	   	    />
+   	   	</LinearLayout>   	     
+</RelativeLayout>

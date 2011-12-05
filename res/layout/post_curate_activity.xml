@@ -15,10 +15,18 @@
 					  >			    
     			<Button android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:id="@+id/prev_image"
-					android:text="prev"></Button>
+					android:text="prev"
+					android:gravity="center"
+					android:textStyle="bold"
+					android:background="@drawable/rcblue"					
+					/>
 				<Button android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:id="@+id/next_image"
-					android:text="next"></Button>
+					android:text="next"
+					android:gravity="center"
+					android:textStyle="bold"
+					android:background="@drawable/rcblue"					
+					/>
     			    			    
 			</LinearLayout>
 		    			    
@@ -42,10 +50,18 @@
 					  >			    
    			<Button android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:id="@+id/discard"
-				android:text="discard"></Button>
+				android:text="discard"
+				android:gravity="center"
+				android:textStyle="bold"
+				android:background="@drawable/rcred"					
+				/>
 			<Button android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:id="@+id/curate"
-				android:text="curate"></Button>
+				android:text="curate"
+				android:gravity="center"
+				android:textStyle="bold"
+				android:background="@drawable/rcgreen"					
+				/>
     			    			    
 			</LinearLayout>
 

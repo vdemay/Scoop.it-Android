@@ -79,6 +79,8 @@ public class CuratedTopicListActivity extends ListActivity {
                 
                 Intent i = new Intent(CuratedTopicListActivity.this, TabPostsListActivity.class);
                 i.putExtra("topicId", "" + t.getId());
+                i.putExtra("topicName", t.getName());
+                i.putExtra("topicImage", t.getMediumImageUrl());
                 CuratedTopicListActivity.this.startActivity(i);
             }
         });

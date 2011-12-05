@@ -7,6 +7,27 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
+		<LinearLayout
+	        android:layout_width="fill_parent"
+    	    android:layout_height="wrap_content"
+    	    android:padding="5dip">
+			<ImageView 
+			    android:layout_width="32dip"
+			    android:layout_height="32dip"
+			    android:id="@+id/topic_icon"
+				/>
+			<TextView
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:maxLines="1"
+			    android:textStyle="bold"
+			    android:textSize="20sp"
+			    android:textColor="@color/topic_title"
+			    android:id="@+id/topic_title"
+			    android:paddingLeft="5dip"
+			    android:gravity="left|top"
+			    />
+		</LinearLayout>    
         <TabWidget
             android:id="@android:id/tabs"
             android:layout_width="fill_parent"
@@ -15,12 +36,12 @@
             android:id="@android:id/tabcontent"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
-            <ListView android:id="@+id/tab_post_curable_list"
+            <com.markupartist.android.widget.PullToRefreshListView android:id="@+id/tab_post_curable_list"
                android:layout_width="match_parent"
                android:layout_height="match_parent"
                android:layout_weight="1"
                android:drawSelectorOnTop="false"/>
-            <ListView android:id="@+id/tab_post_curated_list"
+            <com.markupartist.android.widget.PullToRefreshListView android:id="@+id/tab_post_curated_list"
                android:layout_width="match_parent"
                android:layout_height="match_parent"
                android:layout_weight="1"

@@ -1,22 +1,20 @@
 package com.odeval.scoopit.ui.post;
 
 import java.net.URLEncoder;
+import java.util.HashMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.odeval.scoopit.Constants;
@@ -25,8 +23,6 @@ import com.odeval.scoopit.OAuth.OAuthFlowApp;
 import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.image.ImageLoader;
 import com.odeval.scoopit.model.Post;
-import com.odeval.scoopit.model.Topic;
-import com.odeval.scoopit.ui.list.adapater.CuratedPostListAdapter;
 
 public class PostCurateActivity extends Activity {
     private Post post;
@@ -141,21 +137,26 @@ public class PostCurateActivity extends Activity {
     }
 
     private Post doCuratePost(Post post) throws JSONException {
-        String jsonOutput = NetworkingUtils.sendRestfullRequest(Constants.POST_ACTION_REQUEST + "?id="
-                + post.getId() + "&action=accept&imageUrl=" + URLEncoder.encode(post.getImageUrls().get(currentImage)),
-                OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(this)));
+    	HashMap<String, String> params = new HashMap<String, String>();
+    	params.put("id", post.getId().toString());
+    	params.put("action", "accept");
+    	params.put("imageUrl", post.getImageUrls().get(currentImage));
+        String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
+                OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(this)), params);
         System.out.println("jsonOutput : " + jsonOutput);
         JSONObject jsonPost = new JSONObject(jsonOutput);
         Post ret = new Post();
         ret.popupateFromJsonObject(jsonPost);
         return ret;
     }
+    
     private void doDeletePost(Post post) {
-        String jsonOutput = NetworkingUtils.sendRestfullRequest(Constants.POST_ACTION_REQUEST + "?id="
-                + post.getId() + "&action=delete&imageUrl=" + URLEncoder.encode(post.getImageUrls().get(currentImage)),
-                OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(this)));
-        System.out.println("jsonOutput : " + jsonOutput);
-    	
+    	HashMap<String, String> params = new HashMap<String, String>();
+    	params.put("id", post.getId().toString());
+    	params.put("action", "delete");
+        String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
+                OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(this)), params);
+        System.out.println("jsonOutput : " + jsonOutput);    	
     }
     
 }
