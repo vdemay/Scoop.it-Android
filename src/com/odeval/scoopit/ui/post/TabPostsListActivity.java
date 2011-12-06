@@ -5,17 +5,18 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.app.TabActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.TabHost;
-import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 
 import com.markupartist.android.widget.PullToRefreshListView;
@@ -30,8 +31,10 @@ import com.odeval.scoopit.ui.list.adapater.CurablePostListAdapter;
 import com.odeval.scoopit.ui.list.adapater.CurablePostListAdapter.OnButtonClickedListener;
 import com.odeval.scoopit.ui.list.adapater.CuratedPostListAdapter;
 import com.odeval.scoopit.ui.task.DownloadImageTask;
+import com.viewpagerindicator.PageIndicator;
+import com.viewpagerindicator.TitleProvider;
 
-public class TabPostsListActivity extends TabActivity implements OnTabChangeListener, OnButtonClickedListener {
+public class TabPostsListActivity extends Activity implements OnButtonClickedListener {
 
     private ProgressDialog progress;
     private String topicId;
@@ -39,6 +42,66 @@ public class TabPostsListActivity extends TabActivity implements OnTabChangeList
     private boolean curableTopicLoaded;
 
     private CurablePostListAdapter curablePostListAdapter;
+    private PullToRefreshListView[] views;
+    private static final String[] titles = new String[] { "CURATE", "VIEW TOPIC"};
+    
+    public class MyAdapter extends PagerAdapter implements TitleProvider {
+
+		@Override
+		public void destroyItem(View arg0, int arg1, Object arg2) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void finishUpdate(View arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public Object instantiateItem(View collection, int position) {
+			
+			((ViewPager) collection).addView(views[position],0);
+			return views[position];
+		}
+
+		@Override
+		public boolean isViewFromObject(View view, Object object) {
+			 return view==((PullToRefreshListView)object);
+		}
+
+		@Override
+		public void restoreState(Parcelable arg0, ClassLoader arg1) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public Parcelable saveState() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void startUpdate(View arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return 2;
+		}
+
+		@Override
+		public String getTitle(int position) {
+			// TODO Auto-generated method stub
+			return titles[position];
+		}
+
+    }
     
     
     public void onCreate(Bundle savedInstanceState) {
@@ -48,30 +111,42 @@ public class TabPostsListActivity extends TabActivity implements OnTabChangeList
 
         setContentView(R.layout.tab_posts_list_activity);
 
-        TabHost mTabHost = getTabHost();
-        mTabHost.setOnTabChangedListener(this);
-        mTabHost.addTab(mTabHost.newTabSpec("curatedPost").setIndicator("Curate").setContent(R.id.tab_post_curable_list));
-        mTabHost.addTab(mTabHost.newTabSpec("curablePost").setIndicator("View Topic").setContent(
-                R.id.tab_post_curated_list));
-
-        mTabHost.setCurrentTab(0);
+//        TabHost mTabHost = getTabHost();
+//        mTabHost.setOnTabChangedListener(this);
+//        mTabHost.addTab(mTabHost.newTabSpec("curatedPost").setIndicator("Curate").setContent(R.id.tab_post_curable_list));
+//        mTabHost.addTab(mTabHost.newTabSpec("curablePost").setIndicator("View Topic").setContent(
+//                R.id.tab_post_curated_list));
+//
+//        mTabHost.setCurrentTab(0);
+        views = new PullToRefreshListView[2];
+        views[0] = new PullToRefreshListView(this);
+        views[1] = new PullToRefreshListView(this);
         
+        loadCurablePosts();
+        loadCuratedPosts();
         ((TextView)findViewById(R.id.topic_title)).setText(getIntent().getExtras().getString("topicName"));
         DownloadImageTask task1 = new DownloadImageTask();
         task1.setImageId(R.id.topic_icon);
         task1.setContext(this);
         task1.setRow(getWindow().getDecorView());
         task1.execute(getIntent().getExtras().getString("topicImage"));
-   }
-    
-    @Override
-    public void onTabChanged(String tabName) {
-        if(tabName.equals("curatedPost") && !curatedTopicLoaded) {
-            loadCuratedPosts();
-        } else if(tabName.equals("curablePost") && !curableTopicLoaded) {
-            loadCurablePosts();
-        }
+
+        MyAdapter awesomeAdapter = new MyAdapter();
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager.setAdapter(awesomeAdapter);
+        
+        PageIndicator pageindicator = (PageIndicator) findViewById(R.id.pageindicator);
+        pageindicator.setViewPager(pager);
     }
+    
+//    @Override
+//    public void onTabChanged(String tabName) {
+//        if(tabName.equals("curatedPost") && !curatedTopicLoaded) {
+//            loadCuratedPosts();
+//        } else if(tabName.equals("curablePost") && !curableTopicLoaded) {
+//            loadCurablePosts();
+//        }
+//    }
 
     private void loadCurablePosts() {
         new AsyncTask<Void, Void, Topic>() {
@@ -106,7 +181,7 @@ public class TabPostsListActivity extends TabActivity implements OnTabChangeList
             protected void onPostExecute(Topic result) {
                 super.onPostExecute(result);
                 // populate
-                final PullToRefreshListView lv = (PullToRefreshListView) findViewById(R.id.tab_post_curated_list);
+                final PullToRefreshListView lv = views[1];
                 
                 lv.setAdapter(new CuratedPostListAdapter(TabPostsListActivity.this,
                         result.getCuratedPosts()));
@@ -166,7 +241,7 @@ public class TabPostsListActivity extends TabActivity implements OnTabChangeList
             protected void onPostExecute(Topic result) {
                 super.onPostExecute(result);
                 // populate
-                final PullToRefreshListView lv = (PullToRefreshListView) findViewById(R.id.tab_post_curable_list);
+                final PullToRefreshListView lv = views[0];
                 curablePostListAdapter = new CurablePostListAdapter(TabPostsListActivity.this,
                         result.getCurablePosts(), TabPostsListActivity.this);
                 lv.setAdapter(curablePostListAdapter);
@@ -192,14 +267,25 @@ public class TabPostsListActivity extends TabActivity implements OnTabChangeList
         }.execute();
     }
 
+    final static int DELETE_POST = 0;
+    final static int CURATE_POST = 1;
+    
 	@Override
 	public void onDelete(Post p, int index) {
-		deletePost(p);
+		PostCurateActivity.deletePost(p, false, this, false);
 	}
 
 	@Override
 	public void onAccept(Post p, int index) {
-		curatePost(p);
+		PostCurateActivity.curatePost(p, false, this, 0, false);
+	}
+
+	
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
 	}
 
 	@Override
@@ -208,89 +294,5 @@ public class TabPostsListActivity extends TabActivity implements OnTabChangeList
         i.putExtra("post", p);
         TabPostsListActivity.this.startActivity(i);
 	}
-	
-    
-    private void curatePost(final Post post) {
-        new AsyncTask<Void, Void, Post>() {
-
-            @Override
-            protected void onPreExecute() {
-                progress = ProgressDialog.show(TabPostsListActivity.this, "Please Wait", "Curating post...", true);
-                super.onPreExecute();
-            }
-
-            @Override
-            protected Post doInBackground(Void... params) {
-            	try {
-            		return doCuratePost(post);
-            	} catch (JSONException e) {
-					e.printStackTrace();
-				}
-            	return null;
-            }
-
-            @Override
-            protected void onPostExecute(Post result) {
-                super.onPostExecute(result);
-                progress.dismiss();
-                curablePostListAdapter.remove(result);
-                curablePostListAdapter.notifyDataSetChanged();
-            }
-
-        }.execute();
-
-    }
-
-    private void deletePost(final Post post) {
-        new AsyncTask<Void, Void, Post>() {
-
-            @Override
-            protected void onPreExecute() {
-                progress = ProgressDialog.show(TabPostsListActivity.this, "Please Wait", "Deleting post...", true);
-                super.onPreExecute();
-            }
-
-            @Override
-            protected Post doInBackground(Void... params) {
-            	doDeletePost(post);
-            	return post;
-            }
-
-            @Override
-            protected void onPostExecute(Post result) {
-                super.onPostExecute(result);
-                curablePostListAdapter.remove(result);
-                curablePostListAdapter.notifyDataSetChanged();
-                progress.dismiss();                
-            }
-
-        }.execute();
-
-    	
-    }
-
-    private Post doCuratePost(Post post) throws JSONException {
-    	HashMap<String, String> params = new HashMap<String, String>();
-    	params.put("id", post.getId().toString());
-    	params.put("action", "accept");
-    	params.put("imageUrl", post.getImageUrls().get(0));
-        String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
-                OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(this)), params);
-        System.out.println("jsonOutput : " + jsonOutput);
-        JSONObject jsonPost = new JSONObject(jsonOutput);
-        Post ret = new Post();
-        ret.popupateFromJsonObject(jsonPost);
-        return ret;
-    }
-    
-    private void doDeletePost(Post post) {
-    	HashMap<String, String> params = new HashMap<String, String>();
-    	params.put("id", post.getId().toString());
-    	params.put("action", "delete");
-        String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
-                OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(this)), params);
-        System.out.println("jsonOutput : " + jsonOutput);    	
-    }
-
-	
+		
 }

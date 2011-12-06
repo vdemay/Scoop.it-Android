@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/tabhost"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
@@ -28,24 +28,16 @@
 			    android:gravity="left|top"
 			    />
 		</LinearLayout>    
-        <TabWidget
-            android:id="@android:id/tabs"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-        <FrameLayout
-            android:id="@android:id/tabcontent"
+		<com.viewpagerindicator.TitlePageIndicator
+		    android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/pageindicator"
+            style="@style/CustomTitlePageIndicator"
+			/>
+         <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
-            <com.markupartist.android.widget.PullToRefreshListView android:id="@+id/tab_post_curable_list"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:layout_weight="1"
-               android:drawSelectorOnTop="false"/>
-            <com.markupartist.android.widget.PullToRefreshListView android:id="@+id/tab_post_curated_list"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:layout_weight="1"
-               android:drawSelectorOnTop="false"/>
-        </FrameLayout>
+        </android.support.v4.view.ViewPager>
     </LinearLayout>
-</TabHost>
+</LinearLayout>

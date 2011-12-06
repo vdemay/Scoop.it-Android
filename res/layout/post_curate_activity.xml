@@ -10,15 +10,19 @@
 			android:orientation="vertical">
 			
 			<LinearLayout
-				     android:layout_width="match_parent"
-					  android:layout_height="wrap_content"
-					  >			    
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="5dip"
+				>			    
     			<Button android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:id="@+id/prev_image"
 					android:text="prev"
 					android:gravity="center"
 					android:textStyle="bold"
 					android:background="@drawable/rcblue"					
+					android:minWidth="60dip"
+					android:padding="5dip"
+					android:layout_marginRight="10dip"
 					/>
 				<Button android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:id="@+id/next_image"
@@ -26,21 +30,24 @@
 					android:gravity="center"
 					android:textStyle="bold"
 					android:background="@drawable/rcblue"					
+					android:minWidth="60dip"
+					android:padding="5dip"
 					/>
     			    			    
 			</LinearLayout>
 		    			    
 			    				
-			<TextView android:layout_width="match_parent"
+			<EditText android:layout_width="match_parent"
 					  android:layout_height="wrap_content"
 					  android:id="@+id/post_list_title"
-					  android:text="Loading..."/>
+					  android:text="Loading..."
+					  />
 					  
 			<ImageView android:src="@drawable/default_icon" 
 					   android:id="@+id/post_list_image" 
 					   android:layout_width="match_parent" android:layout_height="265dp"></ImageView>
 					   
-			<TextView android:layout_width="match_parent"
+			<EditText android:layout_width="match_parent"
 					  android:layout_height="wrap_content"
 					  android:id="@+id/post_list_content"
 					  android:text="Loading..."/>
@@ -54,6 +61,9 @@
 				android:gravity="center"
 				android:textStyle="bold"
 				android:background="@drawable/rcred"					
+				android:minWidth="60dip"
+				android:padding="5dip"
+				android:layout_marginRight="10dip"
 				/>
 			<Button android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:id="@+id/curate"
@@ -61,6 +71,8 @@
 				android:gravity="center"
 				android:textStyle="bold"
 				android:background="@drawable/rcgreen"					
+				android:minWidth="60dip"
+				android:padding="5dip"
 				/>
     			    			    
 			</LinearLayout>

@@ -1,6 +1,5 @@
 package com.odeval.scoopit.ui.post;
 
-import java.net.URLEncoder;
 import java.util.HashMap;
 
 import org.json.JSONException;
@@ -8,6 +7,8 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -28,12 +29,27 @@ public class PostCurateActivity extends Activity {
     private Post post;
     ImageLoader imageLoader;
     
+    
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        Intent intent = getIntent();
+        String test = intent.getAction();
+        post = getIntent().getExtras().getParcelable("post");
+        
+        if (intent != null && post != null) {
+        	
+        	if (Constants.CURATE_ACTION.equals(intent.getAction())) {
+        		curatePost(post, true, this, 0, false);
+        		return;
+        	} else if (Constants.DELETE_ACTION.equals(intent.getAction())) {
+        		deletePost(post, true, this, false);
+        		return;
+        	}        	
+        }
+        
         setContentView(R.layout.post_curate_activity);
         
-        post = getIntent().getExtras().getParcelable("post");
         
         ((TextView)findViewById(R.id.post_list_title)).setText(post.getTitle());
         ((TextView)findViewById(R.id.post_list_content)).setText(post.getContent());
@@ -54,12 +70,12 @@ public class PostCurateActivity extends Activity {
         });	
         ((Button)findViewById(R.id.curate)).setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        		curatePost(post);
+        		curatePost(post, true, PostCurateActivity.this, currentImage, true);
         	}
         });	
         ((Button)findViewById(R.id.discard)).setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        		deletePost(post);
+        		deletePost(post, true, PostCurateActivity.this, true);
         	}
         });	
     }
@@ -81,19 +97,20 @@ public class PostCurateActivity extends Activity {
     
     ProgressDialog progress;
     
-    private void curatePost(final Post post) {
+    public static void curatePost(final Post post, final boolean finish, final Context context, final int imageIndex, final boolean showDialog) {
         new AsyncTask<Void, Void, Post>() {
-
+        	ProgressDialog progress;
             @Override
             protected void onPreExecute() {
-                progress = ProgressDialog.show(PostCurateActivity.this, "Please Wait", "Curating post...", true);
+                if (showDialog)
+                	progress = ProgressDialog.show(context, "Please Wait", "Curating post...", true);
                 super.onPreExecute();
             }
 
             @Override
             protected Post doInBackground(Void... params) {
             	try {
-            		return doCuratePost(post);
+            		return doCuratePost(post, imageIndex, context);
             	} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -103,46 +120,47 @@ public class PostCurateActivity extends Activity {
             @Override
             protected void onPostExecute(Post result) {
                 super.onPostExecute(result);
-                progress.hide();
+                if (showDialog) progress.dismiss();
             }
 
         }.execute();
 
     }
 
-    private void deletePost(final Post post) {
+    public static void deletePost(final Post post, final boolean finish, final Context context, final boolean showDialog) {
         new AsyncTask<Void, Void, Post>() {
-
+        	ProgressDialog dialog;
+        	
             @Override
             protected void onPreExecute() {
-                progress = ProgressDialog.show(PostCurateActivity.this, "Please Wait", "Deleting post...", true);
+                if (showDialog)
+                	dialog = ProgressDialog.show(context, "Please Wait", "Deleting post...", true);
                 super.onPreExecute();
             }
 
             @Override
             protected Post doInBackground(Void... params) {
-            	doDeletePost(post);
+            	doDeletePost(post, context);
             	return post;
             }
 
             @Override
             protected void onPostExecute(Post result) {
                 super.onPostExecute(result);
-                progress.hide();
+                if (showDialog)
+                	dialog.dismiss();
             }
 
         }.execute();
-
-    	
     }
 
-    private Post doCuratePost(Post post) throws JSONException {
+    private static Post doCuratePost(Post post, int imageIndex, Context context) throws JSONException {
     	HashMap<String, String> params = new HashMap<String, String>();
     	params.put("id", post.getId().toString());
     	params.put("action", "accept");
-    	params.put("imageUrl", post.getImageUrls().get(currentImage));
+    	params.put("imageUrl", post.getImageUrls().get(imageIndex));
         String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
-                OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(this)), params);
+                OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(context)), params);
         System.out.println("jsonOutput : " + jsonOutput);
         JSONObject jsonPost = new JSONObject(jsonOutput);
         Post ret = new Post();
@@ -150,12 +168,12 @@ public class PostCurateActivity extends Activity {
         return ret;
     }
     
-    private void doDeletePost(Post post) {
+    private static void doDeletePost(Post post, Context context) {
     	HashMap<String, String> params = new HashMap<String, String>();
     	params.put("id", post.getId().toString());
     	params.put("action", "delete");
         String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
-                OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(this)), params);
+                OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(context)), params);
         System.out.println("jsonOutput : " + jsonOutput);    	
     }
     

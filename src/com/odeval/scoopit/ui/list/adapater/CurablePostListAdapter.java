@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.odeval.scoopit.R;
+import com.odeval.scoopit.ScoopItApp;
 import com.odeval.scoopit.image.ImageLoader;
 import com.odeval.scoopit.model.Post;
 import com.odeval.scoopit.ui.task.DownloadImageTask;
@@ -23,8 +24,7 @@ public class CurablePostListAdapter extends ArrayAdapter<Post>{
     private ArrayList<Post> posts;
     private LayoutInflater li;
     public ImageLoader imageLoader; 
-    private DisplayMetrics dm = new DisplayMetrics();
-    
+
     public CurablePostListAdapter(Context context, List<Post> list, OnButtonClickedListener listener) {
     	this(context, list);
     	this.listener = listener;
@@ -39,7 +39,6 @@ public class CurablePostListAdapter extends ArrayAdapter<Post>{
         }
         li = LayoutInflater.from(context);
         imageLoader = new ImageLoader(context);
-        (((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()).getMetrics(dm);
     }
     
     @Override
@@ -119,8 +118,8 @@ public class CurablePostListAdapter extends ArrayAdapter<Post>{
             task1.setRow(v);
             if (h.post.getImageUrls() != null && h.post.getImageUrls().size() > 0) {
                 task1.execute(h.post.getImageUrls().get(0));
-                h.image.getLayoutParams().height = (int) (50.0 * dm.density) ;
-                h.image.getLayoutParams().width = (int) (50.0 * dm.density);
+                h.image.getLayoutParams().height = ScoopItApp.scaleValue(50);
+                h.image.getLayoutParams().width = ScoopItApp.scaleValue(50);
             } else {
                 h.image.getLayoutParams().height = 0;
                 h.image.getLayoutParams().width = 0;
