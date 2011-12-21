@@ -61,4 +61,5 @@ public class DownloadImageTask extends AsyncTask<String, Integer, Drawable> {
         Drawable d = ImageOperations(context, url[0]);
         return d;
     }
+
 }

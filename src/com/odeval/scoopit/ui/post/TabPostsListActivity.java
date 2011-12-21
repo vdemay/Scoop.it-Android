@@ -1,7 +1,5 @@
 package com.odeval.scoopit.ui.post;
 
-import java.util.HashMap;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,16 +28,14 @@ import com.odeval.scoopit.model.Topic;
 import com.odeval.scoopit.ui.list.adapater.CurablePostListAdapter;
 import com.odeval.scoopit.ui.list.adapater.CurablePostListAdapter.OnButtonClickedListener;
 import com.odeval.scoopit.ui.list.adapater.CuratedPostListAdapter;
+import com.odeval.scoopit.ui.post.PostCurateActivity.OnActionComplete;
 import com.odeval.scoopit.ui.task.DownloadImageTask;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitleProvider;
 
 public class TabPostsListActivity extends Activity implements OnButtonClickedListener {
 
-    private ProgressDialog progress;
     private String topicId;
-    private boolean curatedTopicLoaded;
-    private boolean curableTopicLoaded;
 
     private CurablePostListAdapter curablePostListAdapter;
     private PullToRefreshListView[] views;
@@ -111,13 +107,6 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 
         setContentView(R.layout.tab_posts_list_activity);
 
-//        TabHost mTabHost = getTabHost();
-//        mTabHost.setOnTabChangedListener(this);
-//        mTabHost.addTab(mTabHost.newTabSpec("curatedPost").setIndicator("Curate").setContent(R.id.tab_post_curable_list));
-//        mTabHost.addTab(mTabHost.newTabSpec("curablePost").setIndicator("View Topic").setContent(
-//                R.id.tab_post_curated_list));
-//
-//        mTabHost.setCurrentTab(0);
         views = new PullToRefreshListView[2];
         views[0] = new PullToRefreshListView(this);
         views[1] = new PullToRefreshListView(this);
@@ -139,15 +128,6 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
         pageindicator.setViewPager(pager);
     }
     
-//    @Override
-//    public void onTabChanged(String tabName) {
-//        if(tabName.equals("curatedPost") && !curatedTopicLoaded) {
-//            loadCuratedPosts();
-//        } else if(tabName.equals("curablePost") && !curableTopicLoaded) {
-//            loadCurablePosts();
-//        }
-//    }
-
     private void loadCurablePosts() {
         new AsyncTask<Void, Void, Topic>() {
 
@@ -160,7 +140,6 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
             protected Topic doInBackground(Void... params) {
 
                 try {
-                    curableTopicLoaded = true;
                     String jsonOutput = NetworkingUtils.sendRestfullRequest(Constants.CURATED_POST_REQUEST + "?id="
                             + topicId,
                             OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(TabPostsListActivity.this)));
@@ -220,7 +199,6 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
             protected Topic doInBackground(Void... params) {
 
                 try {
-                    curatedTopicLoaded = true;
                     String jsonOutput = NetworkingUtils.sendRestfullRequest(Constants.CURABLE_POST_REQUEST + "&id="
                             + topicId,
                             OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(TabPostsListActivity.this)));
@@ -271,17 +249,25 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
     final static int CURATE_POST = 1;
     
 	@Override
-	public void onDelete(Post p, int index) {
-		PostCurateActivity.deletePost(p, false, this, false);
+	public void onDelete(final Post p, int index) {
+		PostCurateActivity.deletePost(p, false, this, true, new OnActionComplete() {
+			@Override
+			public void onActionComplete() {
+				views[0].onRefresh();
+			}
+		});
 	}
 
 	@Override
-	public void onAccept(Post p, int index) {
-		PostCurateActivity.curatePost(p, false, this, 0, false);
+	public void onAccept(final Post p, int index) {
+		PostCurateActivity.curatePost(p, false, this, 0, true, new OnActionComplete() {
+			@Override
+			public void onActionComplete() {
+				views[0].onRefresh();
+			}
+		});
 	}
 
-	
-	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);

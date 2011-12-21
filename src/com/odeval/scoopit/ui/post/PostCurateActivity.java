@@ -9,13 +9,17 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.odeval.scoopit.Constants;
@@ -28,6 +32,87 @@ import com.odeval.scoopit.model.Post;
 public class PostCurateActivity extends Activity {
     private Post post;
     ImageLoader imageLoader;
+    
+    
+    public class PostImageAdapter implements SpinnerAdapter {
+    	Post post;
+    	Context context;
+    	
+    	public PostImageAdapter(Post post, Context context) {
+    		this.context = context;
+    		this.post = post;
+    	}
+
+    	@Override
+		public int getCount() {
+			return post.getImageUrls().size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return post.getImageUrls().get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			// TODO Auto-generated method stub
+			return position;
+		}
+
+		@Override
+		public int getItemViewType(int position) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			// TODO Auto-generated method stub
+			if (convertView == null) {
+				convertView = new ImageView(context);				
+			}
+            imageLoader.DisplayImage((String)getItem(position), (ImageView)convertView);
+			return convertView;
+		}
+
+		@Override
+		public int getViewTypeCount() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public boolean hasStableIds() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean isEmpty() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void registerDataSetObserver(DataSetObserver observer) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void unregisterDataSetObserver(DataSetObserver observer) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public View getDropDownView(int position, View convertView,
+				ViewGroup parent) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+    	
+    }
     
     
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +140,9 @@ public class PostCurateActivity extends Activity {
         ((TextView)findViewById(R.id.post_list_content)).setText(post.getContent());
         
         imageLoader = new ImageLoader(this);
-        if (post.getImageUrls().get(0) != null) {
-            imageLoader.DisplayImage(post.getImageUrls().get(0), (ImageView)findViewById(R.id.post_list_image));
-        }   
+//        if (post.getImageUrls().get(0) != null) {
+//            imageLoader.DisplayImage(post.getImageUrls().get(0), (ImageView)findViewById(R.id.post_list_image));
+//        }   
         ((Button)findViewById(R.id.next_image)).setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		nextImage();
@@ -78,6 +163,9 @@ public class PostCurateActivity extends Activity {
         		deletePost(post, true, PostCurateActivity.this, true);
         	}
         });	
+        Gallery gallery = (Gallery)findViewById(R.id.gallery);
+        PostImageAdapter adapter = new PostImageAdapter(post, this);
+        gallery.setAdapter(adapter);
     }
 
     int currentImage;
@@ -97,7 +185,14 @@ public class PostCurateActivity extends Activity {
     
     ProgressDialog progress;
     
+    
+    
+    
     public static void curatePost(final Post post, final boolean finish, final Context context, final int imageIndex, final boolean showDialog) {
+    	curatePost(post, finish, context, imageIndex, showDialog, null);
+    }
+    
+    public static void curatePost(final Post post, final boolean finish, final Context context, final int imageIndex, final boolean showDialog, final OnActionComplete onActionComplete) {
         new AsyncTask<Void, Void, Post>() {
         	ProgressDialog progress;
             @Override
@@ -121,13 +216,23 @@ public class PostCurateActivity extends Activity {
             protected void onPostExecute(Post result) {
                 super.onPostExecute(result);
                 if (showDialog) progress.dismiss();
+                if (onActionComplete != null) 
+                	onActionComplete.onActionComplete();
             }
 
         }.execute();
 
     }
 
-    public static void deletePost(final Post post, final boolean finish, final Context context, final boolean showDialog) {
+    public interface OnActionComplete {
+    	public void onActionComplete();
+    };
+    
+   	public static void deletePost(final Post post, final boolean finish, final Context context, final boolean showDialog) {
+   		deletePost(post, finish, context, showDialog, null);
+   	}
+   	
+   	public static void deletePost(final Post post, final boolean finish, final Context context, final boolean showDialog, final OnActionComplete onActionComplete) {
         new AsyncTask<Void, Void, Post>() {
         	ProgressDialog dialog;
         	
@@ -149,6 +254,9 @@ public class PostCurateActivity extends Activity {
                 super.onPostExecute(result);
                 if (showDialog)
                 	dialog.dismiss();
+                if (onActionComplete != null) {
+                	onActionComplete.onActionComplete();
+                }
             }
 
         }.execute();

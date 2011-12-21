@@ -116,6 +116,9 @@ public class OAuthFlowApp extends Activity {
     public static OAuthConsumer getConsumer(SharedPreferences prefs) {
         String token = prefs.getString(OAuth.OAUTH_TOKEN, "");
         String secret = prefs.getString(OAuth.OAUTH_TOKEN_SECRET, "");
+        if (token.length() == 0) {
+        	return null;
+        }
         OAuthConsumer consumer = new CommonsHttpOAuthConsumer(PrivateConstants.CONSUMER_KEY, PrivateConstants.CONSUMER_SECRET);
         consumer.setTokenWithSecret(token, secret);
         return consumer;
