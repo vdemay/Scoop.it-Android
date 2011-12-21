@@ -23,7 +23,7 @@ public class PostViewActivity extends Activity {
         
         ImageLoader imageLoader = new ImageLoader(this);
         if (post.getImageUrl() != null) {
-            imageLoader.DisplayImage(post.getImageUrl(), (ImageView)findViewById(R.id.post_list_image));
+            imageLoader.displayImage(post.getImageUrl(), (ImageView)findViewById(R.id.post_list_image));
         }   
     }
 }

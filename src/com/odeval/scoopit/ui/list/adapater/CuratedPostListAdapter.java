@@ -60,7 +60,7 @@ public class CuratedPostListAdapter extends ArrayAdapter<Post>{
             ImageView imageView = (ImageView) v.findViewById(R.id.list_adapter_post_image);
             imageView.setImageResource(R.drawable.default_icon);
             if (p.getImageUrl() != null) {
-                imageLoader.DisplayImage(p.getImageUrl(), imageView);
+                imageLoader.displayImage(p.getImageUrl(), imageView);
             }
         }
         

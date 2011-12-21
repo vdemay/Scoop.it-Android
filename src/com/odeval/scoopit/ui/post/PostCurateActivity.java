@@ -71,7 +71,7 @@ public class PostCurateActivity extends Activity {
 			if (convertView == null) {
 				convertView = new ImageView(context);				
 			}
-            imageLoader.DisplayImage((String)getItem(position), (ImageView)convertView);
+            imageLoader.displayImage((String)getItem(position), (ImageView)convertView);
 			return convertView;
 		}
 
@@ -172,7 +172,7 @@ public class PostCurateActivity extends Activity {
     
     private void nextImage() {
     	currentImage = (currentImage+1) % post.getImageUrls().size();
-        imageLoader.DisplayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));
+        imageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));
     }
 
     private void prevImage() {
@@ -180,7 +180,7 @@ public class PostCurateActivity extends Activity {
     	if (currentImage < 0) {
     		currentImage =  post.getImageUrls().size() - 1;
     	}
-        imageLoader.DisplayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));    	
+        imageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));    	
     }
     
     ProgressDialog progress;
