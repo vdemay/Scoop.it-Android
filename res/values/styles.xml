@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="StyledIndicators" parent="@android:style/Theme.Light">
+        <item name="vpiTitlePageIndicatorStyle">@style/CustomTitlePageIndicator</item>
+    </style>
+
+    <style name="CustomTitlePageIndicator">
+        <item name="android:background">#FFDDDDDD</item>
+        <item name="footerColor">#FFEE3333</item>
+        <item name="footerLineHeight">2dp</item>
+        <item name="footerIndicatorStyle">triangle</item>
+        <item name="textColor">#FF999999</item>
+        <item name="textSize">13sp</item>
+        <item name="selectedColor">#FF000000</item>
+        <item name="selectedBold">false</item>
+    </style>
+
+</resources>

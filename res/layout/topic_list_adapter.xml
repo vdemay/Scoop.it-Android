@@ -4,6 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="top"
+    android:padding="5dip"
     >
     
     <ImageView
@@ -27,7 +28,7 @@
 	    	android:layout_height="wrap_content"
 	    	android:textStyle="bold"
 	    	android:paddingLeft="5dp"
-	    	/>
+	    	android:text="Title" android:textColor="@color/topic_title" android:textSize="16sp" android:gravity="top"/>
 	    <TextView
 	    	android:id="@+id/list_adapter_topic_description"
 	    	android:layout_width="fill_parent"

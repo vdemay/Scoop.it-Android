@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/tabhost"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
@@ -7,24 +7,37 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-        <TabWidget
-            android:id="@android:id/tabs"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-        <FrameLayout
-            android:id="@android:id/tabcontent"
+		<LinearLayout
+	        android:layout_width="fill_parent"
+    	    android:layout_height="wrap_content"
+    	    android:padding="5dip">
+			<ImageView 
+			    android:layout_width="32dip"
+			    android:layout_height="32dip"
+			    android:id="@+id/topic_icon"
+				/>
+			<TextView
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:maxLines="1"
+			    android:textStyle="bold"
+			    android:textSize="20sp"
+			    android:textColor="@color/topic_title"
+			    android:id="@+id/topic_title"
+			    android:paddingLeft="5dip"
+			    android:gravity="left|top"
+			    />
+		</LinearLayout>    
+		<com.viewpagerindicator.TitlePageIndicator
+		    android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/pageindicator"
+            style="@style/CustomTitlePageIndicator"
+			/>
+         <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
-            <ListView android:id="@+id/tab_post_curable_list"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:layout_weight="1"
-               android:drawSelectorOnTop="false"/>
-            <ListView android:id="@+id/tab_post_curated_list"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:layout_weight="1"
-               android:drawSelectorOnTop="false"/>
-        </FrameLayout>
+        </android.support.v4.view.ViewPager>
     </LinearLayout>
-</TabHost>
+</LinearLayout>

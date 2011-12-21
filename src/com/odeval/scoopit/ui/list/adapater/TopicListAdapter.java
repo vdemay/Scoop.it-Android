@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.odeval.scoopit.R;
-import com.odeval.scoopit.model.Post;
 import com.odeval.scoopit.model.Topic;
 import com.odeval.scoopit.ui.task.DownloadImageTask;
 

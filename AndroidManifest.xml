@@ -4,7 +4,7 @@
 	android:versionName="1.0">
 	<uses-sdk android:minSdkVersion="8" />
 
-	<application android:icon="@drawable/icon" android:label="@string/app_name">
+	<application android:icon="@drawable/icon" android:label="@string/app_name" android:name=".ScoopItApp">
 
 		<!-- Login and oauth -->
 		<activity android:name=".OAuth.LoginActivity"
@@ -28,10 +28,13 @@
 		<activity android:name=".ui.post.TabPostsListActivity"
 			android:label="@string/app_name">
 		</activity>
+		<activity android:name=".ui.post.PostCurateActivity"
+			android:label="@string/app_name">
+		</activity>
 		<activity android:name=".ui.post.PostViewActivity"
 			android:label="@string/app_name">
 		</activity>
-		
+		    		
 
 	</application>
 

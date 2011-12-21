@@ -2,6 +2,7 @@ package com.odeval.scoopit.image.cache;
 
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
+
 import android.graphics.Bitmap;
 
 public class MemoryCache {

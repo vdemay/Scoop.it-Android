@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.odeval.scoopit.Constants;
+import com.odeval.scoopit.PrivateConstants;
 import com.odeval.scoopit.R;
 import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.model.User;
@@ -112,10 +113,10 @@ public class OAuthFlowApp extends Activity {
         edit.commit();
     }
 
-    private OAuthConsumer getConsumer(SharedPreferences prefs) {
+    public static OAuthConsumer getConsumer(SharedPreferences prefs) {
         String token = prefs.getString(OAuth.OAUTH_TOKEN, "");
         String secret = prefs.getString(OAuth.OAUTH_TOKEN_SECRET, "");
-        OAuthConsumer consumer = new CommonsHttpOAuthConsumer(Constants.CONSUMER_KEY, Constants.CONSUMER_SECRET);
+        OAuthConsumer consumer = new CommonsHttpOAuthConsumer(PrivateConstants.CONSUMER_KEY, PrivateConstants.CONSUMER_SECRET);
         consumer.setTokenWithSecret(token, secret);
         return consumer;
     }

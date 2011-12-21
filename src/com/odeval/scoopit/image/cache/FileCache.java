@@ -1,6 +1,7 @@
 package com.odeval.scoopit.image.cache;
 
 import java.io.File;
+
 import android.content.Context;
 
 public class FileCache {
