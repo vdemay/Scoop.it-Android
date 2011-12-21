@@ -3,8 +3,8 @@ package com.odeval.scoopit;
 
 public class Constants {
 
-	public static final String CONSUMER_KEY 	= "TODO";
-	public static final String CONSUMER_SECRET 	= "TODO";
+	public static final String CONSUMER_KEY 	= "seesmic_pl|9g0jVdFUrxjl23yEAFdGEv1iuxWmddW1bNzxE_mvrmg";
+	public static final String CONSUMER_SECRET 	= "U1Cd3BwOT3RXiOlKDTyVfaE3reIapzxdQ3Qofaj@3Y6NA32UbA";
 
 	public static final String REQUEST_URL 		= "http://www.scoop.it/oauth/request";
 	public static final String ACCESS_URL 		= "http://www.scoop.it/oauth/access";  
