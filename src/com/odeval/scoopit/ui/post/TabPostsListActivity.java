@@ -4,7 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,12 +14,14 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.markupartist.android.widget.PullToRefreshListView;
 import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
 import com.odeval.scoopit.Constants;
 import com.odeval.scoopit.R;
+import com.odeval.scoopit.ScoopItApp;
 import com.odeval.scoopit.OAuth.OAuthFlowApp;
 import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.model.Post;
@@ -29,7 +30,6 @@ import com.odeval.scoopit.ui.list.adapater.CurablePostListAdapter;
 import com.odeval.scoopit.ui.list.adapater.CurablePostListAdapter.OnButtonClickedListener;
 import com.odeval.scoopit.ui.list.adapater.CuratedPostListAdapter;
 import com.odeval.scoopit.ui.post.PostCurateActivity.OnActionComplete;
-import com.odeval.scoopit.ui.task.DownloadImageTask;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitleProvider;
 
@@ -114,11 +114,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
         loadCurablePosts();
         loadCuratedPosts();
         ((TextView)findViewById(R.id.topic_title)).setText(getIntent().getExtras().getString("topicName"));
-        DownloadImageTask task1 = new DownloadImageTask();
-        task1.setImageId(R.id.topic_icon);
-        task1.setContext(this);
-        task1.setRow(getWindow().getDecorView());
-        task1.execute(getIntent().getExtras().getString("topicImage"));
+        ScoopItApp.INSTANCE.imgageLoader.displayImage(getIntent().getExtras().getString("topicImage"), (ImageView)findViewById(R.id.topic_icon));
 
         MyAdapter awesomeAdapter = new MyAdapter();
         ViewPager pager = (ViewPager) findViewById(R.id.pager);

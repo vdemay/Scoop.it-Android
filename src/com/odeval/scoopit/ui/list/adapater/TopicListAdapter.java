@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.odeval.scoopit.R;
-import com.odeval.scoopit.image.ImageLoader;
+import com.odeval.scoopit.ScoopItApp;
 import com.odeval.scoopit.model.Topic;
 
 
@@ -19,13 +19,11 @@ public class TopicListAdapter extends ArrayAdapter<Topic>{
 
     private ArrayList<Topic> topics;
     private LayoutInflater li;
-    private ImageLoader imageLoader;
     
     public TopicListAdapter(Context context, ArrayList<Topic> objects) {
         super(context, 0, objects);
         this.topics = objects;
         li = LayoutInflater.from(context);
-        imageLoader = new ImageLoader(context);
     }
     
     @Override
@@ -52,7 +50,7 @@ public class TopicListAdapter extends ArrayAdapter<Topic>{
             content.setText(t.getDescription());
             
             //and avatar
-            imageLoader.displayImage(t.getMediumImageUrl(), (ImageView)v.findViewById(R.id.list_adapter_topic_image));
+            ScoopItApp.INSTANCE.imgageLoader.displayImage(t.getMediumImageUrl(), (ImageView)v.findViewById(R.id.list_adapter_topic_image));
         }
         
         return v;

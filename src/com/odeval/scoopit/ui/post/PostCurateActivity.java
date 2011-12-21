@@ -24,14 +24,13 @@ import android.widget.TextView;
 
 import com.odeval.scoopit.Constants;
 import com.odeval.scoopit.R;
+import com.odeval.scoopit.ScoopItApp;
 import com.odeval.scoopit.OAuth.OAuthFlowApp;
 import com.odeval.scoopit.helper.NetworkingUtils;
-import com.odeval.scoopit.image.ImageLoader;
 import com.odeval.scoopit.model.Post;
 
 public class PostCurateActivity extends Activity {
     private Post post;
-    ImageLoader imageLoader;
     
     
     public class PostImageAdapter implements SpinnerAdapter {
@@ -71,7 +70,7 @@ public class PostCurateActivity extends Activity {
 			if (convertView == null) {
 				convertView = new ImageView(context);				
 			}
-            imageLoader.displayImage((String)getItem(position), (ImageView)convertView);
+			ScoopItApp.INSTANCE.imgageLoader.displayImage((String)getItem(position), (ImageView)convertView);
 			return convertView;
 		}
 
@@ -139,7 +138,6 @@ public class PostCurateActivity extends Activity {
         ((TextView)findViewById(R.id.post_list_title)).setText(post.getTitle());
         ((TextView)findViewById(R.id.post_list_content)).setText(post.getContent());
         
-        imageLoader = new ImageLoader(this);
 //        if (post.getImageUrls().get(0) != null) {
 //            imageLoader.DisplayImage(post.getImageUrls().get(0), (ImageView)findViewById(R.id.post_list_image));
 //        }   
@@ -172,7 +170,7 @@ public class PostCurateActivity extends Activity {
     
     private void nextImage() {
     	currentImage = (currentImage+1) % post.getImageUrls().size();
-        imageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));
+    	ScoopItApp.INSTANCE.imgageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));
     }
 
     private void prevImage() {
@@ -180,7 +178,7 @@ public class PostCurateActivity extends Activity {
     	if (currentImage < 0) {
     		currentImage =  post.getImageUrls().size() - 1;
     	}
-        imageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));    	
+    	ScoopItApp.INSTANCE.imgageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));    	
     }
     
     ProgressDialog progress;

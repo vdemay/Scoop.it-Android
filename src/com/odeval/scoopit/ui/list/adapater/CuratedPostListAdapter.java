@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.odeval.scoopit.R;
-import com.odeval.scoopit.image.ImageLoader;
+import com.odeval.scoopit.ScoopItApp;
 import com.odeval.scoopit.model.Post;
 
 public class CuratedPostListAdapter extends ArrayAdapter<Post>{
@@ -20,7 +20,6 @@ public class CuratedPostListAdapter extends ArrayAdapter<Post>{
     
     private ArrayList<Post> posts;
     private LayoutInflater li;
-    private ImageLoader imageLoader;
 
     public CuratedPostListAdapter(Context context, List<Post> list) {
         super(context, 0, list);
@@ -30,7 +29,6 @@ public class CuratedPostListAdapter extends ArrayAdapter<Post>{
             this.posts = new ArrayList<Post>();
         }
         li = LayoutInflater.from(context);
-        imageLoader = new ImageLoader(context);
     }
     
     @Override
@@ -60,7 +58,7 @@ public class CuratedPostListAdapter extends ArrayAdapter<Post>{
             ImageView imageView = (ImageView) v.findViewById(R.id.list_adapter_post_image);
             imageView.setImageResource(R.drawable.default_icon);
             if (p.getImageUrl() != null) {
-                imageLoader.displayImage(p.getImageUrl(), imageView);
+                ScoopItApp.INSTANCE.imgageLoader.displayImage(p.getImageUrl(), imageView);
             }
         }
         
