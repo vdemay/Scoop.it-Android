@@ -20,9 +20,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
-import com.odeval.scoopit.R;
 import com.odeval.scoopit.image.cache.FileCache;
 import com.odeval.scoopit.image.cache.MemoryCache;
+
 
 public class ImageLoader {
     
@@ -36,7 +36,7 @@ public class ImageLoader {
         executorService=Executors.newFixedThreadPool(5);
     }
     
-    final int stub_id = R.drawable.default_icon;
+    final int stub_id = com.odeval.scoopit.R.drawable.default_icon;
     public void DisplayImage(String url, ImageView imageView)
     {
         imageViews.put(imageView, url);
