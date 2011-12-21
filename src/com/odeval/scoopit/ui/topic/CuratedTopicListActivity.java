@@ -3,6 +3,7 @@ package com.odeval.scoopit.ui.topic;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -65,7 +66,13 @@ public class CuratedTopicListActivity extends ListActivity {
                 super.onPostExecute(result);
                 progress.hide();
                 //populate 
-                CuratedTopicListActivity.this.setListAdapter(new TopicListAdapter(CuratedTopicListActivity.this, result.getCuratedTopics()));
+                if (result != null) {
+                    CuratedTopicListActivity.this.setListAdapter(new TopicListAdapter(CuratedTopicListActivity.this, result.getCuratedTopics()));
+                } else {
+                   Dialog d = new Dialog(CuratedTopicListActivity.this);
+                   d.setTitle("An Error Occured");
+                   d.show();
+                }
             }
             
         }.execute();

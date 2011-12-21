@@ -38,11 +38,13 @@ public class LoginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if ( OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(this)) != null) {
+        //FIXME: put this method into oauth Helper
+        //FIXME: false because credentials can be experied -> need more check
+        /*if ( OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(this)) != null) {
         	startActivity(new Intent(this, CuratedTopicListActivity.class));
         	finish();
         	return;
-        }
+        }*/
         try {
             System.setProperty("debug", "true");
             this.consumer = new CommonsHttpOAuthConsumer(PrivateConstants.CONSUMER_KEY, PrivateConstants.CONSUMER_SECRET);
