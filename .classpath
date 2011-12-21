@@ -7,6 +7,6 @@
 	<classpathentry kind="lib" path="lib/signpost-commonshttp4-1.2.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/signpost-core-1.2.1.1.jar"/>
 	<classpathentry kind="src" path="/PullToRefresh"/>
-	<classpathentry kind="lib" path="/opt/android-sdk-mac_86/android-compatibility/v4/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="libs/android-support-v4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
