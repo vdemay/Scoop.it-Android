@@ -70,7 +70,7 @@ public class PostCurateActivity extends Activity {
 			if (convertView == null) {
 				convertView = new ImageView(context);				
 			}
-			ScoopItApp.INSTANCE.imgageLoader.displayImage((String)getItem(position), (ImageView)convertView);
+			ScoopItApp.INSTANCE.imageLoader.displayImage((String)getItem(position), (ImageView)convertView);
 			return convertView;
 		}
 
@@ -170,7 +170,7 @@ public class PostCurateActivity extends Activity {
     
     private void nextImage() {
     	currentImage = (currentImage+1) % post.getImageUrls().size();
-    	ScoopItApp.INSTANCE.imgageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));
+    	ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));
     }
 
     private void prevImage() {
@@ -178,7 +178,7 @@ public class PostCurateActivity extends Activity {
     	if (currentImage < 0) {
     		currentImage =  post.getImageUrls().size() - 1;
     	}
-    	ScoopItApp.INSTANCE.imgageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));    	
+    	ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));    	
     }
     
     ProgressDialog progress;

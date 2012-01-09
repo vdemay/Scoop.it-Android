@@ -2,4 +2,7 @@
 <resources>
     <string name="hello">Hello World, OAuthActivity!</string>
     <string name="app_name">ScoopIt</string>
+    
+    <string name="topic_list_message">Create topics on the Scoop.it website.</string>
+    <string name="topic_list_title">My Topics</string>
 </resources>

@@ -114,7 +114,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
         loadCurablePosts();
         loadCuratedPosts();
         ((TextView)findViewById(R.id.topic_title)).setText(getIntent().getExtras().getString("topicName"));
-        ScoopItApp.INSTANCE.imgageLoader.displayImage(getIntent().getExtras().getString("topicImage"), (ImageView)findViewById(R.id.topic_icon));
+        ScoopItApp.INSTANCE.imageLoader.displayImage(getIntent().getExtras().getString("topicImage"), (ImageView)findViewById(R.id.topic_icon));
 
         MyAdapter awesomeAdapter = new MyAdapter();
         ViewPager pager = (ViewPager) findViewById(R.id.pager);

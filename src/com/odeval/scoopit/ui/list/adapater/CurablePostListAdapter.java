@@ -106,7 +106,7 @@ public class CurablePostListAdapter extends ArrayAdapter<Post>{
             
             //and image
             if (h.post.getImageUrls() != null && h.post.getImageUrls().size() > 0) {
-                ScoopItApp.INSTANCE.imgageLoader.displayImage(h.post.getImageUrls().get(0), h.image);
+                ScoopItApp.INSTANCE.imageLoader.displayImage(h.post.getImageUrls().get(0), h.image);
                 h.image.getLayoutParams().height = ScoopItApp.scaleValue(50);
                 h.image.getLayoutParams().width = ScoopItApp.scaleValue(50);
             } else {
