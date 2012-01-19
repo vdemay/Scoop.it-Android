@@ -10,7 +10,7 @@ import android.view.WindowManager;
 public class ScoopItApp extends Application {
 	public static ScoopItApp INSTANCE;
 	private static float scale;
-	public ImageLoader imgageLoader;
+	public ImageLoader imageLoader;
 	
 	@Override
 	public void onCreate() {
@@ -19,7 +19,7 @@ public class ScoopItApp extends Application {
 	    (((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()).getMetrics(dm);
 		scale = dm.density;
 		INSTANCE = this;
-		imgageLoader = new ImageLoader(this);
+		imageLoader = new ImageLoader(this);
 	}
 
 	public static int scaleValue(int value) {

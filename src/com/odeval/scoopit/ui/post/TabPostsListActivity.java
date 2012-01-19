@@ -11,9 +11,11 @@ import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -91,7 +93,6 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 			return 2;
 		}
 
-		@Override
 		public String getTitle(int position) {
 			// TODO Auto-generated method stub
 			return titles[position];
@@ -111,20 +112,29 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
         views[0] = new PullToRefreshListView(this);
         views[1] = new PullToRefreshListView(this);
         
-        loadCurablePosts();
-        loadCuratedPosts();
+        loadScoopedPosts();
+        loadPostsToCurate();
+        
         ((TextView)findViewById(R.id.topic_title)).setText(getIntent().getExtras().getString("topicName"));
-        ScoopItApp.INSTANCE.imgageLoader.displayImage(getIntent().getExtras().getString("topicImage"), (ImageView)findViewById(R.id.topic_icon));
+        ScoopItApp.INSTANCE.imageLoader.displayImage(getIntent().getExtras().getString("topicImage"), (ImageView)findViewById(R.id.topic_icon));
 
         MyAdapter awesomeAdapter = new MyAdapter();
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(awesomeAdapter);
+        pager.setOnPageChangeListener(new OnPageChangeListener() {
+			public void onPageSelected(int page) {
+				((ArrayAdapter<Post>)views[page].getAdapter()).notifyDataSetChanged();
+			}
+			
+			public void onPageScrolled(int arg0, float arg1, int arg2) {}
+			public void onPageScrollStateChanged(int arg0) {}
+		});
         
         PageIndicator pageindicator = (PageIndicator) findViewById(R.id.pageindicator);
         pageindicator.setViewPager(pager);
     }
     
-    private void loadCurablePosts() {
+    private void loadScoopedPosts() {
         new AsyncTask<Void, Void, Topic>() {
 
             @Override
@@ -163,7 +173,6 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                 
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                    @Override
                     public void onItemClick(AdapterView< ? > parent, View view, int position, long id) {
                         Post p = (Post) lv.getAdapter().getItem(position);
                         
@@ -173,9 +182,8 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                     }
                 });
                 lv.setOnRefreshListener(new OnRefreshListener() {					
-					@Override
 					public void onRefresh() {
-						loadCurablePosts();
+						loadScoopedPosts();
 					}
 				});
                 lv.onRefreshComplete();
@@ -183,7 +191,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
         }.execute();
     }
     
-    private void loadCuratedPosts() {
+    private void loadPostsToCurate() {
         new AsyncTask<Void, Void, Topic>() {
 
             @Override
@@ -230,9 +238,8 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                 	}
                 });
                 lv.setOnRefreshListener(new OnRefreshListener() {					
-					@Override
 					public void onRefresh() {
-						loadCuratedPosts();
+						loadPostsToCurate();
 					}
 				});
                 lv.onRefreshComplete();
@@ -244,20 +251,16 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
     final static int DELETE_POST = 0;
     final static int CURATE_POST = 1;
     
-	@Override
 	public void onDelete(final Post p, int index) {
-		PostCurateActivity.deletePost(p, false, this, true, new OnActionComplete() {
-			@Override
+		PostCurateActivity.discardPost(p, false, this, true, new OnActionComplete() {
 			public void onActionComplete() {
 				views[0].onRefresh();
 			}
 		});
 	}
 
-	@Override
 	public void onAccept(final Post p, int index) {
 		PostCurateActivity.curatePost(p, false, this, 0, true, new OnActionComplete() {
-			@Override
 			public void onActionComplete() {
 				views[0].onRefresh();
 			}
@@ -270,7 +273,6 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 		
 	}
 
-	@Override
 	public void onEdit(Post p, int index) {
 		Intent i = new Intent(TabPostsListActivity.this, PostCurateActivity.class);
         i.putExtra("post", p);

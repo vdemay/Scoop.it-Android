@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class User {
@@ -82,30 +81,25 @@ public class User {
     
     
     public void popupateFromJsonObject(JSONObject obj) {
-        try { id = obj.getLong("id");} catch (JSONException e) {}
-        try { name = obj.getString("name");} catch (JSONException e) {}
-        try { shortName = obj.getString("shortName");} catch (JSONException e) {}
-        try { bio = obj.getString("bio");} catch (JSONException e) {}
-        try { smallAvatarUrl = obj.getString("smallAvatarUrl");} catch (JSONException e) {}
-        try { mediumAvatarUrl = obj.getString("mediumAvatarUrl");} catch (JSONException e) {}
-        try { largeAvatarUrl = obj.getString("largeAvatarUrl");} catch (JSONException e) {}
+        id = obj.optLong("id");
+        name = obj.optString("name", null);
+        shortName = obj.optString("shortName", null);
+        bio = obj.optString("bio", null);
+        smallAvatarUrl = obj.optString("smallAvatarUrl", null);
+        mediumAvatarUrl = obj.optString("mediumAvatarUrl", null);
+        largeAvatarUrl = obj.optString("largeAvatarUrl", null);
         
-        try { 
-            sharers = new ArrayList<Sharer>();
-            JSONArray jsonSharers = obj.getJSONArray("sharers");
-            for (int i=0; i<jsonSharers.length(); i++) {
-                JSONObject jsonSharer = jsonSharers.getJSONObject(i);
-                Sharer sharer = new Sharer();
-                sharer.popupateFromJsonObject(jsonSharer);
-            }
-        } catch (JSONException e) {}
+        sharers = new ArrayList<Sharer>();
+        JSONArray jsonSharers = obj.optJSONArray("sharers");
+        if (jsonSharers != null) {
+	        for (int i=0; i<jsonSharers.length(); i++) {
+	            JSONObject jsonSharer = jsonSharers.optJSONObject(i);
+	            Sharer sharer = new Sharer();
+	            sharer.popupateFromJsonObject(jsonSharer);
+	        }
+        }
         
-        try { 
-            curatedTopics = Topic.createTopicArrayFromJsonArray(obj.getJSONArray("curatedTopics"));
-        } catch (JSONException e) {}
-        
-        try { 
-            followedTopics = Topic.createTopicArrayFromJsonArray(obj.getJSONArray("followedTopics"));
-        } catch (JSONException e) {}
+        curatedTopics = Topic.createTopicArrayFromJsonArray(obj.optJSONArray("curatedTopics"));
+        followedTopics = Topic.createTopicArrayFromJsonArray(obj.optJSONArray("followedTopics"));
     }
 }

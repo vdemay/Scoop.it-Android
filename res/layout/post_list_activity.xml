@@ -6,12 +6,12 @@
 	<ScrollView android:id="@+id/scrollView1"
 		android:layout_width="fill_parent" android:layout_height="match_parent">
 		<LinearLayout android:id="@+id/linearLayout2"
-			android:layout_width="match_parent" android:layout_height="match_parent"
+			android:layout_width="match_parent" android:layout_height="wrap_content"
 			android:orientation="vertical">
 			
 			<Button android:layout_width="match_parent"
 				android:layout_height="wrap_content" android:id="@+id/post_list_original"
-				android:text="Button"></Button>
+				android:text="@string/post_list_activity_view_original"></Button>
 				
 			<TextView android:layout_width="match_parent"
 					  android:layout_height="wrap_content"
@@ -26,6 +26,28 @@
 					  android:layout_height="wrap_content"
 					  android:id="@+id/post_list_content"
 					  android:text="Loading..."/>
+			
+			<LinearLayout android:id="@+id/linearLayout3"
+	            android:layout_width="match_parent" android:layout_height="wrap_content"
+	            android:orientation="horizontal">
+	            
+                <Button android:layout_width="0dp" android:layout_weight="1"
+                android:layout_height="wrap_content" android:id="@+id/post_list_share"
+                android:text="@string/post_list_activity_share"></Button>
+                
+                <Button android:layout_width="0dp" android:layout_weight="1"
+                android:layout_height="wrap_content" android:id="@+id/post_list_tag"
+                android:text="@string/post_list_activity_tag"></Button>
+                
+                <Button android:layout_width="0dp" android:layout_weight="1"
+                android:layout_height="wrap_content" android:id="@+id/post_list_edit"
+                android:text="@string/post_list_activity_edit"></Button>
+                
+                <Button android:layout_width="0dp" android:layout_weight="1"
+                android:layout_height="wrap_content" android:id="@+id/post_list_delete"
+                android:text="@string/post_list_activity_delete"></Button>
+			    
+			</LinearLayout>
 
 		</LinearLayout>
 	</ScrollView>

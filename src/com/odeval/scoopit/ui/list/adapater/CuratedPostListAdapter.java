@@ -58,7 +58,7 @@ public class CuratedPostListAdapter extends ArrayAdapter<Post>{
             ImageView imageView = (ImageView) v.findViewById(R.id.list_adapter_post_image);
             imageView.setImageResource(R.drawable.default_icon);
             if (p.getImageUrl() != null) {
-                ScoopItApp.INSTANCE.imgageLoader.displayImage(p.getImageUrl(), imageView);
+                ScoopItApp.INSTANCE.imageLoader.displayImage(p.getImageUrl(), imageView);
             }
         }
         

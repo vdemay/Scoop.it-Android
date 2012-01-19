@@ -2,4 +2,12 @@
 <resources>
     <string name="hello">Hello World, OAuthActivity!</string>
     <string name="app_name">ScoopIt</string>
+    
+    <string name="post_list_activity_view_original">View Original</string>
+    <string name="post_list_activity_share">Share</string>
+    <string name="post_list_activity_tag">Tag</string>
+    <string name="post_list_activity_edit">Edit</string>
+    <string name="post_list_activity_delete">Delete</string>
+    <string name="post_list_activity_delete_confirm_title">Are you sure?</string>
+    <string name="post_list_activity_delete_confirm_message">You are about to delete \"%1$s\".\nDo you want to proceed?</string>
 </resources>

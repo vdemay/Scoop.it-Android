@@ -130,7 +130,6 @@ public class ImageLoader {
             this.photoToLoad=photoToLoad;
         }
         
-        @Override
         public void run() {
             if(imageViewReused(photoToLoad))
                 return;

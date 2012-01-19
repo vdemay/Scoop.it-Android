@@ -3,7 +3,6 @@ package com.odeval.scoopit.model;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Parcel;
@@ -263,152 +262,73 @@ public class Post implements Parcelable {
     }
 
     public void popupateFromJsonObject(JSONObject obj) {
-        try {
-            id = obj.getLong("id");
-        } catch (JSONException e) {
+    	if (obj == null) {
+    		return;
+    	}
+    	
+        id = obj.optLong("id");
+        content = obj.optString("content", null);
+        htmlFragment = obj.optString("htmlFragment", null);
+        htmlContent = obj.optString("htmlContent", null);
+        title = obj.optString("title", null);
+        thanksCount = obj.optInt("thanksCount");
+        reactionsCount = obj.optInt("reactionsCount");
+        twitterAuthor = obj.optString("twitterAuthor", null);
+        url = obj.optString("url", null);
+        scoopUrl = obj.optString("scoopUrl", null);
+        smallImageUrl = obj.optString("smallImageUrl", null);
+        mediumImageUrl = obj.optString("mediumImageUrl", null);
+        imageUrl = obj.optString("imageUrl", null);
+        largeImageUrl = obj.optString("largeImageUrl", null);
+        imageWidth = obj.optInt("imageWidth");
+        imageHeight = obj.optInt("imageHeight");
+        imageSize = obj.optInt("imageSize");
+        imagePosition = obj.optString("imagePosition", null);
+        imageUrls = new ArrayList<String>();
+        JSONArray array = obj.optJSONArray("imageUrls");
+        if (array != null) {
+	        for (int i = 0; i < array.length(); i++) {
+	            imageUrls.add(array.optString(i));
+	        }
         }
-        try {
-            content = obj.getString("content");
-        } catch (JSONException e) {
+        tags = new ArrayList<String>();
+        array = obj.optJSONArray("tags");
+        if (array != null) {
+	        for (int i = 0; i < array.length(); i++) {
+	            tags.add(array.optString(i));
+	        }
         }
-        try {
-            htmlFragment = obj.getString("htmlFragment");
-        } catch (JSONException e) {
-        }
-        try {
-            htmlContent = obj.getString("htmlContent");
-        } catch (JSONException e) {
-        }
-        try {
-            title = obj.getString("title");
-        } catch (JSONException e) {
-        }
-        try {
-            thanksCount = obj.getInt("thanksCount");
-        } catch (JSONException e) {
-        }
-        try {
-            reactionsCount = obj.getInt("reactionsCount");
-        } catch (JSONException e) {
-        }
-        try {
-            twitterAuthor = obj.getString("twitterAuthor");
-        } catch (JSONException e) {
-        }
-        try {
-            url = obj.getString("url");
-        } catch (JSONException e) {
-        }
-        try {
-            scoopUrl = obj.getString("scoopUrl");
-        } catch (JSONException e) {
-        }
-        try {
-            smallImageUrl = obj.getString("smallImageUrl");
-        } catch (JSONException e) {
-        }
-        try {
-            mediumImageUrl = obj.getString("mediumImageUrl");
-        } catch (JSONException e) {
-        }
-        try {
-            imageUrl = obj.getString("imageUrl");
-        } catch (JSONException e) {
-        }
-        try {
-            largeImageUrl = obj.getString("largeImageUrl");
-        } catch (JSONException e) {
-        }
-        try {
-            imageWidth = obj.getInt("imageWidth");
-        } catch (JSONException e) {
-        }
-        try {
-            imageHeight = obj.getInt("imageHeight");
-        } catch (JSONException e) {
-        }
-        try {
-            imageSize = obj.getInt("imageSize");
-        } catch (JSONException e) {
-        }
-        try {
-            imagePosition = obj.getString("imagePosition");
-        } catch (JSONException e) {
-        }
-
-        try {
-            imageUrls = new ArrayList<String>();
-            JSONArray array = obj.getJSONArray("imageUrls");
-            for (int i = 0; i < array.length(); i++) {
-                imageUrls.add(array.getString(i));
-            }
-        } catch (JSONException e) {
-        }
-
-        try {
-            tags = new ArrayList<String>();
-            JSONArray array = obj.getJSONArray("tags");
-            for (int i = 0; i < array.length(); i++) {
-                tags.add(array.getString(i));
-            }
-        } catch (JSONException e) {
-        }
-
-        try {
-            commentsCount = obj.getInt("commentsCount");
-        } catch (JSONException e) {
-        }
-        try {
-            isUserSuggestion = obj.getBoolean("isUserSuggestion");
-        } catch (JSONException e) {
-        }
-        try {
-            pageViews = obj.getLong("pageViews");
-        } catch (JSONException e) {
-        }
-        try {
-            edited = obj.getBoolean("edited");
-        } catch (JSONException e) {
-        }
-        try {
-            publicationDate = obj.getInt("publicationDate");
-        } catch (JSONException e) {
-        }
-        try {
-            curationDate = obj.getInt("curationDate");
-        } catch (JSONException e) {
-        }
-
-        try {
-            topic = new Topic();
-            topic.popupateFromJsonObject(obj.getJSONObject("topic"));
-        } catch (JSONException e) {
-        }
+        commentsCount = obj.optInt("commentsCount");
+        isUserSuggestion = obj.optBoolean("isUserSuggestion");
+        pageViews = obj.optLong("pageViews");
+        edited = obj.optBoolean("edited");
+        publicationDate = obj.optInt("publicationDate");
+        curationDate = obj.optInt("curationDate");
+        topic = new Topic();
+        topic.popupateFromJsonObject(obj.optJSONObject("topic"));
     }
 
     public static ArrayList<Post> createPostArrayFromJsonArray(JSONArray array) {
-        try {
-            ArrayList<Post> posts = new ArrayList<Post>();
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject jsonPost;
-                jsonPost = array.getJSONObject(i);
+    	if (array == null) {
+    		return null;
+    	}
+    	
+        ArrayList<Post> posts = new ArrayList<Post>();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject jsonPost;
+            jsonPost = array.optJSONObject(i);
 
-                Post post = new Post();
-                post.popupateFromJsonObject(jsonPost);
-                posts.add(post);
-            }
-            return posts;
-        } catch (JSONException e) {
-            return null;
+            Post post = new Post();
+            post.popupateFromJsonObject(jsonPost);
+            posts.add(post);
         }
+        return posts;
     }
 
-    @Override
     public int describeContents() {
         return 0;
     }
 
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
         dest.writeString(content);
@@ -445,7 +365,6 @@ public class Post implements Parcelable {
             return new Post[size];
         }
 
-        @Override
         public Post createFromParcel(Parcel source) {
             return new Post(source);
         }

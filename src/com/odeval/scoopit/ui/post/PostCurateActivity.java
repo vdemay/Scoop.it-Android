@@ -42,69 +42,58 @@ public class PostCurateActivity extends Activity {
     		this.post = post;
     	}
 
-    	@Override
 		public int getCount() {
 			return post.getImageUrls().size();
 		}
 
-		@Override
 		public Object getItem(int position) {
 			return post.getImageUrls().get(position);
 		}
 
-		@Override
 		public long getItemId(int position) {
 			// TODO Auto-generated method stub
 			return position;
 		}
 
-		@Override
 		public int getItemViewType(int position) {
 			// TODO Auto-generated method stub
 			return 0;
 		}
 
-		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			if (convertView == null) {
 				convertView = new ImageView(context);				
 			}
-			ScoopItApp.INSTANCE.imgageLoader.displayImage((String)getItem(position), (ImageView)convertView);
+			ScoopItApp.INSTANCE.imageLoader.displayImage((String)getItem(position), (ImageView)convertView);
 			return convertView;
 		}
 
-		@Override
 		public int getViewTypeCount() {
 			// TODO Auto-generated method stub
 			return 0;
 		}
 
-		@Override
 		public boolean hasStableIds() {
 			// TODO Auto-generated method stub
 			return false;
 		}
 
-		@Override
 		public boolean isEmpty() {
 			// TODO Auto-generated method stub
 			return false;
 		}
 
-		@Override
 		public void registerDataSetObserver(DataSetObserver observer) {
 			// TODO Auto-generated method stub
 			
 		}
 
-		@Override
 		public void unregisterDataSetObserver(DataSetObserver observer) {
 			// TODO Auto-generated method stub
 			
 		}
 
-		@Override
 		public View getDropDownView(int position, View convertView,
 				ViewGroup parent) {
 			// TODO Auto-generated method stub
@@ -118,7 +107,6 @@ public class PostCurateActivity extends Activity {
         super.onCreate(savedInstanceState);
         
         Intent intent = getIntent();
-        String test = intent.getAction();
         post = getIntent().getExtras().getParcelable("post");
         
         if (intent != null && post != null) {
@@ -127,7 +115,7 @@ public class PostCurateActivity extends Activity {
         		curatePost(post, true, this, 0, false);
         		return;
         	} else if (Constants.DELETE_ACTION.equals(intent.getAction())) {
-        		deletePost(post, true, this, false);
+        		discardPost(post, true, this, false);
         		return;
         	}        	
         }
@@ -158,7 +146,7 @@ public class PostCurateActivity extends Activity {
         });	
         ((Button)findViewById(R.id.discard)).setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        		deletePost(post, true, PostCurateActivity.this, true);
+        		discardPost(post, true, PostCurateActivity.this, true);
         	}
         });	
         Gallery gallery = (Gallery)findViewById(R.id.gallery);
@@ -170,7 +158,7 @@ public class PostCurateActivity extends Activity {
     
     private void nextImage() {
     	currentImage = (currentImage+1) % post.getImageUrls().size();
-    	ScoopItApp.INSTANCE.imgageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));
+    	ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));
     }
 
     private void prevImage() {
@@ -178,7 +166,7 @@ public class PostCurateActivity extends Activity {
     	if (currentImage < 0) {
     		currentImage =  post.getImageUrls().size() - 1;
     	}
-    	ScoopItApp.INSTANCE.imgageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));    	
+    	ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));    	
     }
     
     ProgressDialog progress;
@@ -226,24 +214,24 @@ public class PostCurateActivity extends Activity {
     	public void onActionComplete();
     };
     
-   	public static void deletePost(final Post post, final boolean finish, final Context context, final boolean showDialog) {
-   		deletePost(post, finish, context, showDialog, null);
+   	public static void discardPost(final Post post, final boolean finish, final Context context, final boolean showDialog) {
+   		discardPost(post, finish, context, showDialog, null);
    	}
    	
-   	public static void deletePost(final Post post, final boolean finish, final Context context, final boolean showDialog, final OnActionComplete onActionComplete) {
+   	public static void discardPost(final Post post, final boolean finish, final Context context, final boolean showDialog, final OnActionComplete onActionComplete) {
         new AsyncTask<Void, Void, Post>() {
         	ProgressDialog dialog;
         	
             @Override
             protected void onPreExecute() {
                 if (showDialog)
-                	dialog = ProgressDialog.show(context, "Please Wait", "Deleting post...", true);
+                	dialog = ProgressDialog.show(context, "Please Wait", "Discarding post...", true);
                 super.onPreExecute();
             }
 
             @Override
             protected Post doInBackground(Void... params) {
-            	doDeletePost(post, context);
+            	doDiscardPost(post, context);
             	return post;
             }
 
@@ -274,10 +262,10 @@ public class PostCurateActivity extends Activity {
         return ret;
     }
     
-    private static void doDeletePost(Post post, Context context) {
+    private static void doDiscardPost(Post post, Context context) {
     	HashMap<String, String> params = new HashMap<String, String>();
     	params.put("id", post.getId().toString());
-    	params.put("action", "delete");
+    	params.put("action", "refuse");
         String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
                 OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(context)), params);
         System.out.println("jsonOutput : " + jsonOutput);    	
