@@ -37,6 +37,7 @@ public class ImageLoader {
     }
     
     final int stub_id = com.odeval.scoopit.R.drawable.default_icon;
+    
     public void displayImage(String url, ImageView imageView)
     {
         imageViews.put(imageView, url);

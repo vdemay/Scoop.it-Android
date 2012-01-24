@@ -117,6 +117,7 @@ public class PostViewActivity extends Activity {
                 if (onActionComplete != null) {
                 	onActionComplete.onActionComplete();
                 }
+                activity.setResult(TabPostsListActivity.RESULT_REFRESH_TOPIC_LIST);
                 activity.finish();
             }
 

@@ -21,7 +21,7 @@ public class Post implements Parcelable {
     private String title;
     private int thanksCount;
     private int reactionsCount;
-    // private Source source;
+    private Source source;
     private String twitterAuthor;
     private String url;
     private String scoopUrl;
@@ -101,7 +101,15 @@ public class Post implements Parcelable {
         this.reactionsCount = reactionsCount;
     }
 
-    public String getTwitterAuthor() {
+    public Source getSource() {
+		return source;
+	}
+
+	public void setSource(Source source) {
+		this.source = source;
+	}
+
+	public String getTwitterAuthor() {
         return twitterAuthor;
     }
 
@@ -273,6 +281,7 @@ public class Post implements Parcelable {
         title = obj.optString("title", null);
         thanksCount = obj.optInt("thanksCount");
         reactionsCount = obj.optInt("reactionsCount");
+        source = new Source(obj.optJSONObject("source"));
         twitterAuthor = obj.optString("twitterAuthor", null);
         url = obj.optString("url", null);
         scoopUrl = obj.optString("scoopUrl", null);

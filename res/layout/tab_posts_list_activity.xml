@@ -27,7 +27,7 @@
 			    android:paddingLeft="5dip"
 			    android:gravity="left|top"
 			    />
-		</LinearLayout>    
+		</LinearLayout>
 		<com.viewpagerindicator.TitlePageIndicator
 		    android:layout_width="fill_parent"
             android:layout_height="wrap_content"

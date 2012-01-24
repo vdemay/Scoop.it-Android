@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="top"
     >
     	
-   	 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   	 <LinearLayout
 	    android:orientation="vertical"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:gravity="center_horizontal"
 	    android:paddingTop="2dp"
 	    android:paddingBottom="2dp"
+	    android:id="@+id/post_image_text_layout"
 	    >
 	    <TextView
 	    	android:id="@+id/list_adapter_post_title"
@@ -35,5 +35,54 @@
 	    	android:layout_height="wrap_content"
 	    	android:paddingLeft="5dp"
 	    	/>
-	    </LinearLayout>
-</LinearLayout>
+    </LinearLayout>
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"        
+        android:padding="5dip"
+        android:orientation="horizontal"
+        android:layout_below="@id/post_image_text_layout"
+    >
+        <ImageView
+            android:id="@+id/list_adapter_source_icon"
+            android:layout_width="16dip"
+            android:layout_height="16dip"
+            android:src="@drawable/default_icon"
+            android:layout_gravity="left|bottom"
+        />
+        <TextView
+            android:id="@+id/list_adapter_source_title"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="16dip"
+            android:textSize="8dp"
+            android:layout_gravity="left|bottom"
+            android:gravity="left|center_vertical"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_marginLeft="5dp"
+            />
+        <TextView
+            android:id="@+id/list_adapter_post_date"
+            android:layout_width="wrap_content"
+            android:layout_height="16dip"
+            android:textSize="8dp"
+            android:gravity="right|center_vertical"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="10dp"
+            />
+        <Button 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit"
+            android:padding="5dip"
+            android:background="@drawable/rcblue"
+            android:textStyle="bold"
+            android:id="@+id/btn_edit"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+         />
+    </LinearLayout>
+</RelativeLayout>

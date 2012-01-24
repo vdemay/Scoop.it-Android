@@ -128,7 +128,7 @@ public class PostCurateActivity extends Activity {
         
 //        if (post.getImageUrls().get(0) != null) {
 //            imageLoader.DisplayImage(post.getImageUrls().get(0), (ImageView)findViewById(R.id.post_list_image));
-//        }   
+//        }
         ((Button)findViewById(R.id.next_image)).setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		nextImage();
@@ -184,7 +184,7 @@ public class PostCurateActivity extends Activity {
             @Override
             protected void onPreExecute() {
                 if (showDialog)
-                	progress = ProgressDialog.show(context, "Please Wait", "Curating post...", true);
+                	progress = ProgressDialog.show(context, "Please Wait", "Scooping post...", true);
                 super.onPreExecute();
             }
 
@@ -252,7 +252,7 @@ public class PostCurateActivity extends Activity {
     	HashMap<String, String> params = new HashMap<String, String>();
     	params.put("id", post.getId().toString());
     	params.put("action", "accept");
-    	params.put("imageUrl", post.getImageUrls().get(imageIndex));
+    	params.put("imageUrl", post.getImageUrls().isEmpty() ? null : post.getImageUrls().get(imageIndex));
         String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
                 OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(context)), params);
         System.out.println("jsonOutput : " + jsonOutput);

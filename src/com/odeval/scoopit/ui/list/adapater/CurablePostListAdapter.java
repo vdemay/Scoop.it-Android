@@ -1,32 +1,35 @@
 package com.odeval.scoopit.ui.list.adapater;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.odeval.scoopit.R;
 import com.odeval.scoopit.ScoopItApp;
 import com.odeval.scoopit.model.Post;
 
 public class CurablePostListAdapter extends ArrayAdapter<Post>{
+	
     private ArrayList<Post> posts;
+    
     private LayoutInflater li;
     
+    private DateFormat postDateFormat;
+    
+    private OnButtonClickedListener listener;
+    
     public CurablePostListAdapter(Context context, List<Post> list, OnButtonClickedListener listener) {
-    	this(context, list);
-    	this.listener = listener;
-    }
-   	
-    public CurablePostListAdapter(Context context, List<Post> list) {
         super(context, 0, list);
+        this.listener = listener;
+    	postDateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
         if (list != null) {
             this.posts = new ArrayList<Post>(list);
         } else {
@@ -40,77 +43,40 @@ public class CurablePostListAdapter extends ArrayAdapter<Post>{
         return posts.get(position);
     }
     
-    public class ViewHolder implements OnClickListener {
-    	TextView title;
-    	TextView content;
-    	ImageView image;    	    	
-    	Post post;
-    	int position;
-    	
-		public void onClick(View v) {
-			if (post != null && listener != null) {
-				switch (v.getId()) {
-				case R.id.btn_accept:
-					listener.onAccept(post, position);
-					break;
-				case R.id.btn_delete:
-					listener.onDelete(post, position);
-					break;
-				case R.id.btn_edit:
-					listener.onEdit(post, position);
-					break;						
-				}
-			}
-		}
-    }
-    
-    public interface OnButtonClickedListener {
-    	public void onDelete(Post p, int index);
-    	public void onAccept(Post p, int index);
-    	public void onEdit(Post p, int index);    	
-    }
-    
-    OnButtonClickedListener listener;
-    
-    public void setOnButtonClickListener(OnButtonClickedListener listener) {
-    	this.listener = listener;
-    }
-    
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-        ViewHolder h = null;
+        PostView postView = null;
         //create view if it does not exist
         if (v == null) {
             //assign view
             v = li.inflate(R.layout.curable_post_list_adapter, null);
-            h = new ViewHolder();
-            v.setTag(h);
-            h.title = (TextView) v.findViewById(R.id.list_adapter_post_title);
-            h.content = (TextView) v.findViewById(R.id.list_adapter_post_content);
-            h.image = (ImageView) v.findViewById(R.id.list_adapter_post_image);
-            v.findViewById(R.id.btn_accept).setOnClickListener(h);
-            v.findViewById(R.id.btn_delete).setOnClickListener(h);
-            v.findViewById(R.id.btn_edit).setOnClickListener(h);
+            postView = new PostView(v, listener);
+            v.setTag(postView);
+            v.findViewById(R.id.btn_discard).setOnClickListener(postView);
         }
-        h = (ViewHolder)v.getTag();
+        postView = (PostView)v.getTag();
 
         //populate view
-        h.post = posts.get(position);
-        h.position = position;
+        postView.post = posts.get(position);
+        postView.position = position;
         
-        if (h.post != null) {
-            h.title.setText(h.post.getTitle());
-            h.content.setText(h.post.getContent());
+        if (postView.post != null) {
+            postView.title.setText(postView.post.getTitle());
+            postView.content.setText(postView.post.getContent());
+            postView.sourceTitle.setText(postView.post.getSource().getName());
+            ScoopItApp.INSTANCE.imageLoader.displayImage(postView.post.getSource().getIconUrl(), postView.sourceIcon);
+            Date postDate = new Date(postView.post.getPublicationDate());
+            postView.postDate.setText(postDateFormat.format(postDate));
             
             //and image
-            if (h.post.getImageUrls() != null && h.post.getImageUrls().size() > 0) {
-                ScoopItApp.INSTANCE.imageLoader.displayImage(h.post.getImageUrls().get(0), h.image);
-                h.image.getLayoutParams().height = ScoopItApp.scaleValue(50);
-                h.image.getLayoutParams().width = ScoopItApp.scaleValue(50);
+            if (postView.post.getImageUrls() != null && postView.post.getImageUrls().size() > 0) {
+                ScoopItApp.INSTANCE.imageLoader.displayImage(postView.post.getImageUrls().get(0), postView.image);
+                postView.image.getLayoutParams().height = ScoopItApp.scaleValue(50);
+                postView.image.getLayoutParams().width = ScoopItApp.scaleValue(50);
             } else {
-                h.image.getLayoutParams().height = 0;
-                h.image.getLayoutParams().width = 0;
+                postView.image.getLayoutParams().height = 0;
+                postView.image.getLayoutParams().width = 0;
             }
         }
         
