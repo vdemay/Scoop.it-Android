@@ -1,89 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/linearLayout1"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-	<ScrollView android:id="@+id/scrollView1"
-		android:layout_width="fill_parent" android:layout_height="match_parent">
-		<LinearLayout android:id="@+id/linearLayout2"
-			android:layout_width="match_parent" android:layout_height="match_parent"
-			android:orientation="vertical">
-			
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:padding="5dip"
-				>			    
-    			<Button android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:id="@+id/prev_image"
-					android:text="prev"
-					android:gravity="center"
-					android:textStyle="bold"
-					android:background="@drawable/rcblue"					
-					android:minWidth="60dip"
-					android:padding="5dip"
-					android:layout_marginRight="10dip"
-					/>
-				<Button android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:id="@+id/next_image"
-					android:text="next"
-					android:gravity="center"
-					android:textStyle="bold"
-					android:background="@drawable/rcblue"					
-					android:minWidth="60dip"
-					android:padding="5dip"
-					/>
-    			    			    
-			</LinearLayout>
-		    			    
-			    				
-			<EditText android:layout_width="match_parent"
-					  android:layout_height="wrap_content"
-					  android:id="@+id/post_list_title"
-					  android:text="Loading..."
-					  />
-					  
-			<Gallery 
-			    android:layout_width="match_parent"
-			    android:layout_height="265dp"
-			    android:id="@+id/gallery"
-			    />	
-<!-- 			<ImageView android:src="@drawable/default_icon"  -->
-<!-- 					   android:id="@+id/post_list_image"  -->
-<!-- 					   android:layout_width="match_parent" android:layout_height="265dp"></ImageView> -->
-					   
-			<EditText android:layout_width="match_parent"
-					  android:layout_height="wrap_content"
-					  android:id="@+id/post_list_content"
-					  android:text="Loading..."/>
-			<LinearLayout
-				     android:layout_width="match_parent"
-					  android:layout_height="wrap_content"
-					  >			    
-   			<Button android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/discard"
-				android:text="discard"
-				android:gravity="center"
-				android:textStyle="bold"
-				android:background="@drawable/rcred"					
-				android:minWidth="60dip"
-				android:padding="5dip"
-				android:layout_marginRight="10dip"
-				/>
-			<Button android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/curate"
-				android:text="curate"
-				android:gravity="center"
-				android:textStyle="bold"
-				android:background="@drawable/rcgreen"					
-				android:minWidth="60dip"
-				android:padding="5dip"
-				/>
-    			    			    
-			</LinearLayout>
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent" >
 
-			</LinearLayout>
-	</ScrollView>
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dip" >
+
+                <Button
+                    android:id="@+id/prev_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dip"
+                    android:background="@drawable/rcblue"
+                    android:gravity="center"
+                    android:minWidth="60dip"
+                    android:padding="5dip"
+                    android:text="prev"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/next_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rcblue"
+                    android:gravity="center"
+                    android:minWidth="60dip"
+                    android:padding="5dip"
+                    android:text="next"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/post_list_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Loading..." />
+
+            <Gallery
+                android:id="@+id/gallery"
+                android:layout_width="match_parent"
+                android:layout_height="265dp" />
+            <!-- <ImageView android:src="@drawable/default_icon" -->
+            <!-- android:id="@+id/post_list_image" -->
+            <!-- android:layout_width="match_parent" android:layout_height="265dp"></ImageView> -->
+
+            <EditText
+                android:id="@+id/post_list_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Loading..." />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/curate"
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rcgreen"
+                    android:gravity="center"
+                    android:minWidth="60dip"
+                    android:padding="5dip"
+                    android:text="Scoop.it!"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/discard"
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rcgreen"
+                    android:gravity="center"
+                    android:minWidth="60dip"
+                    android:padding="5dip"
+                    android:text="Discard"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

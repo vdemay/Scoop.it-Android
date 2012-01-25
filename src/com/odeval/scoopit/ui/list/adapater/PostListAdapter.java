@@ -12,11 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import com.odeval.scoopit.R;
 import com.odeval.scoopit.ScoopItApp;
 import com.odeval.scoopit.model.Post;
 
-public class CurablePostListAdapter extends ArrayAdapter<Post>{
+public class PostListAdapter extends ArrayAdapter<Post>{
 	
     private ArrayList<Post> posts;
     
@@ -26,8 +25,14 @@ public class CurablePostListAdapter extends ArrayAdapter<Post>{
     
     private OnButtonClickedListener listener;
     
-    public CurablePostListAdapter(Context context, List<Post> list, OnButtonClickedListener listener) {
+    private int postLayoutId;
+    
+    private int actionButtonId;
+    
+    public PostListAdapter(int postLayoutId, int actionButtonId, Context context, List<Post> list, OnButtonClickedListener listener) {
         super(context, 0, list);
+        this.postLayoutId = postLayoutId;
+        this.actionButtonId = actionButtonId;
         this.listener = listener;
     	postDateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
         if (list != null) {
@@ -50,10 +55,10 @@ public class CurablePostListAdapter extends ArrayAdapter<Post>{
         //create view if it does not exist
         if (v == null) {
             //assign view
-            v = li.inflate(R.layout.curable_post_list_adapter, null);
+            v = li.inflate(postLayoutId, null);
             postView = new PostView(v, listener);
             v.setTag(postView);
-            v.findViewById(R.id.btn_discard).setOnClickListener(postView);
+            v.findViewById(actionButtonId).setOnClickListener(postView);
         }
         postView = (PostView)v.getTag();
 
@@ -70,10 +75,10 @@ public class CurablePostListAdapter extends ArrayAdapter<Post>{
             postView.postDate.setText(postDateFormat.format(postDate));
             
             //and image
-            if (postView.post.getImageUrls() != null && postView.post.getImageUrls().size() > 0) {
+            if (postView.post.getImageUrl() != null) {
+                ScoopItApp.INSTANCE.imageLoader.displayImage(postView.post.getImageUrl(), postView.image);
+            } else if (postView.post.getImageUrls() != null && postView.post.getImageUrls().size() > 0) {
                 ScoopItApp.INSTANCE.imageLoader.displayImage(postView.post.getImageUrls().get(0), postView.image);
-                postView.image.getLayoutParams().height = ScoopItApp.scaleValue(50);
-                postView.image.getLayoutParams().width = ScoopItApp.scaleValue(50);
             } else {
                 postView.image.getLayoutParams().height = 0;
                 postView.image.getLayoutParams().width = 0;
@@ -82,6 +87,5 @@ public class CurablePostListAdapter extends ArrayAdapter<Post>{
         
         return v;
     }
-    
     
 }

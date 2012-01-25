@@ -25,9 +25,8 @@ import com.odeval.scoopit.OAuth.OAuthFlowApp;
 import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.model.Post;
 import com.odeval.scoopit.model.Topic;
-import com.odeval.scoopit.ui.list.adapater.CurablePostListAdapter;
-import com.odeval.scoopit.ui.list.adapater.CuratedPostListAdapter;
 import com.odeval.scoopit.ui.list.adapater.OnButtonClickedListener;
+import com.odeval.scoopit.ui.list.adapater.PostListAdapter;
 import com.odeval.scoopit.ui.post.PostCurateActivity.OnActionComplete;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitleProvider;
@@ -39,7 +38,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 
     private String topicId;
 
-    private CurablePostListAdapter curablePostListAdapter;
+    private PostListAdapter curablePostListAdapter;
     private PullToRefreshListView[] views;
     private static final String[] titles = new String[] { "CURATE", "VIEW TOPIC"};
     
@@ -159,7 +158,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                 // populate
                 final PullToRefreshListView lv = views[1];
                 
-                lv.setAdapter(new CuratedPostListAdapter(TabPostsListActivity.this, result.getCuratedPosts(), TabPostsListActivity.this));
+                lv.setAdapter(new PostListAdapter(R.layout.curated_post_list_adapter, R.id.btn_edit, TabPostsListActivity.this, result.getCuratedPosts(), TabPostsListActivity.this));
                 
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -214,15 +213,15 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                 super.onPostExecute(result);
                 // populate
                 final PullToRefreshListView lv = views[0];
-                curablePostListAdapter = new CurablePostListAdapter(TabPostsListActivity.this,
+                curablePostListAdapter = new PostListAdapter(R.layout.curable_post_list_adapter, R.id.btn_discard, TabPostsListActivity.this,
                         result.getCurablePosts(), TabPostsListActivity.this);
                 lv.setAdapter(curablePostListAdapter);
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 	public void onItemClick(AdapterView< ? > parent, View view, int position, long id) {
                 		Post p = (Post) lv.getAdapter().getItem(position);
-                        Intent i = new Intent(TabPostsListActivity.this, PostCurateActivity.class);
+                        Intent i = new Intent(TabPostsListActivity.this, PostViewBeforeCurateActivity.class);
                         i.putExtra("post", p);
-                        TabPostsListActivity.this.startActivity(i);
+                        TabPostsListActivity.this.startActivityForResult(i, 1);
                 	}
                 });
                 lv.setOnRefreshListener(new OnRefreshListener() {					

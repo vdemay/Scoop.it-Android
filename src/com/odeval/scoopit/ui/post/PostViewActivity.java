@@ -30,7 +30,7 @@ public class PostViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.post_list_activity);
+        setContentView(R.layout.post_view_activity);
         
         final Post post = getIntent().getExtras().getParcelable("post");
         
