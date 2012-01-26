@@ -48,6 +48,8 @@ public class PostViewActivity extends Activity {
         
         if (post.getImageUrl() != null) {
         	ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrl(), (ImageView)findViewById(R.id.post_image));
+        } else {
+        	((ImageView)findViewById(R.id.post_image)).setVisibility(View.GONE);
         }
         ScoopItApp.INSTANCE.imageLoader.displayImage(post.getSource().getIconUrl(), (ImageView)findViewById(R.id.post_source_icon));
         ((TextView)findViewById(R.id.post_date)).setText(ScoopItApp.INSTANCE.dateTimeFormatMediumShort.format(new Date(post.getPublicationDate())));

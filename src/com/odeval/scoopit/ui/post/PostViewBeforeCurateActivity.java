@@ -39,6 +39,8 @@ public class PostViewBeforeCurateActivity extends Activity {
         
         if (post.getImageUrls() != null && !post.getImageUrls().isEmpty()) {
         	ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrls().get(0), (ImageView)findViewById(R.id.post_image));
+        } else {
+        	((ImageView)findViewById(R.id.post_image)).setVisibility(View.GONE);
         }
         ScoopItApp.INSTANCE.imageLoader.displayImage(post.getSource().getIconUrl(), (ImageView)findViewById(R.id.post_source_icon));
         ((TextView)findViewById(R.id.post_date)).setText(ScoopItApp.INSTANCE.dateTimeFormatMediumShort.format(new Date(post.getPublicationDate())));

@@ -79,37 +79,46 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="@drawable/background_toolbar_curated"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/post_share"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:background="@drawable/view_button_left"
+            android:textColor="@color/post_toolbar_button"
             android:text="@string/post_list_activity_share" >
         </Button>
 
         <Button
             android:id="@+id/post_tag"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:background="@drawable/view_button_middle"
+            android:textColor="@color/post_toolbar_button"
             android:text="@string/post_list_activity_tag" >
         </Button>
 
         <Button
             android:id="@+id/post_edit"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:background="@drawable/view_button_middle"
+            android:textColor="@color/post_toolbar_button"
             android:text="@string/post_list_activity_edit" >
         </Button>
 
         <Button
             android:id="@+id/post_delete"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:background="@drawable/view_button_right"
+            android:textColor="@color/post_toolbar_button"
             android:text="@string/post_list_activity_delete" >
         </Button>
     </LinearLayout>

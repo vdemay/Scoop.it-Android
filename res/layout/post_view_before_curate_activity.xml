@@ -79,21 +79,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="@drawable/background_toolbar_curable"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/post_view_before_curate_scoopit"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:background="@drawable/view_before_curate_button_scoopit"
+            android:textColor="@color/post_toolbar_button"
+            android:textStyle="bold"
             android:text="Scoop.it!" >
         </Button>
 
         <Button
             android:id="@+id/post_view_before_curate_discard"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:background="@drawable/view_before_curate_button_discard"
+            android:textColor="@color/post_toolbar_button"
+            android:textStyle="bold"
             android:text="Discard" >
         </Button>
     </LinearLayout>
