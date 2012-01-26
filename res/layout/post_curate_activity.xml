@@ -71,26 +71,12 @@
                 <Button
                     android:id="@+id/curate"
                     android:layout_width="fill_parent"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:background="@drawable/rcgreen"
                     android:gravity="center"
-                    android:minWidth="60dip"
                     android:padding="5dip"
-                    android:text="Scoop.it!"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/discard"
-                    android:layout_width="fill_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rcgreen"
-                    android:gravity="center"
-                    android:minWidth="60dip"
-                    android:padding="5dip"
-                    android:text="Discard"
+                    android:text="Post"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold" />
             </LinearLayout>

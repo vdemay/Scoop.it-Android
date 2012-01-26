@@ -35,6 +35,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 	
 	public static final int RESULT_REFRESH_CURATION_LIST = 2;
 	public static final int RESULT_REFRESH_TOPIC_LIST = 3;
+	public static final int RESULT_REFRESH_ALL = 4;
 
     private String topicId;
 
@@ -266,6 +267,10 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 				views[0].onRefresh(); break;
 			case RESULT_REFRESH_TOPIC_LIST: 
 				views[1].onRefresh(); break;
+			case RESULT_REFRESH_ALL: 
+				views[0].onRefresh(); 
+				views[1].onRefresh(); 
+				break;
 		}
 	}
 

@@ -1,10 +1,8 @@
 package com.odeval.scoopit.ui.list.adapater;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -21,8 +19,6 @@ public class PostListAdapter extends ArrayAdapter<Post>{
     
     private LayoutInflater li;
     
-    private DateFormat postDateFormat;
-    
     private OnButtonClickedListener listener;
     
     private int postLayoutId;
@@ -34,7 +30,6 @@ public class PostListAdapter extends ArrayAdapter<Post>{
         this.postLayoutId = postLayoutId;
         this.actionButtonId = actionButtonId;
         this.listener = listener;
-    	postDateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
         if (list != null) {
             this.posts = new ArrayList<Post>(list);
         } else {
@@ -72,7 +67,7 @@ public class PostListAdapter extends ArrayAdapter<Post>{
             postView.sourceTitle.setText(postView.post.getSource().getName());
             ScoopItApp.INSTANCE.imageLoader.displayImage(postView.post.getSource().getIconUrl(), postView.sourceIcon);
             Date postDate = new Date(postView.post.getPublicationDate());
-            postView.postDate.setText(postDateFormat.format(postDate));
+            postView.postDate.setText(ScoopItApp.INSTANCE.dateTimeFormatShortShort.format(postDate));
             
             //and image
             if (postView.post.getImageUrl() != null) {

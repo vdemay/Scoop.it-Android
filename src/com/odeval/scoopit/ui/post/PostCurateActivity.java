@@ -144,11 +144,6 @@ public class PostCurateActivity extends Activity {
         		curatePost(post, true, PostCurateActivity.this, currentImage, true);
         	}
         });	
-        ((Button)findViewById(R.id.discard)).setOnClickListener(new OnClickListener() {
-        	public void onClick(View v) {
-        		discardPost(post, true, PostCurateActivity.this, true);
-        	}
-        });	
         Gallery gallery = (Gallery)findViewById(R.id.gallery);
         PostImageAdapter adapter = new PostImageAdapter(post, this);
         gallery.setAdapter(adapter);
@@ -158,7 +153,7 @@ public class PostCurateActivity extends Activity {
     
     private void nextImage() {
     	currentImage = (currentImage+1) % post.getImageUrls().size();
-    	ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));
+    	ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_image));
     }
 
     private void prevImage() {
@@ -166,7 +161,7 @@ public class PostCurateActivity extends Activity {
     	if (currentImage < 0) {
     		currentImage =  post.getImageUrls().size() - 1;
     	}
-    	ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_list_image));    	
+    	ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrls().get(currentImage), (ImageView)findViewById(R.id.post_image));    	
     }
     
     ProgressDialog progress;
@@ -174,24 +169,24 @@ public class PostCurateActivity extends Activity {
     
     
     
-    public static void curatePost(final Post post, final boolean finish, final Context context, final int imageIndex, final boolean showDialog) {
-    	curatePost(post, finish, context, imageIndex, showDialog, null);
+    public static void curatePost(final Post post, final boolean finish, final Activity activity, final int imageIndex, final boolean showDialog) {
+    	curatePost(post, finish, activity, imageIndex, showDialog, null);
     }
     
-    public static void curatePost(final Post post, final boolean finish, final Context context, final int imageIndex, final boolean showDialog, final OnActionComplete onActionComplete) {
+    public static void curatePost(final Post post, final boolean finish, final Activity activity, final int imageIndex, final boolean showDialog, final OnActionComplete onActionComplete) {
         new AsyncTask<Void, Void, Post>() {
         	ProgressDialog progress;
             @Override
             protected void onPreExecute() {
                 if (showDialog)
-                	progress = ProgressDialog.show(context, "Please Wait", "Scooping post...", true);
+                	progress = ProgressDialog.show(activity, "Please Wait", "Scooping post...", true);
                 super.onPreExecute();
             }
 
             @Override
             protected Post doInBackground(Void... params) {
             	try {
-            		return doCuratePost(post, imageIndex, context);
+            		return doCuratePost(post, imageIndex, activity);
             	} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -202,8 +197,11 @@ public class PostCurateActivity extends Activity {
             protected void onPostExecute(Post result) {
                 super.onPostExecute(result);
                 if (showDialog) progress.dismiss();
-                if (onActionComplete != null) 
+                if (onActionComplete != null) { 
                 	onActionComplete.onActionComplete();
+                }
+                activity.setResult(TabPostsListActivity.RESULT_REFRESH_ALL);
+                activity.finish();
             }
 
         }.execute();

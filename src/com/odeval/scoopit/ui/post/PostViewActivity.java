@@ -1,5 +1,6 @@
 package com.odeval.scoopit.ui.post;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -19,9 +20,9 @@ import android.widget.TextView;
 
 import com.odeval.scoopit.Constants;
 import com.odeval.scoopit.R;
+import com.odeval.scoopit.ScoopItApp;
 import com.odeval.scoopit.OAuth.OAuthFlowApp;
 import com.odeval.scoopit.helper.NetworkingUtils;
-import com.odeval.scoopit.image.ImageLoader;
 import com.odeval.scoopit.model.Post;
 import com.odeval.scoopit.ui.post.PostCurateActivity.OnActionComplete;
 
@@ -34,40 +35,42 @@ public class PostViewActivity extends Activity {
         
         final Post post = getIntent().getExtras().getParcelable("post");
         
-        ((Button)findViewById(R.id.post_list_original)).setOnClickListener(new OnClickListener() {
+        ((Button)findViewById(R.id.post_original)).setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(post.getUrl()));
         		startActivity(browserIntent);
         	}
         });
         
-        ((TextView)findViewById(R.id.post_list_title)).setText(post.getTitle());
-        ((TextView)findViewById(R.id.post_list_content)).setText(post.getContent());
+        ((TextView)findViewById(R.id.post_source_title)).setText(post.getSource().getName());
+        ((TextView)findViewById(R.id.post_title)).setText(post.getTitle());
+        ((TextView)findViewById(R.id.post_content)).setText(post.getContent());
         
-        ImageLoader imageLoader = new ImageLoader(this);
         if (post.getImageUrl() != null) {
-            imageLoader.displayImage(post.getImageUrl(), (ImageView)findViewById(R.id.post_list_image));
+        	ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrl(), (ImageView)findViewById(R.id.post_image));
         }
+        ScoopItApp.INSTANCE.imageLoader.displayImage(post.getSource().getIconUrl(), (ImageView)findViewById(R.id.post_source_icon));
+        ((TextView)findViewById(R.id.post_date)).setText(ScoopItApp.INSTANCE.dateTimeFormatMediumShort.format(new Date(post.getPublicationDate())));
         
-        ((Button)findViewById(R.id.post_list_share)).setOnClickListener(new OnClickListener() {
+        ((Button)findViewById(R.id.post_share)).setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		
         	}
         });
         
-        ((Button)findViewById(R.id.post_list_tag)).setOnClickListener(new OnClickListener() {
+        ((Button)findViewById(R.id.post_tag)).setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		
         	}
         });
         
-        ((Button)findViewById(R.id.post_list_edit)).setOnClickListener(new OnClickListener() {
+        ((Button)findViewById(R.id.post_edit)).setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		
         	}
         });
         
-        ((Button)findViewById(R.id.post_list_delete)).setOnClickListener(new OnClickListener() {
+        ((Button)findViewById(R.id.post_delete)).setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		new AlertDialog.Builder(PostViewActivity.this)
         		.setTitle(getResources().getString(R.string.post_list_activity_delete_confirm_title))

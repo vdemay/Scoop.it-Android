@@ -346,7 +346,7 @@ public class Post implements Parcelable {
         dest.writeString(title);
         dest.writeInt(thanksCount);
         dest.writeInt(reactionsCount);
-        //TODO source
+        dest.writeParcelable(source, flags);
         dest.writeString(twitterAuthor);
         dest.writeString(url);
         dest.writeString(scoopUrl);
@@ -387,7 +387,7 @@ public class Post implements Parcelable {
         title = in.readString();
         thanksCount = in.readInt();
         reactionsCount = in.readInt();
-        //TODO source
+        source = in.readParcelable(this.getClass().getClassLoader());
         twitterAuthor = in.readString();
         url = in.readString();
         scoopUrl = in.readString();
