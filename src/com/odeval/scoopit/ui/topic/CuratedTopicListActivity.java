@@ -22,10 +22,9 @@ import com.odeval.scoopit.ui.list.adapater.TopicListAdapter;
 import com.odeval.scoopit.ui.post.TabPostsListActivity;
 
 public class CuratedTopicListActivity extends ListActivity {
-    
 
     private ProgressDialog progress;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,13 +33,10 @@ public class CuratedTopicListActivity extends ListActivity {
         
         //start a task
         new AsyncTask<Void, Void, User>() {
-            
+
             @Override
             protected void onPreExecute() {
-                progress = ProgressDialog.show(
-                        CuratedTopicListActivity.this, 
-                        "Please Wait", 
-                        "Loading your topics...", 
+                progress = ProgressDialog.show(CuratedTopicListActivity.this, "Please Wait", "Loading your topics...",
                         true);
                 super.onPreExecute();
             }
@@ -49,42 +45,44 @@ public class CuratedTopicListActivity extends ListActivity {
             protected User doInBackground(Void... params) {
 
                 try {
-                    String jsonOutput = NetworkingUtils.sendRestfullRequest(Constants.PROFILE_REQUEST, OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(CuratedTopicListActivity.this)));
+                    String jsonOutput = NetworkingUtils.sendRestfullRequest(
+                            Constants.PROFILE_REQUEST,
+                            OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(CuratedTopicListActivity.this)));
                     System.out.println("jsonOutput : " + jsonOutput);
                     JSONObject jsonResponse;
                     jsonResponse = new JSONObject(jsonOutput);
-                   
+
                     User user = new User();
                     user.popupateFromJsonObject(jsonResponse.getJSONObject("user"));
                     return user;
                 } catch (JSONException e) {
-                    //TODO
+                    // TODO
                 }
                 return null;
             }
-            
+
             @Override
             protected void onPostExecute(User result) {
                 super.onPostExecute(result);
                 progress.hide();
-                //populate 
+                // populate
                 if (result != null) {
-                    CuratedTopicListActivity.this.setListAdapter(new TopicListAdapter(CuratedTopicListActivity.this, result.getCuratedTopics()));
+                	CuratedTopicListActivity.this.setListAdapter(new TopicListAdapter(CuratedTopicListActivity.this,
+                            result.getCuratedTopics()));
                 } else {
-                   Dialog d = new Dialog(CuratedTopicListActivity.this);
-                   d.setTitle("An Error Occured");
-                   d.show();
+                    Dialog d = new Dialog(CuratedTopicListActivity.this);
+                    d.setTitle("An Error Occured");
+                    d.show();
                 }
             }
-            
+
         }.execute();
-        
-        
+
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView< ? > parent, View view, int position, long id) {
-                Topic t = (Topic)getListAdapter().getItem(position);
-                
+            	Topic t = (Topic)getListAdapter().getItem(position);
+
                 Intent i = new Intent(CuratedTopicListActivity.this, TabPostsListActivity.class);
                 i.putExtra("topicId", "" + t.getId());
                 i.putExtra("topicName", t.getName());
@@ -92,7 +90,7 @@ public class CuratedTopicListActivity extends ListActivity {
                 CuratedTopicListActivity.this.startActivity(i);
             }
         });
-    
+
     }
-    
+
 }
