@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent" 
+    android:background="#E6E6E6">
 
     <ScrollView
         android:id="@+id/scrollView1"
@@ -32,14 +33,16 @@
                 android:ellipsize="end"
                 android:gravity="left|center_vertical"
                 android:singleLine="true"
-                android:textSize="8dp" />
+                android:textSize="8dp"
+                android:textColor="#555555" />
 
             <TextView
                 android:id="@+id/post_date"
                 android:layout_width="wrap_content"
                 android:layout_height="16dip"
                 android:layout_below="@id/post_source_icon"
-                android:textSize="8dp" />
+                android:textSize="8dp"
+                android:textColor="#555555" />
 
             <Button
                 android:id="@+id/post_original"
@@ -54,7 +57,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/post_original"
-                android:text="Loading..." />
+                android:text="Loading..."
+                android:textColor="#313131" />
 
             <ImageView
                 android:id="@+id/post_image"
@@ -62,7 +66,8 @@
                 android:layout_height="200dp"
                 android:layout_below="@id/post_title"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/default_icon" >
+                android:src="@drawable/default_icon"
+                android:background="@drawable/image_white_border" >
             </ImageView>
 
             <TextView
@@ -70,7 +75,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/post_image"
-                android:text="Loading..." />
+                android:text="Loading..."
+                android:textColor="#313131" />
         </RelativeLayout>
     </ScrollView>
 

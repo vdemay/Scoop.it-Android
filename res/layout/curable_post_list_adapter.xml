@@ -3,96 +3,107 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="top"
-    >
-    
-    <LinearLayout 
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:id="@+id/post_image_text_layout"
-        android:gravity="top"
-    >
-	    <ImageView
-	    	android:id="@+id/list_adapter_post_image"
-	    	android:layout_width="64dip"
-	    	android:layout_height="64dip"
-	    	android:src="@drawable/default_icon"
-	    	android:layout_gravity="left"
-        />
-    	
-	   	 <LinearLayout 
-		    android:orientation="vertical"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_gravity="right"
-		    android:gravity="center_horizontal"
-			android:id="@+id/textLayout"
-		    >
-		    <TextView
-		    	android:id="@+id/list_adapter_post_title"
-		    	android:layout_width="fill_parent"
-		    	android:layout_height="wrap_content"
-		    	android:textStyle="bold"
-		    	android:paddingLeft="5dp"
-		    	/>
-		    <TextView
-		    	android:id="@+id/list_adapter_post_content"
-		    	android:layout_width="fill_parent"
-		    	android:layout_height="wrap_content"
-		    	android:paddingLeft="5dp"
-		    	/>
-		  </LinearLayout>
+    android:paddingBottom="10dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp" >
+
+    <ImageView
+        android:id="@+id/list_adapter_post_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="left"
+        android:padding="2dp"
+        android:background="@drawable/image_white_border"
+        android:src="@drawable/default_icon" />
+
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="44dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="15dp"
+        android:src="@drawable/icon_arrow_light" />
+
+    <LinearLayout
+        android:id="@+id/discardLayout"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/arrow"
+        android:background="@drawable/delete_button"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginLeft="15dp" >
+
+        <Button
+            android:id="@+id/btn_discard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/icon_delete" />
     </LinearLayout>
-   	<LinearLayout 
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"		
-		android:padding="5dip"
-		android:orientation="horizontal"
-		android:layout_below="@id/post_image_text_layout"
-    >
-	   	<ImageView
+
+    <LinearLayout
+        android:id="@+id/textLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/arrow"
+        android:layout_toRightOf="@id/list_adapter_post_image"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/list_adapter_post_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="2"
+            android:paddingLeft="5dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/list_adapter_post_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="2"
+            android:paddingLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textLayout"
+        android:orientation="horizontal" >
+
+        <ImageView
             android:id="@+id/list_adapter_source_icon"
             android:layout_width="16dip"
             android:layout_height="16dip"
-            android:src="@drawable/default_icon"
             android:layout_gravity="left|bottom"
-        />
-	    <TextView
+            android:src="@drawable/default_icon" />
+
+        <TextView
             android:id="@+id/list_adapter_source_title"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="16dip"
-            android:textSize="8dp"
             android:layout_gravity="left|bottom"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
             android:gravity="left|center_vertical"
             android:singleLine="true"
-            android:ellipsize="end"
-            android:layout_marginLeft="5dp"
-            />
+            android:textSize="8dp" />
+
         <TextView
             android:id="@+id/list_adapter_post_date"
             android:layout_width="wrap_content"
             android:layout_height="16dip"
-            android:textSize="8dp"
-            android:gravity="right|center_vertical"
             android:layout_gravity="bottom"
             android:layout_marginLeft="10dp"
-            />
-        <Button 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Discard"
-            android:padding="5dip"
-            android:background="@drawable/rcred"
-            android:textStyle="bold"
-            android:id="@+id/btn_discard"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:gravity="center"
-            android:layout_marginLeft="10dp"
-         />
+            android:gravity="right|center_vertical"
+            android:textSize="8dp" />
     </LinearLayout>
+
 </RelativeLayout>

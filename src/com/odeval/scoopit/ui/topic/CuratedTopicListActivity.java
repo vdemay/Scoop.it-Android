@@ -30,6 +30,8 @@ public class CuratedTopicListActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        setContentView(com.odeval.scoopit.R.layout.topic_list_activity);
+        
         //start a task
         new AsyncTask<Void, Void, User>() {
             

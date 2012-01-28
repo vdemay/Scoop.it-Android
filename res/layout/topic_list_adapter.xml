@@ -1,39 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
     android:gravity="top"
-    android:padding="5dip"
-    >
-    
+    android:paddingLeft="15dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp" >
+
     <ImageView
-    	android:id="@+id/list_adapter_topic_image"
-    	android:layout_width="50dp"
-    	android:layout_height="50dp"
-    	android:src="@drawable/default_icon"
-    	android:paddingTop="2dp"/>
-    	
-   	 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:orientation="vertical"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:gravity="center_horizontal"
-	    android:paddingTop="2dp"
-	    android:paddingBottom="2dp"
-	    >
-	    <TextView
-	    	android:id="@+id/list_adapter_topic_name"
-	    	android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content"
-	    	android:textStyle="bold"
-	    	android:paddingLeft="5dp"
-	    	android:text="Title" android:textColor="@color/topic_title" android:textSize="16sp" android:gravity="top"/>
-	    <TextView
-	    	android:id="@+id/list_adapter_topic_description"
-	    	android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content"
-	    	android:paddingLeft="5dp"
-	    	/>
-	    </LinearLayout>
-</LinearLayout>
+        android:id="@+id/list_adapter_topic_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/image_white_border"
+        android:padding="2dp"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/default_icon" />
+
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="15dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/icon_arrow_light" />
+
+    <LinearLayout
+        android:id="@+id/titleDescLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@id/arrow"
+        android:layout_toRightOf="@id/list_adapter_topic_image"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/list_adapter_topic_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="top"
+            android:singleLine="true"
+            android:text="Title"
+            android:textColor="@color/list_selector"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/list_adapter_topic_description"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="2"
+            android:text="Description"
+            android:textColor="@color/list_selector"
+            android:textSize="14dp" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -49,7 +49,6 @@ public class TopicListAdapter extends ArrayAdapter<Topic>{
             userName.setText(t.getName());
             content.setText(t.getDescription());
             
-            //and avatar
             ScoopItApp.INSTANCE.imageLoader.displayImage(t.getMediumImageUrl(), (ImageView)v.findViewById(R.id.list_adapter_topic_image));
         }
         

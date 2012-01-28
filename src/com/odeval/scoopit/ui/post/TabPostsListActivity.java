@@ -111,6 +111,13 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
         views = new PullToRefreshListView[2];
         views[0] = new PullToRefreshListView(this);
         views[1] = new PullToRefreshListView(this);
+
+        for(PullToRefreshListView view : views) {
+        	view.setCacheColorHint(0);
+            view.setDivider(ScoopItApp.INSTANCE.getResources().getDrawable(R.color.list_divider));
+            view.setDividerHeight(1);
+            view.setSelector(R.drawable.list_selector);
+        }
         
         loadPostsToCurate();
         loadScoopedPosts();
