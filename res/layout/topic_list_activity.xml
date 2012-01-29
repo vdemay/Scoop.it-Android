@@ -28,6 +28,7 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/settings_button"
             android:gravity="center"
+            android:clickable="true"
             android:orientation="horizontal" >
 
             <Button
@@ -75,7 +76,7 @@
         android:cacheColorHint="#00000000"
         android:divider="#4D4D4D"
         android:dividerHeight="1px"
-        android:listSelector="@drawable/list_selector" />
+        android:listSelector="@drawable/curable_list_selector" />
 
     <TextView
         android:id="@android:id/empty"

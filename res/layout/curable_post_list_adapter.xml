@@ -23,6 +23,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/icon_arrow_light" />
 
     <LinearLayout
@@ -35,12 +36,15 @@
         android:background="@drawable/delete_button"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_marginLeft="15dp" >
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp" >
 
         <Button
             android:id="@+id/btn_discard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:background="@drawable/icon_delete" />
     </LinearLayout>
 
@@ -51,6 +55,7 @@
         android:layout_toLeftOf="@id/arrow"
         android:layout_toRightOf="@id/list_adapter_post_image"
         android:gravity="center_horizontal"
+        android:paddingLeft="10dp"
         android:orientation="vertical" >
 
         <TextView
@@ -58,8 +63,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:lines="2"
-            android:paddingLeft="5dp"
+            android:maxLines="2"
+            android:textColor="@color/curable_text_selector"
+            android:textSize="14dp"
             android:textStyle="bold" />
 
         <TextView
@@ -67,15 +73,17 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:lines="2"
-            android:paddingLeft="5dp" />
+            android:textColor="@color/curable_text_selector"
+            android:maxLines="2"
+            android:textSize="12dp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/textLayout"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true" >
 
         <ImageView
             android:id="@+id/list_adapter_source_icon"
@@ -93,8 +101,9 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:gravity="left|center_vertical"
+            android:textColor="@color/curable_subtext_selector"
             android:singleLine="true"
-            android:textSize="8dp" />
+            android:textSize="10dp" />
 
         <TextView
             android:id="@+id/list_adapter_post_date"
@@ -102,8 +111,10 @@
             android:layout_height="16dip"
             android:layout_gravity="bottom"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="54dp"
+            android:textColor="@color/curable_subtext_selector"
             android:gravity="right|center_vertical"
-            android:textSize="8dp" />
+            android:textSize="10dp" />
     </LinearLayout>
 
 </RelativeLayout>

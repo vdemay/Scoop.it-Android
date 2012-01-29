@@ -63,7 +63,12 @@ public class PostListAdapter extends ArrayAdapter<Post>{
         
         if (postView.post != null) {
             postView.title.setText(postView.post.getTitle());
-            postView.content.setText(postView.post.getContent());
+            String postContent = postView.post.getContent();
+            if (postContent != null && postContent.length() > 0) {
+            	postView.content.setText(postContent);
+            } else {
+            	postView.content.setVisibility(View.GONE);
+            }
             postView.sourceTitle.setText(postView.post.getSource().getName());
             ScoopItApp.INSTANCE.imageLoader.displayImage(postView.post.getSource().getIconUrl(), postView.sourceIcon);
             Date postDate = new Date(postView.post.getPublicationDate());
@@ -82,5 +87,4 @@ public class PostListAdapter extends ArrayAdapter<Post>{
         
         return v;
     }
-    
 }

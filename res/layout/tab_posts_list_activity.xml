@@ -2,43 +2,46 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/tabhost"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/background_dark">
+    android:layout_height="fill_parent" >
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-		<LinearLayout
-	        android:layout_width="fill_parent"
-    	    android:layout_height="wrap_content"
-    	    android:padding="5dip">
-			<ImageView 
-			    android:layout_width="32dip"
-			    android:layout_height="32dip"
-			    android:id="@+id/topic_icon"
-				/>
-			<TextView
-			    android:layout_width="fill_parent"
-			    android:layout_height="wrap_content"
-			    android:maxLines="1"
-			    android:textStyle="bold"
-			    android:textSize="20sp"
-			    android:textColor="@color/topic_title"
-			    android:id="@+id/topic_title"
-			    android:paddingLeft="5dip"
-			    android:gravity="left|top"
-			    />
-		</LinearLayout>
-		<com.viewpagerindicator.TitlePageIndicator
-		    android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:padding="5dip" >
+
+            <ImageView
+                android:id="@+id/topic_icon"
+                android:layout_width="32dip"
+                android:layout_height="32dip" />
+
+            <TextView
+                android:id="@+id/topic_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|top"
+                android:maxLines="1"
+                android:paddingLeft="5dip"
+                android:textColor="@color/topic_title"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <com.viewpagerindicator.TitlePageIndicator
             android:id="@+id/pageindicator"
             style="@style/CustomTitlePageIndicator"
-			/>
-         <android.support.v4.view.ViewPager
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent" >
         </android.support.v4.view.ViewPager>
     </LinearLayout>
+
 </LinearLayout>

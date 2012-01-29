@@ -44,7 +44,7 @@
             android:gravity="top"
             android:singleLine="true"
             android:text="Title"
-            android:textColor="@color/list_selector"
+            android:textColor="@color/curable_text_selector"
             android:textSize="16dp"
             android:textStyle="bold" />
 
@@ -55,7 +55,7 @@
             android:ellipsize="end"
             android:lines="2"
             android:text="Description"
-            android:textColor="@color/list_selector"
+            android:textColor="@color/curable_text_selector"
             android:textSize="14dp" />
     </LinearLayout>
 
