@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Topic {
@@ -184,57 +183,51 @@ public class Topic {
     }
 
     public void popupateFromJsonObject(JSONObject obj) {
+        if (obj == null) {
+        	return;
+        }
         
-        try { id = obj.getLong("id");} catch (JSONException e) {}
-        try { smallImageUrl = obj.getString("smallImageUrl");} catch (JSONException e) {}
-        try { mediumImageUrl = obj.getString("mediumImageUrl");} catch (JSONException e) {}
-        try { largeImageUrl = obj.getString("largeImageUrl");} catch (JSONException e) {}
-        try { backgroundImage = obj.getString("backgroundImage");} catch (JSONException e) {}
-        try { backgroundRepeat = obj.getString("backgroundRepeat");} catch (JSONException e) {}
-        try { backgroundColor = obj.getString("backgroundColor");} catch (JSONException e) {}
-        try { description = obj.getString("description");} catch (JSONException e) {}
-        try { name = obj.getString("name");} catch (JSONException e) {}
-        try { shortname = obj.getString("shortname");} catch (JSONException e) {}
-        try { url = obj.getString("url");} catch (JSONException e) {}
-        try { isCurator = obj.getBoolean("isCurator");} catch (JSONException e) {}
-        try { curablePostCount = obj.getInt("curablePostCount");} catch (JSONException e) {}
-        try { curatedPostCount = obj.getInt("curatedPostCount");} catch (JSONException e) {}
-        try { unreadPostCount = obj.getInt("unreadPostCount");} catch (JSONException e) {}
+        id = obj.optLong("id");
+        smallImageUrl = obj.optString("smallImageUrl", null);
+        mediumImageUrl = obj.optString("mediumImageUrl", null);
+        largeImageUrl = obj.optString("largeImageUrl", null);
+        backgroundImage = obj.optString("backgroundImage", null);
+        backgroundRepeat = obj.optString("backgroundRepeat", null);
+        backgroundColor = obj.optString("backgroundColor", null);
+        description = obj.optString("description", null);
+        name = obj.optString("name", null);
+        shortname = obj.optString("shortname", null);
+        url = obj.optString("url", null);
+        isCurator = obj.optBoolean("isCurator");
+        curablePostCount = obj.optInt("curablePostCount");
+        curatedPostCount = obj.optInt("curatedPostCount");
+        unreadPostCount = obj.optInt("unreadPostCount");
         
-        try {
-            creator = new User();
-            creator.popupateFromJsonObject(obj.getJSONObject("creator"));
-        } catch (JSONException e) {}
+        creator = new User();
+        creator.popupateFromJsonObject(obj.optJSONObject("creator"));
         
-        try {
-            pinnedPost = new Post();
-            pinnedPost.popupateFromJsonObject(obj.getJSONObject("pinnedPost"));
-        } catch (JSONException e) {}
+        pinnedPost = new Post();
+        pinnedPost.popupateFromJsonObject(obj.optJSONObject("pinnedPost"));
         
-        try {
-            curablePosts = Post.createPostArrayFromJsonArray(obj.getJSONArray("curablePosts"));
-        } catch (JSONException e) {}
+        curablePosts = Post.createPostArrayFromJsonArray(obj.optJSONArray("curablePosts"));
         
-        try {
-            curatedPosts = Post.createPostArrayFromJsonArray(obj.getJSONArray("curatedPosts"));
-        } catch (JSONException e) {}
-        
+        curatedPosts = Post.createPostArrayFromJsonArray(obj.optJSONArray("curatedPosts"));
     }
 
     public static ArrayList<Topic> createTopicArrayFromJsonArray(JSONArray array) {
-        try {
-            ArrayList<Topic> topics = new ArrayList<Topic>();
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject jsonTopic;
-                jsonTopic = array.getJSONObject(i);
+    	if (array == null) {
+    		return null;
+    	}
+    	
+        ArrayList<Topic> topics = new ArrayList<Topic>();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject jsonTopic;
+            jsonTopic = array.optJSONObject(i);
 
-                Topic topic = new Topic();
-                topic.popupateFromJsonObject(jsonTopic);
-                topics.add(topic);
-            }
-            return topics;
-        } catch (JSONException e) {
-            return null;
+            Topic topic = new Topic();
+            topic.popupateFromJsonObject(jsonTopic);
+            topics.add(topic);
         }
+        return topics;
     }
 }

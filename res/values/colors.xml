@@ -1,10 +1,18 @@
 
-    <resources>
-        <color name="topic_title">#509DEB</color>
-
-        <color name="blue">#509DEB</color>
-        <color name="red">#BC0000</color>
-        <color name="green">#83B31F</color>
-        
-        <color name="white">#FFFFFF</color>
-	</resources>
+<resources>
+    <color name="topic_title">#509DEB</color>
+    
+    <color name="blue">#509DEB</color>
+    <color name="red">#BC0000</color>
+    <color name="green">#83B31F</color>
+    
+    <color name="dark_gray_color">#555555</color>
+    <color name="light_gray_color">#AAAAAA</color>
+    <color name="gray_color">#808080</color>
+    
+    <color name="curable_list_divider">#4D4D4D</color>
+    <color name="curated_list_divider">#D6D6D6</color>
+    
+    <color name="curable_background">#323232</color>
+    <color name="curated_background">#FFFFFF</color>
+</resources>

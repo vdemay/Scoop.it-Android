@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#E6E6E6" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp" >
+
+        <RelativeLayout
+            android:id="@+id/layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/post_source_icon"
+                android:layout_width="16dip"
+                android:layout_height="16dip"
+                android:layout_alignLeft="@id/layout"
+                android:layout_alignTop="@id/layout"
+                android:src="@drawable/default_icon" />
+
+            <TextView
+                android:id="@+id/post_source_title"
+                android:layout_width="wrap_content"
+                android:layout_height="16dip"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_toRightOf="@id/post_source_icon"
+                android:layout_toLeftOf="@id/post_original"
+                android:ellipsize="end"
+                android:gravity="left|center_vertical"
+                android:singleLine="true"
+                android:textColor="#555555"
+                android:textSize="10dp" />
+
+            <TextView
+                android:id="@+id/post_date"
+                android:layout_width="wrap_content"
+                android:layout_height="16dip"
+                android:layout_below="@id/post_source_icon"
+                android:textColor="#555555"
+                android:textSize="10dp" />
+
+            <Button
+                android:id="@+id/post_original"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/view_original_button"
+                android:padding="5dp"
+                android:shadowDx="1.0"
+                android:shadowDy="1.0"
+                android:text="@string/post_list_activity_view_original"
+                android:textColor="@android:color/white"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/post_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/post_original"
+                android:layout_marginTop="10dp"
+                android:shadowColor="@android:color/white"
+                android:shadowDx="0.0"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
+                android:text="Loading..."
+                android:textColor="#313131"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/post_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/post_title"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:background="@drawable/image_white_border"
+                android:padding="2dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/default_icon" >
+            </ImageView>
+
+            <TextView
+                android:id="@+id/post_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/post_image"
+                android:shadowColor="@android:color/white"
+                android:shadowDx="0.0"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
+                android:text="Loading..."
+                android:textColor="#313131"
+                android:layout_marginTop="10dp"
+                android:textSize="12dp" />
+        </RelativeLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/background_toolbar_curable"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/post_view_before_curate_scoopit"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/view_before_curate_button_scoopit"
+            android:text="Scoop.it!"
+            android:textColor="@color/post_toolbar_button"
+            android:textStyle="bold" >
+        </Button>
+
+        <Button
+            android:id="@+id/post_view_before_curate_discard"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/view_before_curate_button_discard"
+            android:text="Discard"
+            android:textColor="@color/post_toolbar_button"
+            android:textStyle="bold" >
+        </Button>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.odeval.scoopit" android:versionCode="1"
-	android:versionName="1.0">
-	<uses-sdk android:minSdkVersion="8" />
+    android:installLocation="preferExternal"
+    package="com.odeval.scoopit"
+    android:versionCode="1"
+    android:versionName="1.0" >
 
-	<application android:icon="@drawable/icon" android:label="@string/app_name" android:name=".ScoopItApp">
+    <uses-sdk android:minSdkVersion="8" />
+    
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
+    <supports-screens />
 
-		<!-- Login and oauth -->
+    <application
+        android:name=".ScoopItApp"
+        android:debuggable="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name" >
+
+        <!-- Login and oauth -->
 		<activity android:name=".OAuth.LoginActivity"
 			android:launchMode="singleTask">
 			<intent-filter>
@@ -21,29 +33,31 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		
 		<!-- Embedded webView for oauth -->
 		<activity android:name=".OAuth.OAuthWindowActivity"
 		    	  android:theme="@style/ActivityAsPopup">
 		</activity>
 		
+        <activity
+            android:name=".ui.topic.CuratedTopicListActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".ui.post.TabPostsListActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".ui.post.PostCurateActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".ui.post.PostViewActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".ui.post.PostViewBeforeCurateActivity"
+            android:label="@string/app_name" >
+        </activity>
+    </application>
 
-		<activity android:name=".ui.topic.CuratedTopicListActivity"
-			android:label="@string/app_name">
-		</activity>
-		<activity android:name=".ui.post.TabPostsListActivity"
-			android:label="@string/app_name">
-		</activity>
-		<activity android:name=".ui.post.PostCurateActivity"
-			android:label="@string/app_name">
-		</activity>
-		<activity android:name=".ui.post.PostViewActivity"
-			android:label="@string/app_name">
-		</activity>
-		    		
-
-	</application>
-
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 </manifest>

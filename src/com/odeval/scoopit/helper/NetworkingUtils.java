@@ -157,16 +157,15 @@ public class NetworkingUtils {
                 e1.printStackTrace();
             }
             
-            
             consumer.sign(request);
             
             HttpResponse response = httpclient.execute(request);
             InputStream data = response.getEntity().getContent();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(data));
-            String responeLine;
+            String responseLine;
             StringBuilder responseBuilder = new StringBuilder();
-            while ((responeLine = bufferedReader.readLine()) != null) {
-                responseBuilder.append(responeLine);
+            while ((responseLine = bufferedReader.readLine()) != null) {
+                responseBuilder.append(responseLine);
             }
             return responseBuilder.toString();
         } catch (OAuthMessageSignerException e) {
@@ -186,7 +185,5 @@ public class NetworkingUtils {
             e.printStackTrace();
         }
         return null;
-
     }
-
 }

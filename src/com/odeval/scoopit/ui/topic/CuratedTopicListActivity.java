@@ -3,8 +3,8 @@ package com.odeval.scoopit.ui.topic;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,10 +12,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.odeval.scoopit.Constants;
-import com.odeval.scoopit.R;
 import com.odeval.scoopit.OAuth.OAuthFlowApp;
 import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.model.Topic;
@@ -23,17 +21,17 @@ import com.odeval.scoopit.model.User;
 import com.odeval.scoopit.ui.list.adapater.TopicListAdapter;
 import com.odeval.scoopit.ui.post.TabPostsListActivity;
 
-public class CuratedTopicListActivity extends Activity {
+public class CuratedTopicListActivity extends ListActivity {
 
     private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.curated_topic_list_activity);
-        final ListView curatedTopicListView = ((ListView) findViewById(R.id.curated_topic_list_view));
-        // start a task
+        
+        setContentView(com.odeval.scoopit.R.layout.topic_list_activity);
+        
+        //start a task
         new AsyncTask<Void, Void, User>() {
 
             @Override
@@ -69,7 +67,7 @@ public class CuratedTopicListActivity extends Activity {
                 progress.hide();
                 // populate
                 if (result != null) {
-                    curatedTopicListView.setAdapter(new TopicListAdapter(CuratedTopicListActivity.this,
+                	CuratedTopicListActivity.this.setListAdapter(new TopicListAdapter(CuratedTopicListActivity.this,
                             result.getCuratedTopics()));
                 } else {
                     Dialog d = new Dialog(CuratedTopicListActivity.this);
@@ -80,11 +78,10 @@ public class CuratedTopicListActivity extends Activity {
 
         }.execute();
 
-        curatedTopicListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            @Override
             public void onItemClick(AdapterView< ? > parent, View view, int position, long id) {
-                Topic t = (Topic) curatedTopicListView.getAdapter().getItem(position);
+            	Topic t = (Topic)getListAdapter().getItem(position);
 
                 Intent i = new Intent(CuratedTopicListActivity.this, TabPostsListActivity.class);
                 i.putExtra("topicId", "" + t.getId());

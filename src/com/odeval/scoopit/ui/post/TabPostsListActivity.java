@@ -13,7 +13,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,18 +25,21 @@ import com.odeval.scoopit.OAuth.OAuthFlowApp;
 import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.model.Post;
 import com.odeval.scoopit.model.Topic;
-import com.odeval.scoopit.ui.list.adapater.CurablePostListAdapter;
-import com.odeval.scoopit.ui.list.adapater.CurablePostListAdapter.OnButtonClickedListener;
-import com.odeval.scoopit.ui.list.adapater.CuratedPostListAdapter;
+import com.odeval.scoopit.ui.list.adapater.OnButtonClickedListener;
+import com.odeval.scoopit.ui.list.adapater.PostListAdapter;
 import com.odeval.scoopit.ui.post.PostCurateActivity.OnActionComplete;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitleProvider;
 
 public class TabPostsListActivity extends Activity implements OnButtonClickedListener {
+	
+	public static final int RESULT_REFRESH_CURATION_LIST = 2;
+	public static final int RESULT_REFRESH_TOPIC_LIST = 3;
+	public static final int RESULT_REFRESH_ALL = 4;
 
     private String topicId;
 
-    private CurablePostListAdapter curablePostListAdapter;
+    private PostListAdapter curablePostListAdapter;
     private PullToRefreshListView[] views;
     private static final String[] titles = new String[] { "CURATE", "VIEW TOPIC"};
     
@@ -91,7 +93,6 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 			return 2;
 		}
 
-		@Override
 		public String getTitle(int position) {
 			// TODO Auto-generated method stub
 			return titles[position];
@@ -110,21 +111,33 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
         views = new PullToRefreshListView[2];
         views[0] = new PullToRefreshListView(this);
         views[1] = new PullToRefreshListView(this);
+
+        views[0].setCacheColorHint(0);
+        views[0].setDivider(ScoopItApp.INSTANCE.getResources().getDrawable(R.color.curable_list_divider));
+        views[0].setDividerHeight(1);
+        views[0].setSelector(R.drawable.curable_list_selector);
+        views[0].setBackgroundDrawable(ScoopItApp.INSTANCE.getResources().getDrawable(R.color.curable_background));
         
-        loadCurablePosts();
-        loadCuratedPosts();
+        views[1].setCacheColorHint(0);
+        views[1].setDivider(ScoopItApp.INSTANCE.getResources().getDrawable(R.color.curated_list_divider));
+        views[1].setDividerHeight(1);
+        views[1].setSelector(R.drawable.curated_list_selector);
+        views[1].setBackgroundDrawable(ScoopItApp.INSTANCE.getResources().getDrawable(R.color.curated_background));
+        
+        loadPostsToCurate();
+        loadScoopedPosts();
+        
         ((TextView)findViewById(R.id.topic_title)).setText(getIntent().getExtras().getString("topicName"));
         ScoopItApp.INSTANCE.imageLoader.displayImage(getIntent().getExtras().getString("topicImage"), (ImageView)findViewById(R.id.topic_icon));
 
         MyAdapter awesomeAdapter = new MyAdapter();
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(awesomeAdapter);
-        
         PageIndicator pageindicator = (PageIndicator) findViewById(R.id.pageindicator);
         pageindicator.setViewPager(pager);
     }
     
-    private void loadCurablePosts() {
+    private void loadScoopedPosts() {
         new AsyncTask<Void, Void, Topic>() {
 
             @Override
@@ -158,24 +171,21 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                 // populate
                 final PullToRefreshListView lv = views[1];
                 
-                lv.setAdapter(new CuratedPostListAdapter(TabPostsListActivity.this,
-                        result.getCuratedPosts()));
+                lv.setAdapter(new PostListAdapter(R.layout.curated_post_list_adapter, R.id.btn_edit, TabPostsListActivity.this, result.getCuratedPosts(), TabPostsListActivity.this));
                 
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                    @Override
                     public void onItemClick(AdapterView< ? > parent, View view, int position, long id) {
                         Post p = (Post) lv.getAdapter().getItem(position);
                         
                         Intent i = new Intent(TabPostsListActivity.this, PostViewActivity.class);
                         i.putExtra("post", p);
-                        TabPostsListActivity.this.startActivity(i);
+                        TabPostsListActivity.this.startActivityForResult(i, 1);
                     }
                 });
                 lv.setOnRefreshListener(new OnRefreshListener() {					
-					@Override
 					public void onRefresh() {
-						loadCurablePosts();
+						loadScoopedPosts();
 					}
 				});
                 lv.onRefreshComplete();
@@ -183,7 +193,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
         }.execute();
     }
     
-    private void loadCuratedPosts() {
+    private void loadPostsToCurate() {
         new AsyncTask<Void, Void, Topic>() {
 
             @Override
@@ -216,23 +226,20 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                 super.onPostExecute(result);
                 // populate
                 final PullToRefreshListView lv = views[0];
-                curablePostListAdapter = new CurablePostListAdapter(TabPostsListActivity.this,
+                curablePostListAdapter = new PostListAdapter(R.layout.curable_post_list_adapter, R.id.btn_discard, TabPostsListActivity.this,
                         result.getCurablePosts(), TabPostsListActivity.this);
                 lv.setAdapter(curablePostListAdapter);
-                lv.setOnItemClickListener(new OnItemClickListener() {
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 	public void onItemClick(AdapterView< ? > parent, View view, int position, long id) {
                 		Post p = (Post) lv.getAdapter().getItem(position);
-                        
-                        Intent i = new Intent(TabPostsListActivity.this, PostCurateActivity.class);
+                        Intent i = new Intent(TabPostsListActivity.this, PostViewBeforeCurateActivity.class);
                         i.putExtra("post", p);
-                        TabPostsListActivity.this.startActivity(i);
-                		
+                        TabPostsListActivity.this.startActivityForResult(i, 1);
                 	}
                 });
                 lv.setOnRefreshListener(new OnRefreshListener() {					
-					@Override
 					public void onRefresh() {
-						loadCuratedPosts();
+						loadPostsToCurate();
 					}
 				});
                 lv.onRefreshComplete();
@@ -240,37 +247,45 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 
         }.execute();
     }
+    
+    public void refreshView(int index) {
+    	views[index].onRefresh();
+    }
 
     final static int DELETE_POST = 0;
     final static int CURATE_POST = 1;
     
-	@Override
-	public void onDelete(final Post p, int index) {
-		PostCurateActivity.deletePost(p, false, this, true, new OnActionComplete() {
-			@Override
+	public void onDiscard(final Post p, int index) {
+		PostCurateActivity.discardPost(p, false, this, true, new OnActionComplete() {
 			public void onActionComplete() {
 				views[0].onRefresh();
 			}
 		});
 	}
 
-	@Override
 	public void onAccept(final Post p, int index) {
 		PostCurateActivity.curatePost(p, false, this, 0, true, new OnActionComplete() {
-			@Override
 			public void onActionComplete() {
-				views[0].onRefresh();
+				views[0].onRefresh(); // refresh to remove scooped post from curation list
+				views[1].onRefresh(); // refresh to add scooped post to published posts list
 			}
 		});
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		
+		switch(resultCode) {
+			case RESULT_REFRESH_CURATION_LIST: 
+				views[0].onRefresh(); break;
+			case RESULT_REFRESH_TOPIC_LIST: 
+				views[1].onRefresh(); break;
+			case RESULT_REFRESH_ALL: 
+				views[0].onRefresh(); 
+				views[1].onRefresh(); 
+				break;
+		}
 	}
 
-	@Override
 	public void onEdit(Post p, int index) {
 		Intent i = new Intent(TabPostsListActivity.this, PostCurateActivity.class);
         i.putExtra("post", p);

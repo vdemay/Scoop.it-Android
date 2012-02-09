@@ -37,6 +37,7 @@ public class ImageLoader {
     }
     
     final int stub_id = com.odeval.scoopit.R.drawable.default_icon;
+    
     public void displayImage(String url, ImageView imageView)
     {
         imageViews.put(imageView, url);
@@ -130,7 +131,6 @@ public class ImageLoader {
             this.photoToLoad=photoToLoad;
         }
         
-        @Override
         public void run() {
             if(imageViewReused(photoToLoad))
                 return;

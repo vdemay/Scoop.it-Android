@@ -1,16 +1,26 @@
 package com.odeval.scoopit;
 
-import com.odeval.scoopit.image.ImageLoader;
+import java.text.DateFormat;
+import java.util.Locale;
 
 import android.app.Application;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import com.odeval.scoopit.image.ImageLoader;
+
 public class ScoopItApp extends Application {
+	
 	public static ScoopItApp INSTANCE;
+	
 	private static float scale;
+	
 	public ImageLoader imageLoader;
+	
+	public DateFormat dateTimeFormatShortShort = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
+	
+	public DateFormat dateTimeFormatMediumShort = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault());
 	
 	@Override
 	public void onCreate() {
