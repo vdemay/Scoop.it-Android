@@ -53,8 +53,10 @@ public class OAuthRequestTokenTask extends AsyncTask<Void, Void, Void> {
 	protected Void doInBackground(Void... params) {
 		
 		try {
-			final String url = provider.retrieveRequestToken(consumer, Constants.OAUTH_CALLBACK_URL);
-			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url)).setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_FROM_BACKGROUND);
+			String url = provider.retrieveRequestToken(consumer, Constants.OAUTH_CALLBACK_URL);
+			//call an inner Browser : not the default browser!
+			Intent intent = new Intent(this.context, OAuthWindowActivity.class);
+			intent.setData(Uri.parse(url));
 			context.startActivity(intent);
 			
 		} catch (Exception e) {

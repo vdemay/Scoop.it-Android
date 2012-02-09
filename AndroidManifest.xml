@@ -21,6 +21,12 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		
+		<!-- Embedded webView for oauth -->
+		<activity android:name=".OAuth.OAuthWindowActivity"
+		    	  android:theme="@style/ActivityAsPopup">
+		</activity>
+		
 
 		<activity android:name=".ui.topic.CuratedTopicListActivity"
 			android:label="@string/app_name">
