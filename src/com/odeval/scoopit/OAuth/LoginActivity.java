@@ -12,6 +12,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 
 import com.odeval.scoopit.Constants;
 import com.odeval.scoopit.PrivateConstants;
@@ -34,6 +38,8 @@ public class LoginActivity extends Activity {
 
     private OAuthConsumer consumer;
     private OAuthProvider provider;
+    
+    private LinearLayout loadIndicator;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,18 +65,41 @@ public class LoginActivity extends Activity {
 
         setContentView(R.layout.login_activity);
         
+        loadIndicator = (LinearLayout)findViewById(R.id.loginLayout);
+        
         new OAuthRequestTokenTask(this, consumer, provider).execute();
     }
-
-    /**
-     * Called when the OAuthRequestTokenTask finishes (user has authorized the
-     * request token). The callback URL will be intercepted here.
-     */
-    @Override
-    public void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
+    
+    public void loadScoopItUrlForLogin(String url) {
+        WebView wv = (WebView)findViewById(R.id.login_webview);
+        
+        wv.loadUrl(url);
+        wv.setVisibility(View.GONE);
+        wv.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        wv.setWebViewClient(new WebViewClient() {
+            public boolean shouldOverrideUrlLoading(WebView view, String url){
+                if (url.startsWith("x-oauthflow")) {
+                    executeStoringForConnectedUser(Uri.parse(url));
+                    return true;
+                }
+                view.loadUrl(url);
+                loadIndicator.setVisibility(View.VISIBLE);
+                return false; // then it is not handled by default action
+           }
+            
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                if (url.contains("/login")) {
+                    view.setVisibility(View.VISIBLE);
+                }
+                loadIndicator.setVisibility(View.GONE);
+            }
+        });
+    }
+    
+    public void executeStoringForConnectedUser(Uri uri) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        final Uri uri = intent.getData();
         if (uri != null && uri.getScheme().equals(Constants.OAUTH_CALLBACK_SCHEME)) {
             Log.i(getClass().getName(), "Callback received : " + uri);
             Log.i(getClass().getName(), "Retrieving Access Token");
@@ -81,7 +110,19 @@ public class LoginActivity extends Activity {
                             new Intent(LoginActivity.this, CuratedTopicListActivity.class));
                 };
             }.execute(uri);
-            finish();
+            //finish();
         }
+    }
+
+    /**
+     * Called when the OAuthRequestTokenTask finishes (user has authorized the
+     * request token). The callback URL will be intercepted here.
+     */
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        final Uri uri = intent.getData();
+        executeStoringForConnectedUser(uri);
+       
     }
 }
