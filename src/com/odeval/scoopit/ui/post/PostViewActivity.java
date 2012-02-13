@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.odeval.scoopit.Constants;
 import com.odeval.scoopit.R;
 import com.odeval.scoopit.ScoopItApp;
-import com.odeval.scoopit.OAuth.OAuthFlowApp;
+import com.odeval.scoopit.OAuth.OAutHelper;
 import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.model.Post;
 import com.odeval.scoopit.ui.post.PostCurateActivity.OnActionComplete;
@@ -134,7 +134,7 @@ public class PostViewActivity extends Activity {
     	params.put("id", post.getId().toString());
     	params.put("action", "delete");
         String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
-                OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(activity)), params);
+                OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(activity)), params);
         System.out.println("jsonOutput : " + jsonOutput);    	
     }
 }

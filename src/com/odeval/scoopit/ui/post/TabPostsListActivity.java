@@ -21,7 +21,7 @@ import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
 import com.odeval.scoopit.Constants;
 import com.odeval.scoopit.R;
 import com.odeval.scoopit.ScoopItApp;
-import com.odeval.scoopit.OAuth.OAuthFlowApp;
+import com.odeval.scoopit.OAuth.OAutHelper;
 import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.model.Post;
 import com.odeval.scoopit.model.Topic;
@@ -151,7 +151,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                 try {
                     String jsonOutput = NetworkingUtils.sendRestfullRequest(Constants.CURATED_POST_REQUEST + "?id="
                             + topicId,
-                            OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(TabPostsListActivity.this)));
+                            OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(TabPostsListActivity.this)));
                     System.out.println("jsonOutput : " + jsonOutput);
                     JSONObject jsonResponse;
                     jsonResponse = new JSONObject(jsonOutput);
@@ -207,7 +207,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                 try {
                     String jsonOutput = NetworkingUtils.sendRestfullRequest(Constants.CURABLE_POST_REQUEST + "&id="
                             + topicId,
-                            OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(TabPostsListActivity.this)));
+                            OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(TabPostsListActivity.this)));
                     System.out.println("jsonOutput : " + jsonOutput);
                     JSONObject jsonResponse;
                     jsonResponse = new JSONObject(jsonOutput);

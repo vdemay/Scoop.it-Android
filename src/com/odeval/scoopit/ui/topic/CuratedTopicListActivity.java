@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.odeval.scoopit.Constants;
-import com.odeval.scoopit.OAuth.OAuthFlowApp;
+import com.odeval.scoopit.OAuth.OAutHelper;
 import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.model.Topic;
 import com.odeval.scoopit.model.User;
@@ -47,7 +47,7 @@ public class CuratedTopicListActivity extends ListActivity {
                 try {
                     String jsonOutput = NetworkingUtils.sendRestfullRequest(
                             Constants.PROFILE_REQUEST,
-                            OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(CuratedTopicListActivity.this)));
+                            OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(CuratedTopicListActivity.this)));
                     System.out.println("jsonOutput : " + jsonOutput);
                     JSONObject jsonResponse;
                     jsonResponse = new JSONObject(jsonOutput);
