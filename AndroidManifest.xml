@@ -19,7 +19,7 @@
         android:label="@string/app_name" >
 
         <!-- Login and oauth -->
-		<activity android:name=".OAuth.LoginActivity">
+		<activity android:name=".OAuth.LoginActivity" android:noHistory="true">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />

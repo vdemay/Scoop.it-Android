@@ -9,17 +9,14 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageView;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.odeval.scoopit.Constants;
@@ -28,77 +25,11 @@ import com.odeval.scoopit.ScoopItApp;
 import com.odeval.scoopit.OAuth.OAutHelper;
 import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.model.Post;
+import com.odeval.scoopit.ui.list.adapater.GalleryPostImageAdapter;
 
 public class PostCurateActivity extends Activity {
     private Post post;
 
-    public class PostImageAdapter implements SpinnerAdapter {
-        Post post;
-        Context context;
-
-        public PostImageAdapter(Post post, Context context) {
-            this.context = context;
-            this.post = post;
-        }
-
-        public int getCount() {
-            return post.getImageUrls().size();
-        }
-
-        public Object getItem(int position) {
-            return post.getImageUrls().get(position);
-        }
-
-        public long getItemId(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        public int getItemViewType(int position) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            if (convertView == null) {
-                convertView = new ImageView(context);
-            }
-            ScoopItApp.INSTANCE.imageLoader.displayImage((String) getItem(position), (ImageView) convertView);
-            return convertView;
-        }
-
-        public int getViewTypeCount() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        public boolean hasStableIds() {
-            // TODO Auto-generated method stub
-            return false;
-        }
-
-        public boolean isEmpty() {
-            // TODO Auto-generated method stub
-            return false;
-        }
-
-        public void registerDataSetObserver(DataSetObserver observer) {
-            // TODO Auto-generated method stub
-
-        }
-
-        public void unregisterDataSetObserver(DataSetObserver observer) {
-            // TODO Auto-generated method stub
-
-        }
-
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,7 +72,8 @@ public class PostCurateActivity extends Activity {
             }
         });
         Gallery gallery = (Gallery) findViewById(R.id.gallery);
-        PostImageAdapter adapter = new PostImageAdapter(post, this);
+        GalleryPostImageAdapter adapter = new GalleryPostImageAdapter(post, this);
+        gallery.setUnselectedAlpha(0.5f);
         gallery.setAdapter(adapter);
     }
 

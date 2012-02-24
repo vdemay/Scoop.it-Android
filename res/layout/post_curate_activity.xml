@@ -54,9 +54,6 @@
                 android:id="@+id/gallery"
                 android:layout_width="match_parent"
                 android:layout_height="265dp" />
-            <!-- <ImageView android:src="@drawable/default_icon" -->
-            <!-- android:id="@+id/post_list_image" -->
-            <!-- android:layout_width="match_parent" android:layout_height="265dp"></ImageView> -->
 
             <EditText
                 android:id="@+id/post_list_content"
