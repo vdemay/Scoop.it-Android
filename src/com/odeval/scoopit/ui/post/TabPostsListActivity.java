@@ -13,6 +13,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.HeaderViewListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,20 +23,45 @@ import com.odeval.scoopit.Constants;
 import com.odeval.scoopit.R;
 import com.odeval.scoopit.ScoopItApp;
 import com.odeval.scoopit.OAuth.OAutHelper;
+import com.odeval.scoopit.actions.PostAction;
 import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.model.Post;
 import com.odeval.scoopit.model.Topic;
 import com.odeval.scoopit.ui.list.adapater.OnButtonClickedListener;
 import com.odeval.scoopit.ui.list.adapater.PostListAdapter;
-import com.odeval.scoopit.ui.post.PostCurateActivity.OnActionComplete;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitleProvider;
 
+/**
+ * This Activity can start other activity for result
+ * ResultCode can be 
+ * <ul>
+ *  <li> {@link TabPostsListActivity#RESULT_REFRESH_CURATED} : to refresh curated list. no data needed </li>
+ *  <li> {@link TabPostsListActivity#RESULT_REFRESH_CURABLE} : to refresh curable list. no data needed </li>
+ *  <li> {@link TabPostsListActivity#RESULT_REFRESH_ALL} : to refresh curated and curable list. no data needed </li>
+ *  <li> {@link TabPostsListActivity#RESULT_DELETE_CURABLE} : to delete a curable list. data need to contain a post </li>
+ *  <li> {@link TabPostsListActivity#RESULT_DELETE_CURATED} : to delete a curated list. data need to contain a post </li>
+ *  <li> {@link TabPostsListActivity#RESULT_ADD_CURATED_AND_REMOVE_CURABLE} : to delete a post from curable list and add a post in curated list. data need to contain a postToRemove and postToAdd </li>
+ * </ul>
+ * @author vincentdemay
+ *
+ */
 public class TabPostsListActivity extends Activity implements OnButtonClickedListener {
 	
-	public static final int RESULT_REFRESH_CURATION_LIST = 2;
-	public static final int RESULT_REFRESH_TOPIC_LIST = 3;
+    /**
+     * This class is also in charge of managing bothe curated and
+     * curable list of topic
+     * Result of other activity are handled here
+     */
+	public static final int RESULT_REFRESH_CURABLE = 2;
+	public static final int RESULT_REFRESH_CURATED = 3;
 	public static final int RESULT_REFRESH_ALL = 4;
+	public static final int RESULT_DELETE_CURABLE = 5;
+    public static final int RESULT_DELETE_CURATED = 6;
+    public static final int RESULT_ADD_CURATED_AND_REMOVE_CURABLE = 7;
+
+    public static final int CURABLE_LIST_INDEX = 0;
+    public static final int CURATED_LIST_INDEX = 1;
 
     private String topicId;
 
@@ -109,20 +135,20 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
         setContentView(R.layout.tab_posts_list_activity);
 
         views = new PullToRefreshListView[2];
-        views[0] = new PullToRefreshListView(this);
-        views[1] = new PullToRefreshListView(this);
+        views[CURABLE_LIST_INDEX] = new PullToRefreshListView(this);
+        views[CURATED_LIST_INDEX] = new PullToRefreshListView(this);
 
-        views[0].setCacheColorHint(0);
-        views[0].setDivider(ScoopItApp.INSTANCE.getResources().getDrawable(R.color.curable_list_divider));
-        views[0].setDividerHeight(1);
-        views[0].setSelector(R.drawable.curable_list_selector);
-        views[0].setBackgroundDrawable(ScoopItApp.INSTANCE.getResources().getDrawable(R.color.curable_background));
+        views[CURABLE_LIST_INDEX].setCacheColorHint(0);
+        views[CURABLE_LIST_INDEX].setDivider(ScoopItApp.INSTANCE.getResources().getDrawable(R.color.curable_list_divider));
+        views[CURABLE_LIST_INDEX].setDividerHeight(1);
+        views[CURABLE_LIST_INDEX].setSelector(R.drawable.curable_list_selector);
+        views[CURABLE_LIST_INDEX].setBackgroundDrawable(ScoopItApp.INSTANCE.getResources().getDrawable(R.color.curable_background));
         
-        views[1].setCacheColorHint(0);
-        views[1].setDivider(ScoopItApp.INSTANCE.getResources().getDrawable(R.color.curated_list_divider));
-        views[1].setDividerHeight(1);
-        views[1].setSelector(R.drawable.curated_list_selector);
-        views[1].setBackgroundDrawable(ScoopItApp.INSTANCE.getResources().getDrawable(R.color.curated_background));
+        views[CURATED_LIST_INDEX].setCacheColorHint(0);
+        views[CURATED_LIST_INDEX].setDivider(ScoopItApp.INSTANCE.getResources().getDrawable(R.color.curated_list_divider));
+        views[CURATED_LIST_INDEX].setDividerHeight(1);
+        views[CURATED_LIST_INDEX].setSelector(R.drawable.curated_list_selector);
+        views[CURATED_LIST_INDEX].setBackgroundDrawable(ScoopItApp.INSTANCE.getResources().getDrawable(R.color.curated_background));
         
         loadPostsToCurate();
         loadScoopedPosts();
@@ -225,7 +251,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
             protected void onPostExecute(Topic result) {
                 super.onPostExecute(result);
                 // populate
-                final PullToRefreshListView lv = views[0];
+                final PullToRefreshListView lv = views[CURABLE_LIST_INDEX];
                 curablePostListAdapter = new PostListAdapter(R.layout.curable_post_list_adapter, R.id.btn_discard, TabPostsListActivity.this,
                         result.getCurablePosts(), TabPostsListActivity.this);
                 lv.setAdapter(curablePostListAdapter);
@@ -252,22 +278,23 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
     	views[index].onRefresh();
     }
 
-    final static int DELETE_POST = 0;
-    final static int CURATE_POST = 1;
+    //final static int DELETE_POST = 0;
+    //final static int CURATE_POST = 1;
     
+    //FIXME  : is it usefull??
 	public void onDiscard(final Post p, int index) {
-		PostCurateActivity.discardPost(p, false, this, true, new OnActionComplete() {
-			public void onActionComplete() {
-				views[0].onRefresh();
-			}
+		PostAction.discardPost(p, this, true, new PostAction.OnActionComplete() {
+			public void onActionComplete(Post in, Post out) {
+				views[CURABLE_LIST_INDEX].onRefresh();
+			}    
 		});
 	}
 
 	public void onAccept(final Post p, int index) {
-		PostCurateActivity.curatePost(p, false, this, 0, true, new OnActionComplete() {
-			public void onActionComplete() {
-				views[0].onRefresh(); // refresh to remove scooped post from curation list
-				views[1].onRefresh(); // refresh to add scooped post to published posts list
+	    PostAction.curatePost(p, this, true, new PostAction.OnActionComplete() {
+			public void onActionComplete(Post in, Post out) {
+				views[CURABLE_LIST_INDEX].onRefresh(); // refresh to remove scooped post from curation list
+				views[CURATED_LIST_INDEX].onRefresh(); // refresh to add scooped post to published posts list
 			}
 		});
 	}
@@ -275,14 +302,45 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch(resultCode) {
-			case RESULT_REFRESH_CURATION_LIST: 
-				views[0].onRefresh(); break;
-			case RESULT_REFRESH_TOPIC_LIST: 
-				views[1].onRefresh(); break;
+			case RESULT_REFRESH_CURABLE: 
+				views[CURABLE_LIST_INDEX].onRefresh(); break;
+			case RESULT_REFRESH_CURATED: 
+				views[CURATED_LIST_INDEX].onRefresh(); break;
 			case RESULT_REFRESH_ALL: 
-				views[0].onRefresh(); 
-				views[1].onRefresh(); 
+				views[CURABLE_LIST_INDEX].onRefresh(); 
+				views[CURATED_LIST_INDEX].onRefresh(); 
 				break;
+			case RESULT_DELETE_CURABLE:
+			    PostListAdapter pla = (PostListAdapter)((HeaderViewListAdapter)views[CURABLE_LIST_INDEX].getAdapter()).getWrappedAdapter();
+			    Post post = (Post)data.getExtras().getParcelable("post");
+			    if (post != null) {
+    			    pla.remove(post);
+    			    views[CURABLE_LIST_INDEX].invalidateViews();
+			    }
+			    break;
+			case RESULT_DELETE_CURATED: 
+			    PostListAdapter pla2 = (PostListAdapter)((HeaderViewListAdapter)views[CURATED_LIST_INDEX].getAdapter()).getWrappedAdapter();
+			    Post post2 = (Post)data.getExtras().getParcelable("post");
+                if (post2 != null) {
+                    pla2.remove(post2);
+                    pla2.notifyDataSetChanged();
+                }
+                break;
+			case RESULT_ADD_CURATED_AND_REMOVE_CURABLE:
+			    PostListAdapter curablePla = (PostListAdapter)((HeaderViewListAdapter)views[CURABLE_LIST_INDEX].getAdapter()).getWrappedAdapter();
+			    PostListAdapter curatedPla = (PostListAdapter)((HeaderViewListAdapter)views[CURATED_LIST_INDEX].getAdapter()).getWrappedAdapter();
+			    Post postToRemove = (Post)data.getExtras().getParcelable("postToRemove");
+			    Post postToAdd = (Post)data.getExtras().getParcelable("postToAdd");
+			    if (postToAdd != null && postToRemove != null) {
+			        curablePla.remove(postToRemove);
+			        curablePla.notifyDataSetChanged();
+			        curatedPla.add(postToAdd);
+			        curatedPla.notifyDataSetChanged();
+			    }
+			    break;
+			    
+               
+			    
 		}
 	}
 

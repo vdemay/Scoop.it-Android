@@ -87,4 +87,16 @@ public class PostListAdapter extends ArrayAdapter<Post>{
         
         return v;
     }
+    
+    @Override
+    public void remove(Post object) {
+        super.remove(object);
+        posts.remove(object);
+    }
+    
+    @Override
+    public void add(Post object) {
+        super.add(object);
+        posts.add(0, object);
+    }
 }

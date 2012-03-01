@@ -368,6 +368,14 @@ public class Post implements Parcelable {
         //TODO thanked
         //TODO topic
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Post) {
+            return ((Post)o).getId().equals(this.getId());
+        }
+        return false;
+    }
 
     public static final Parcelable.Creator<Post> CREATOR = new Parcelable.Creator<Post>() {
         public Post[] newArray(int size) {

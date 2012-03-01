@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.odeval.scoopit.R;
 import com.odeval.scoopit.ScoopItApp;
+import com.odeval.scoopit.actions.PostAction;
 import com.odeval.scoopit.model.Post;
-import com.odeval.scoopit.ui.post.PostCurateActivity.OnActionComplete;
 
 public class PostViewBeforeCurateActivity extends Activity {
 	
@@ -55,10 +55,12 @@ public class PostViewBeforeCurateActivity extends Activity {
         
         ((Button)findViewById(R.id.post_view_before_curate_discard)).setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        		PostCurateActivity.discardPost(post, true, PostViewBeforeCurateActivity.this, true, new OnActionComplete() {
+        		PostAction.discardPost(post, PostViewBeforeCurateActivity.this, true, new PostAction.OnActionComplete() {
 					@Override
-					public void onActionComplete() {
-						PostViewBeforeCurateActivity.this.setResult(TabPostsListActivity.RESULT_REFRESH_CURATION_LIST);
+					public void onActionComplete(Post in, Post out) {
+					    Intent i = new Intent();
+					    i.putExtra("post", in);
+						PostViewBeforeCurateActivity.this.setResult(TabPostsListActivity.RESULT_DELETE_CURABLE, i);
 						PostViewBeforeCurateActivity.this.finish();
 					}
 				});
@@ -68,7 +70,8 @@ public class PostViewBeforeCurateActivity extends Activity {
     
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	setResult(resultCode);
+        //Propagate activity result to the caller activity
+    	setResult(resultCode, data);
 		finish();
 	}
 }

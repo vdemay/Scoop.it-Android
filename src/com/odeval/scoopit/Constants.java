@@ -31,6 +31,6 @@ public class Constants {
 	public static final String	OAUTH_CALLBACK_URL		= OAUTH_CALLBACK_SCHEME + "://" + OAUTH_CALLBACK_HOST;
 
 	
-	public static final String CURATE_ACTION = "com.odeval.scoopit.CURATE_ACTION";
-	public static final String DELETE_ACTION = "com.odeval.scoopit.DELETE_ACTION";
+	//public static final String CURATE_ACTION = "com.odeval.scoopit.CURATE_ACTION";
+	//public static final String DELETE_ACTION = "com.odeval.scoopit.DELETE_ACTION";
 }

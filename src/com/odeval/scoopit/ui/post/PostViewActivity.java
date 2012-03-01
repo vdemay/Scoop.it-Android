@@ -1,30 +1,23 @@
 package com.odeval.scoopit.ui.post;
 
 import java.util.Date;
-import java.util.HashMap;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.odeval.scoopit.Constants;
 import com.odeval.scoopit.R;
 import com.odeval.scoopit.ScoopItApp;
-import com.odeval.scoopit.OAuth.OAutHelper;
-import com.odeval.scoopit.helper.NetworkingUtils;
+import com.odeval.scoopit.actions.PostAction;
 import com.odeval.scoopit.model.Post;
-import com.odeval.scoopit.ui.post.PostCurateActivity.OnActionComplete;
 
 public class PostViewActivity extends Activity {
     
@@ -80,7 +73,15 @@ public class PostViewActivity extends Activity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {			
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						deletePost(post, true, PostViewActivity.this, true);
+					    PostAction.deletePost(post, PostViewActivity.this, true, new PostAction.OnActionComplete() {
+                            @Override
+                            public void onActionComplete(Post in, Post out) {
+                                Intent i = new Intent();
+                                i.putExtra("post", in);
+                                PostViewActivity.this.setResult(TabPostsListActivity.RESULT_DELETE_CURATED, i);
+                                PostViewActivity.this.finish();
+                            }
+                        });
 					}
 				})
 				.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {			
@@ -91,50 +92,5 @@ public class PostViewActivity extends Activity {
 				}).show();
         	}
         });
-    }
-    
-    public static void deletePost(final Post post, final boolean finish, final Activity activity, final boolean showDialog) {
-   		deletePost(post, finish, activity, showDialog, null);
-   	}
-    
-    public static void deletePost(final Post post, final boolean finish, final Activity activity, final boolean showDialog, final OnActionComplete onActionComplete) {
-        new AsyncTask<Void, Void, Post>() {
-        	ProgressDialog dialog;
-        	
-            @Override
-            protected void onPreExecute() {
-                if (showDialog)
-                	dialog = ProgressDialog.show(activity, "Please Wait", "Deleting post...", true);
-                super.onPreExecute();
-            }
-
-            @Override
-            protected Post doInBackground(Void... params) {
-            	doDeletePost(post, activity);
-            	return post;
-            }
-
-            @Override
-            protected void onPostExecute(Post result) {
-                super.onPostExecute(result);
-                if (showDialog)
-                	dialog.dismiss();
-                if (onActionComplete != null) {
-                	onActionComplete.onActionComplete();
-                }
-                activity.setResult(TabPostsListActivity.RESULT_REFRESH_TOPIC_LIST);
-                activity.finish();
-            }
-
-        }.execute();
-    }
-    
-    private static void doDeletePost(Post post, Activity activity) {
-    	HashMap<String, String> params = new HashMap<String, String>();
-    	params.put("id", post.getId().toString());
-    	params.put("action", "delete");
-        String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
-                OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(activity)), params);
-        System.out.println("jsonOutput : " + jsonOutput);    	
     }
 }
