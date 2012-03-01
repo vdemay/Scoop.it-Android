@@ -15,35 +15,48 @@ import com.odeval.scoopit.actions.PostAction;
 import com.odeval.scoopit.model.Post;
 import com.odeval.scoopit.ui.list.adapater.GalleryPostImageAdapter;
 
+/**
+ * View to curate a post
+ * 
+ * @author vincentdemay
+ *
+ */
 public class PostCurateActivity extends Activity {
-    private Post post;
+    protected Post post;
     
-    private EditText titleEditText;
-    private EditText descriptionEditText;
-    private Gallery gallery;
+    protected EditText titleEditText;
+    protected EditText descriptionEditText;
+    protected Gallery gallery;
+    protected Button action;
+    protected TextView pageTitle;
+    
+    protected void populateFormFromIntent(Intent intent) {
+        post = intent.getExtras().getParcelable("post");
+        setContentView(R.layout.post_curate_activity);
+        
+        titleEditText =  ((EditText) findViewById(R.id.post_list_title));
+        descriptionEditText = ((EditText) findViewById(R.id.post_list_content));
+        action = ((Button) findViewById(R.id.curate));
+        gallery = (Gallery) findViewById(R.id.gallery);
+        pageTitle = ((TextView) findViewById(R.id.curate_title));
+        
+        GalleryPostImageAdapter adapter = new GalleryPostImageAdapter(post, this);
+        gallery.setUnselectedAlpha(0.5f);
+        gallery.setAdapter(adapter);
+        titleEditText.setText(post.getTitle());
+        descriptionEditText.setText(post.getContent()); 
+    }
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Intent intent = getIntent();
-        post = getIntent().getExtras().getParcelable("post");
-        setContentView(R.layout.post_curate_activity);
+        Intent intent = getIntent();
+        populateFormFromIntent(intent);
         
-        ((TextView) findViewById(R.id.curate_title)).setText("Accept a Post");
+        pageTitle.setText("Accept a Post");
         
-        titleEditText =  ((EditText) findViewById(R.id.post_list_title));
-        descriptionEditText = ((EditText) findViewById(R.id.post_list_content));
-
-        gallery = (Gallery) findViewById(R.id.gallery);
-        GalleryPostImageAdapter adapter = new GalleryPostImageAdapter(post, this);
-        gallery.setUnselectedAlpha(0.5f);
-        gallery.setAdapter(adapter);
-        
-        titleEditText.setText(post.getTitle());
-        descriptionEditText.setText(post.getContent());
-        
-        ((Button) findViewById(R.id.curate)).setOnClickListener(new OnClickListener() {
+        action.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 //start to update the post
                 post.setTitle(titleEditText.getText().toString());

@@ -21,18 +21,15 @@ import com.odeval.scoopit.model.Post;
 
 public class PostViewActivity extends Activity {
     
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-        setContentView(R.layout.post_view_activity);
-        
-        final Post post = getIntent().getExtras().getParcelable("post");
-        
+    private Post post;
+    
+    private void populateFields(final Post post) {
+       
         ((Button)findViewById(R.id.post_original)).setOnClickListener(new OnClickListener() {
-        	public void onClick(View v) {
-        		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(post.getUrl()));
-        		startActivity(browserIntent);
-        	}
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(post.getUrl()));
+                startActivity(browserIntent);
+            }
         });
         
         ((TextView)findViewById(R.id.post_source_title)).setText(post.getSource().getName());
@@ -40,12 +37,23 @@ public class PostViewActivity extends Activity {
         ((TextView)findViewById(R.id.post_content)).setText(post.getContent());
         
         if (post.getImageUrl() != null) {
-        	ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrl(), (ImageView)findViewById(R.id.post_image));
+            ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrl(), (ImageView)findViewById(R.id.post_image));
         } else {
-        	((ImageView)findViewById(R.id.post_image)).setVisibility(View.GONE);
+            ((ImageView)findViewById(R.id.post_image)).setVisibility(View.GONE);
         }
         ScoopItApp.INSTANCE.imageLoader.displayImage(post.getSource().getIconUrl(), (ImageView)findViewById(R.id.post_source_icon));
         ((TextView)findViewById(R.id.post_date)).setText(ScoopItApp.INSTANCE.dateTimeFormatMediumShort.format(new Date(post.getPublicationDate())));
+                
+    }
+    
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        setContentView(R.layout.post_view_activity);
+        post = getIntent().getExtras().getParcelable("post");
+        
+        populateFields(post);
+       
         
         ((Button)findViewById(R.id.post_share)).setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
@@ -61,7 +69,9 @@ public class PostViewActivity extends Activity {
         
         ((Button)findViewById(R.id.post_edit)).setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        		
+        	    Intent i = new Intent(PostViewActivity.this, PostEditActivity.class);
+                i.putExtra("post", post);
+                PostViewActivity.this.startActivityForResult(i, 1);
         	}
         });
         
@@ -92,5 +102,21 @@ public class PostViewActivity extends Activity {
 				}).show();
         	}
         });
+    }
+    
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null && data.getExtras() != null) {
+            //update fields
+            Post postToAdd = (Post)data.getExtras().get("postToAdd");
+            if (postToAdd != null) {
+                post = postToAdd;
+                populateFields(postToAdd);
+            }
+        }
+        
+        //propagate
+        setResult(resultCode, data);
     }
 }

@@ -99,4 +99,12 @@ public class PostListAdapter extends ArrayAdapter<Post>{
         super.add(object);
         posts.add(0, object);
     }
+    
+    public void replace(Post toRemove, Post toPut) {
+        int pos = posts.indexOf(toRemove);
+        posts.remove(pos);
+        posts.add(pos, toPut);
+    }
+    
+    
 }

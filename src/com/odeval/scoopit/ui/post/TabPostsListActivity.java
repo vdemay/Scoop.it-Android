@@ -42,6 +42,7 @@ import com.viewpagerindicator.TitleProvider;
  *  <li> {@link TabPostsListActivity#RESULT_DELETE_CURABLE} : to delete a curable list. data need to contain a post </li>
  *  <li> {@link TabPostsListActivity#RESULT_DELETE_CURATED} : to delete a curated list. data need to contain a post </li>
  *  <li> {@link TabPostsListActivity#RESULT_ADD_CURATED_AND_REMOVE_CURABLE} : to delete a post from curable list and add a post in curated list. data need to contain a postToRemove and postToAdd </li>
+ *  <li> {@link TabPostsListActivity#RESULT_REPLACE_CURATED} : to change a post from curated at the same pos. data need to contain a postToRemove and postToAdd </li>
  * </ul>
  * @author vincentdemay
  *
@@ -59,6 +60,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 	public static final int RESULT_DELETE_CURABLE = 5;
     public static final int RESULT_DELETE_CURATED = 6;
     public static final int RESULT_ADD_CURATED_AND_REMOVE_CURABLE = 7;
+    public static final int RESULT_REPLACE_CURATED = 8;
 
     public static final int CURABLE_LIST_INDEX = 0;
     public static final int CURATED_LIST_INDEX = 1;
@@ -301,46 +303,50 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch(resultCode) {
-			case RESULT_REFRESH_CURABLE: 
-				views[CURABLE_LIST_INDEX].onRefresh(); break;
-			case RESULT_REFRESH_CURATED: 
-				views[CURATED_LIST_INDEX].onRefresh(); break;
-			case RESULT_REFRESH_ALL: 
-				views[CURABLE_LIST_INDEX].onRefresh(); 
-				views[CURATED_LIST_INDEX].onRefresh(); 
-				break;
-			case RESULT_DELETE_CURABLE:
-			    PostListAdapter pla = (PostListAdapter)((HeaderViewListAdapter)views[CURABLE_LIST_INDEX].getAdapter()).getWrappedAdapter();
-			    Post post = (Post)data.getExtras().getParcelable("post");
-			    if (post != null) {
-    			    pla.remove(post);
-    			    views[CURABLE_LIST_INDEX].invalidateViews();
-			    }
-			    break;
-			case RESULT_DELETE_CURATED: 
-			    PostListAdapter pla2 = (PostListAdapter)((HeaderViewListAdapter)views[CURATED_LIST_INDEX].getAdapter()).getWrappedAdapter();
-			    Post post2 = (Post)data.getExtras().getParcelable("post");
-                if (post2 != null) {
-                    pla2.remove(post2);
-                    pla2.notifyDataSetChanged();
-                }
-                break;
-			case RESULT_ADD_CURATED_AND_REMOVE_CURABLE:
-			    PostListAdapter curablePla = (PostListAdapter)((HeaderViewListAdapter)views[CURABLE_LIST_INDEX].getAdapter()).getWrappedAdapter();
-			    PostListAdapter curatedPla = (PostListAdapter)((HeaderViewListAdapter)views[CURATED_LIST_INDEX].getAdapter()).getWrappedAdapter();
-			    Post postToRemove = (Post)data.getExtras().getParcelable("postToRemove");
-			    Post postToAdd = (Post)data.getExtras().getParcelable("postToAdd");
-			    if (postToAdd != null && postToRemove != null) {
-			        curablePla.remove(postToRemove);
-			        curablePla.notifyDataSetChanged();
-			        curatedPla.add(postToAdd);
-			        curatedPla.notifyDataSetChanged();
-			    }
-			    break;
-			    
-               
-			    
+	    if (data != null && data.getExtras() != null) {
+    	    Post postToRemove = (Post)data.getExtras().getParcelable("postToRemove");
+            Post postToAdd = (Post)data.getExtras().getParcelable("postToAdd");
+            Post post = (Post)data.getExtras().getParcelable("post");
+            
+            PostListAdapter curablePla = (PostListAdapter)((HeaderViewListAdapter)views[CURABLE_LIST_INDEX].getAdapter()).getWrappedAdapter();
+            PostListAdapter curatedPla = (PostListAdapter)((HeaderViewListAdapter)views[CURATED_LIST_INDEX].getAdapter()).getWrappedAdapter();
+            
+    	    switch(resultCode) {
+    		    case RESULT_REFRESH_CURABLE: 
+    				views[CURABLE_LIST_INDEX].onRefresh(); break;
+    			case RESULT_REFRESH_CURATED: 
+    				views[CURATED_LIST_INDEX].onRefresh(); break;
+    			case RESULT_REFRESH_ALL: 
+    				views[CURABLE_LIST_INDEX].onRefresh(); 
+    				views[CURATED_LIST_INDEX].onRefresh(); 
+    				break;
+    			case RESULT_DELETE_CURABLE:
+    			     if (post != null) {
+        			    curablePla.remove(post);
+        			    views[CURABLE_LIST_INDEX].invalidateViews();
+    			    }
+    			    break;
+    			case RESULT_DELETE_CURATED: 
+                    if (post != null) {
+                        curatedPla.remove(post);
+                        curatedPla.notifyDataSetChanged();
+                    }
+                    break;
+    			case RESULT_ADD_CURATED_AND_REMOVE_CURABLE:
+    			    if (postToAdd != null && postToRemove != null) {
+    			        curablePla.remove(postToRemove);
+    			        curablePla.notifyDataSetChanged();
+    			        curatedPla.add(postToAdd);
+    			        curatedPla.notifyDataSetChanged();
+    			    }
+    			    break;
+    			case RESULT_REPLACE_CURATED:
+    			    if (postToAdd != null && postToRemove != null) {
+                        curatedPla.replace(postToRemove, postToAdd);
+                        curatedPla.notifyDataSetChanged();
+                    }
+                    break;
+    	    }    
 		}
 	}
 
