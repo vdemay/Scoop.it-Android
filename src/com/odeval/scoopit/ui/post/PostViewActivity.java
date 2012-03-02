@@ -1,16 +1,21 @@
 package com.odeval.scoopit.ui.post;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,10 +23,16 @@ import com.odeval.scoopit.R;
 import com.odeval.scoopit.ScoopItApp;
 import com.odeval.scoopit.actions.PostAction;
 import com.odeval.scoopit.model.Post;
+import com.odeval.scoopit.ui.animation.ExpandCollapseAnimation;
+import com.odeval.scoopit.ui.layout.TagLayout;
 
 public class PostViewActivity extends Activity {
     
     private Post post;
+    private boolean tagsShown;
+    private boolean tagsAnimationRunning;
+    
+    private TagLayout tl;
     
     private void populateFields(final Post post) {
        
@@ -32,10 +43,12 @@ public class PostViewActivity extends Activity {
             }
         });
         
+        //data
         ((TextView)findViewById(R.id.post_source_title)).setText(post.getSource().getName());
         ((TextView)findViewById(R.id.post_title)).setText(post.getTitle());
         ((TextView)findViewById(R.id.post_content)).setText(post.getContent());
         
+        //image
         if (post.getImageUrl() != null) {
             ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrl(), (ImageView)findViewById(R.id.post_image));
         } else {
@@ -43,7 +56,50 @@ public class PostViewActivity extends Activity {
         }
         ScoopItApp.INSTANCE.imageLoader.displayImage(post.getSource().getIconUrl(), (ImageView)findViewById(R.id.post_source_icon));
         ((TextView)findViewById(R.id.post_date)).setText(ScoopItApp.INSTANCE.dateTimeFormatMediumShort.format(new Date(post.getPublicationDate())));
-                
+        
+        //tags
+        tl.removeAllViews();
+        for (int i = 0; i < post.getTags().size(); i++) {
+            addTag(post.getTags().get(i));
+        }       
+    }
+    
+    private void addTag(String tag) {
+        Button t = new Button(this);
+        t.setText(tag);
+        t.setBackgroundResource(R.drawable.tag);
+        t.setTextColor(Color.WHITE);
+        t.setSingleLine(true);
+        t.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                tl.removeView(v);
+                updateTagsOnServeurSide();
+            }
+        });
+        tl.addView(t, new TagLayout.LayoutParams(2, 0));
+    }
+
+
+    private void updateTagsOnServeurSide() {
+        post.setTags(getTags());
+        PostAction.setTag(post, getTags(), PostViewActivity.this, false);
+        //also create a result for update on back
+        //this can be overriden but if not it allow post to be up to date 
+        Intent i = new Intent();
+        i.putExtra("postToAdd", post);
+        i.putExtra("postToRemove", post);
+        PostViewActivity.this.setResult(TabPostsListActivity.RESULT_REPLACE_CURATED, i);
+    }
+    
+    private ArrayList<String> getTags() {
+        ArrayList<String> tags = new ArrayList<String>();
+        for (int i=0; i< tl.getChildCount(); i++) {
+            Button tv = (Button) tl.getChildAt(i);
+            tags.add(tv.getText().toString());
+        }
+        return tags;
     }
     
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +107,8 @@ public class PostViewActivity extends Activity {
         
         setContentView(R.layout.post_view_activity);
         post = getIntent().getExtras().getParcelable("post");
+        
+        tl = (TagLayout)findViewById(R.id.post_tag_container);
         
         populateFields(post);
        
@@ -62,9 +120,71 @@ public class PostViewActivity extends Activity {
         });
         
         ((Button)findViewById(R.id.post_tag)).setOnClickListener(new OnClickListener() {
+            View tagView = ((View)findViewById(R.id.post_tag_view));
         	public void onClick(View v) {
-        		
+        	    if (!tagsAnimationRunning) {
+            	    tagsAnimationRunning = true;
+            	    
+            	    DisplayMetrics metrics = new DisplayMetrics();
+                    getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                    float logicalDensity = metrics.density;
+                    int px = (int) (150 * logicalDensity + 0.5);
+            	    
+            	    if (!tagsShown) {
+            	        ExpandCollapseAnimation anim = new ExpandCollapseAnimation(tagView, px, true);
+            	        anim.setAnimationListener(new Animation.AnimationListener() {
+                            
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                                tagsShown = false;
+                            }
+                            
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {}
+                            
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                tagsShown = true;
+                                tagsAnimationRunning = false;
+                            }
+                        });
+            	        tagView.startAnimation(anim);
+            	    } else {
+            	        ExpandCollapseAnimation anim = new ExpandCollapseAnimation(tagView, px, false);
+                        anim.setAnimationListener(new Animation.AnimationListener() {
+                            
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                                tagsShown = true;
+                            }
+                            
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {}
+                            
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                tagsShown = false;
+                                tagsAnimationRunning = false;
+                            }
+                        });
+                        tagView.startAnimation(anim);
+            	    }
+        	    }
         	}
+        });
+        
+        ((Button)findViewById(R.id.button_add_tag)).setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                EditText tagField = (EditText) PostViewActivity.this.findViewById(R.id.editText_add_tag);
+                if (tagField != null && !tagField.getText().toString().equals("")) {
+                    addTag(tagField.getText().toString());
+                    updateTagsOnServeurSide();
+                    tagField.setText("");
+                }
+            }
+            
         });
         
         ((Button)findViewById(R.id.post_edit)).setOnClickListener(new OnClickListener() {

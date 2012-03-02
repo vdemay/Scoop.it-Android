@@ -138,17 +138,20 @@ public class NetworkingUtils {
         return null;
 
     }
-
+    
     public static String sendRestfullPostRequest(String url, OAuthConsumer consumer, Map<String, String> params) {
+        List<NameValuePair> httpParams = new ArrayList<NameValuePair>();
+
+        for(String param : params.keySet()) {
+            httpParams.add(new BasicNameValuePair(param, params.get(param)));
+        }
+        return sendRestfullPostRequest(url, consumer, httpParams);
+    }
+
+    public static String sendRestfullPostRequest(String url, OAuthConsumer consumer, List<NameValuePair> httpParams) {
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
             HttpPost request = new HttpPost(url);
-
-            List<NameValuePair> httpParams = new ArrayList<NameValuePair>();
-
-            for(String param : params.keySet()) {
-                httpParams.add(new BasicNameValuePair(param, params.get(param)));
-            }
             
             //Log.d("Params:", httpParams.toString());
             try {
