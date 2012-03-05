@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 
 import com.odeval.scoopit.Constants;
@@ -68,6 +67,9 @@ public class CuratedTopicListActivity extends ListActivity {
                 progress.hide();
                 // populate
                 if (result != null) {
+                    //store user
+                    result.witeToFile(CuratedTopicListActivity.this);
+                    //update list
                 	CuratedTopicListActivity.this.setListAdapter(new TopicListAdapter(CuratedTopicListActivity.this,
                             result.getCuratedTopics()));
                 } else {

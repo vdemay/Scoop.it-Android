@@ -333,6 +333,8 @@ public class Post implements Parcelable {
         }
         return posts;
     }
+    
+    // -- PARCELABLE -- //
 
     public int describeContents() {
         return 0;
@@ -418,6 +420,16 @@ public class Post implements Parcelable {
         //TODO comments
         //TODO thanked
         //TODO topic
+    }
+    
+    public String generateTweetText() {
+        String suffix = " | @scoopit http://bit.ly/...";
+        int textLengthMax = 140 - suffix.length();
+        String editTitle = title;
+        if (editTitle.length() > textLengthMax) {
+            editTitle = editTitle.substring(0, textLengthMax -1);
+        }
+        return editTitle + suffix;
     }
 
 }

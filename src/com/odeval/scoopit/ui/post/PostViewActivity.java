@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.odeval.scoopit.R;
+import com.odeval.scoopit.model.User;
+import com.odeval.scoopit.model.Sharer;
 import com.odeval.scoopit.ScoopItApp;
 import com.odeval.scoopit.actions.PostAction;
 import com.odeval.scoopit.model.Post;
@@ -102,6 +105,59 @@ public class PostViewActivity extends Activity {
         return tags;
     }
     
+    private void showSharerMenu() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(PostViewActivity.this);
+        builder.setTitle("Share to...");
+        
+        final User user = User.readFromFile(PostViewActivity.this);
+        
+        ArrayList<CharSequence> items = new ArrayList<CharSequence>();
+        for (Sharer sharer : user.getSharers()) {
+            items.add(sharer.getSharerName());
+        }
+                
+        builder.setItems(items.toArray(new CharSequence[0]), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                Sharer sharer = user.getSharers().get(item);
+                if (sharer.isMustSpecifyShareText()) {
+                    showSharerInput(sharer);
+                } else {
+                    share(sharer, null);
+                }
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+    
+    private void showSharerInput(final Sharer sharer) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Add or Edit message");
+        // Set an EditText view to get user input 
+        final EditText input = new EditText(this);
+        if ("Twitter".equals(sharer.getSharerName())) {
+            input.setText(post.generateTweetText());
+        }
+        alert.setView(input);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Editable value = input.getText();
+                share(sharer, value.toString());
+            }
+        });
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+              }
+        });
+        alert.show();
+    }
+    
+    private void share(Sharer sharer, String text) {
+        // TODO Auto-generated method stub
+        PostAction.sharePost(post, sharer, text, this, true);
+    }
+    
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
@@ -111,11 +167,11 @@ public class PostViewActivity extends Activity {
         tl = (TagLayout)findViewById(R.id.post_tag_container);
         
         populateFields(post);
-       
         
         ((Button)findViewById(R.id.post_share)).setOnClickListener(new OnClickListener() {
+            
         	public void onClick(View v) {
-        		
+        	    showSharerMenu();
         	}
         });
         
