@@ -176,20 +176,37 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 
             @Override
             protected void onPreExecute() {
-                String cache = ScoopItApp.INSTANCE.cache.getCachedForUrl(Constants.CURATED_POST_REQUEST + "?id=" + topicId);
-                if (cache != null) {
-                    try {
-                        Topic result = Topic.getTopicFromJson(cache);
-                        final PullToRefreshListView lv = views[CURATED_LIST_INDEX];
-                        if (curatedPostListAdapter == null) {
-                            curatedPostListAdapter = new PostListAdapter(R.layout.curated_post_list_adapter, R.id.btn_edit, TabPostsListActivity.this,
-                                    result.getCuratedPosts(), TabPostsListActivity.this);
-                            lv.setAdapter(curatedPostListAdapter);
-                        } else {
-                            curatedPostListAdapter.updatePostList(result.getCuratedPosts());
+                if (ScoopItApp.INSTANCE.cache.hasCacheForUrl(Constants.CURATED_POST_REQUEST + "?id=" + topicId)) {
+                    new AsyncTask<Void, Void, Topic>(){
+
+                        @Override
+                        protected Topic doInBackground(Void... params) {
+                            try {
+                                String cache = ScoopItApp.INSTANCE.cache.getCachedForUrl(Constants.CURATED_POST_REQUEST + "?id=" + topicId);
+                                Topic result = Topic.getTopicFromJson(cache);
+                                return result;
+                            } catch (JSONException e) {}
+                            
+                            return null;
                         }
-                        progresshasBeenShown = true;
-                    } catch (JSONException e) {}
+                        
+                        protected void onPostExecute(Topic result) {
+                            final PullToRefreshListView lv = views[CURATED_LIST_INDEX];
+                            if (curatedPostListAdapter == null) {
+                                curatedPostListAdapter = new PostListAdapter(R.layout.curated_post_list_adapter, R.id.btn_edit, TabPostsListActivity.this,
+                                        result.getCuratedPosts(), TabPostsListActivity.this);
+                                lv.setAdapter(curatedPostListAdapter);
+                            } else {
+                                curatedPostListAdapter.updatePostList(result.getCuratedPosts());
+                            }
+                            progresshasBeenShown = true;
+                            
+                            if (progress != null) {
+                                progress.hide();
+                            }
+                        };
+                        
+                    }.execute();
                 }
                 
                 if (!progresshasBeenShown) {
@@ -260,21 +277,36 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 
             @Override
             protected void onPreExecute() {
-                //read from cache
-                String cache = ScoopItApp.INSTANCE.cache.getCachedForUrl(Constants.CURABLE_POST_REQUEST + "&id=" + topicId);
-                if (cache != null) {
-                    try {
-                        Topic result = Topic.getTopicFromJson(cache);
-                        final PullToRefreshListView lv = views[CURABLE_LIST_INDEX];
-                        if (curablePostListAdapter == null) {
-                            curablePostListAdapter = new PostListAdapter(R.layout.curable_post_list_adapter, R.id.btn_discard, TabPostsListActivity.this,
-                                    result.getCurablePosts(), TabPostsListActivity.this);
-                            lv.setAdapter(curablePostListAdapter);
-                        } else {
-                            curablePostListAdapter.updatePostList(result.getCurablePosts());
+                if (ScoopItApp.INSTANCE.cache.hasCacheForUrl(Constants.CURABLE_POST_REQUEST + "&id=" + topicId)) {
+                    new AsyncTask<Void, Void, Topic>(){
+
+                        @Override
+                        protected Topic doInBackground(Void... params) {
+                            try {
+                                String cache = ScoopItApp.INSTANCE.cache.getCachedForUrl(Constants.CURABLE_POST_REQUEST + "&id=" + topicId);
+                                Topic result = Topic.getTopicFromJson(cache);
+                                return result;
+                            } catch (JSONException e) {}
+                            
+                            return null;
                         }
-                        progresshasBeenShown = true;
-                    } catch (JSONException e) {}
+                        
+                        protected void onPostExecute(Topic result) {
+                            final PullToRefreshListView lv = views[CURABLE_LIST_INDEX];
+                            if (curablePostListAdapter == null) {
+                                curablePostListAdapter = new PostListAdapter(R.layout.curable_post_list_adapter, R.id.btn_discard, TabPostsListActivity.this,
+                                        result.getCurablePosts(), TabPostsListActivity.this);
+                                lv.setAdapter(curablePostListAdapter);
+                            } else {
+                                curablePostListAdapter.updatePostList(result.getCurablePosts());
+                            };
+                            
+                            if (progress != null) {
+                                progress.hide();
+                            }
+                        };
+                        
+                    }.execute();
                 }
                 
                 if (!progresshasBeenShown) {
