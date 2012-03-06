@@ -27,7 +27,7 @@ import com.odeval.scoopit.ScoopItApp;
 import com.odeval.scoopit.actions.PostAction;
 import com.odeval.scoopit.model.Post;
 import com.odeval.scoopit.ui.animation.ExpandCollapseAnimation;
-import com.odeval.scoopit.ui.layout.TagLayout;
+import com.odeval.scoopit.ui.layout.InlineLayout;
 
 public class PostViewActivity extends Activity {
     
@@ -35,7 +35,7 @@ public class PostViewActivity extends Activity {
     private boolean tagsShown;
     private boolean tagsAnimationRunning;
     
-    private TagLayout tl;
+    private InlineLayout tl;
     
     private void populateFields(final Post post) {
        
@@ -81,7 +81,7 @@ public class PostViewActivity extends Activity {
                 updateTagsOnServeurSide();
             }
         });
-        tl.addView(t, new TagLayout.LayoutParams(2, 0));
+        tl.addView(t, new InlineLayout.LayoutParams(2, 0));
     }
 
 
@@ -164,7 +164,7 @@ public class PostViewActivity extends Activity {
         setContentView(R.layout.post_view_activity);
         post = getIntent().getExtras().getParcelable("post");
         
-        tl = (TagLayout)findViewById(R.id.post_tag_container);
+        tl = (InlineLayout)findViewById(R.id.post_tag_container);
         
         populateFields(post);
         

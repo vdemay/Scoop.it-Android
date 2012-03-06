@@ -68,7 +68,6 @@
             <!-- Description -->
 
             <TextView
-                android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -83,6 +82,41 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:text="Loading..." />
+            
+            <!-- Share -->
+             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:text="Share" />
+             
+             	<HorizontalScrollView 
+             	      android:id="@+id/shareScroll"
+                      android:layout_width="match_parent" 
+                      android:layout_height="wrap_content">
+             
+		            <LinearLayout
+		                android:id="@+id/shareContainer"
+		                android:layout_width="wrap_content"
+		                android:layout_height="40dp" 
+		                android:paddingLeft="5dp"
+			            android:paddingRight="5dp"
+			            android:orientation="horizontal">
+		                
+			        </LinearLayout>
+	        	</HorizontalScrollView>
+	        
+            <LinearLayout
+                android:id="@+id/shareEditContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" 
+                android:paddingLeft="5dip"
+	            android:paddingRight="5dip"
+	            android:orientation="vertical">
+                
+	        </LinearLayout>
             
             <!-- Button -->
 
