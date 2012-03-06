@@ -15,7 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 
 import com.odeval.scoopit.Constants;
-import com.odeval.scoopit.OAuth.LoginActivity;
+import com.odeval.scoopit.ScoopItApp;
 import com.odeval.scoopit.OAuth.OAutHelper;
 import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.model.Topic;
@@ -41,6 +41,13 @@ public class CuratedTopicListActivity extends ListActivity {
             protected void onPreExecute() {
                 progress = ProgressDialog.show(CuratedTopicListActivity.this, "Please Wait", "Loading your topics...",
                         true);
+                String cache = ScoopItApp.INSTANCE.cache.getCachedForUrl(Constants.PROFILE_REQUEST);
+                if (cache != null) {
+                    try {
+                        onPostExecute(User.getUserFromJson(cache));
+                    } catch (JSONException e) {} //ok fail : it is just cache
+                }
+
                 super.onPreExecute();
             }
 
@@ -52,17 +59,14 @@ public class CuratedTopicListActivity extends ListActivity {
                             Constants.PROFILE_REQUEST,
                             OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(CuratedTopicListActivity.this)));
                     System.out.println("jsonOutput : " + jsonOutput);
-                    JSONObject jsonResponse;
-                    jsonResponse = new JSONObject(jsonOutput);
-
-                    User user = new User();
-                    user.popupateFromJsonObject(jsonResponse.getJSONObject("user"));
-                    return user;
+                    ScoopItApp.INSTANCE.cache.setCacheForUrl(jsonOutput, Constants.PROFILE_REQUEST);
+                    return User.getUserFromJson(jsonOutput);
                 } catch (JSONException e) {
                     // TODO
                 }
                 return null;
             }
+            
 
             @Override
             protected void onPostExecute(User result) {
@@ -73,8 +77,13 @@ public class CuratedTopicListActivity extends ListActivity {
                     //store user
                     result.witeToFile(CuratedTopicListActivity.this);
                     //update list
-                	CuratedTopicListActivity.this.setListAdapter(new TopicListAdapter(CuratedTopicListActivity.this,
+                    if (CuratedTopicListActivity.this.getListAdapter() == null) {
+                        CuratedTopicListActivity.this.setListAdapter(new TopicListAdapter(CuratedTopicListActivity.this,
                             result.getCuratedTopics()));
+                    } else {
+                        TopicListAdapter tla = (TopicListAdapter)CuratedTopicListActivity.this.getListAdapter();
+                        tla.updateTopics(result.getCuratedTopics());
+                    }
                 } else {
                     Dialog d = new Dialog(CuratedTopicListActivity.this);
                     d.setTitle("An Error Occured");

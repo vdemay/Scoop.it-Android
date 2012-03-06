@@ -38,6 +38,15 @@ public class PostListAdapter extends ArrayAdapter<Post>{
         li = LayoutInflater.from(context);
     }
     
+    public void updatePostList(List<Post> list) {
+        if (list != null) {
+            this.posts = new ArrayList<Post>(list);
+        } else {
+            this.posts = new ArrayList<Post>();
+        }
+        this.notifyDataSetChanged();
+    }
+    
     @Override
     public Post getItem(int position) {
         return posts.get(position);

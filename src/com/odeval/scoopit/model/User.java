@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -219,6 +220,16 @@ public class User implements /*Parcelable,*/ Serializable {
             }
         }
 
+        return user;
+    }
+    
+
+    public static User getUserFromJson(String json) throws JSONException {
+        JSONObject jsonResponse;
+        jsonResponse = new JSONObject(json);
+
+        User user = new User();
+        user.popupateFromJsonObject(jsonResponse.getJSONObject("user"));
         return user;
     }
 

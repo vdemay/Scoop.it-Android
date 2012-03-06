@@ -8,6 +8,7 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import com.odeval.scoopit.helper.NetworkingCache;
 import com.odeval.scoopit.image.ImageLoader;
 
 public class ScoopItApp extends Application {
@@ -17,6 +18,7 @@ public class ScoopItApp extends Application {
 	private static float scale;
 	
 	public ImageLoader imageLoader;
+	public NetworkingCache cache;
 	
 	public DateFormat dateTimeFormatShortShort = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
 	
@@ -30,6 +32,7 @@ public class ScoopItApp extends Application {
 		scale = dm.density;
 		INSTANCE = this;
 		imageLoader = new ImageLoader(this);
+		cache = new NetworkingCache(this);
 	}
 
 	public static int scaleValue(int value) {

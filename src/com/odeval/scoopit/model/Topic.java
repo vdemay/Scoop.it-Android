@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Topic {
@@ -229,5 +230,14 @@ public class Topic {
             topics.add(topic);
         }
         return topics;
+    }
+    
+    public static Topic getTopicFromJson(String json) throws JSONException {
+        JSONObject jsonResponse;
+        jsonResponse = new JSONObject(json);
+
+        Topic topic = new Topic();
+        topic.popupateFromJsonObject(jsonResponse.getJSONObject("topic"));
+        return topic;
     }
 }

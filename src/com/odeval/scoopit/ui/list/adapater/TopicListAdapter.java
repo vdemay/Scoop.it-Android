@@ -18,12 +18,18 @@ import com.odeval.scoopit.model.Topic;
 public class TopicListAdapter extends ArrayAdapter<Topic>{
 
     private ArrayList<Topic> topics;
+
     private LayoutInflater li;
     
     public TopicListAdapter(Context context, ArrayList<Topic> objects) {
         super(context, 0, objects);
         this.topics = objects;
         li = LayoutInflater.from(context);
+    }
+
+    public void updateTopics(ArrayList<Topic> topics) {
+        this.topics = topics;
+        this.notifyDataSetChanged();
     }
     
     @Override

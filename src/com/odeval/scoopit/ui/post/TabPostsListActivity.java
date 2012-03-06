@@ -73,6 +73,8 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
     private String topicId;
 
     private PostListAdapter curablePostListAdapter;
+    private PostListAdapter curatedPostListAdapter;
+    
     private PullToRefreshListView[] views;
     private static final String[] titles = new String[] {"CURATE", "VIEW TOPIC"};
 
@@ -174,6 +176,22 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 
             @Override
             protected void onPreExecute() {
+                String cache = ScoopItApp.INSTANCE.cache.getCachedForUrl(Constants.CURATED_POST_REQUEST + "?id=" + topicId);
+                if (cache != null) {
+                    try {
+                        Topic result = Topic.getTopicFromJson(cache);
+                        final PullToRefreshListView lv = views[1];
+                        if (curatedPostListAdapter == null) {
+                            curatedPostListAdapter = new PostListAdapter(R.layout.curated_post_list_adapter, R.id.btn_edit, TabPostsListActivity.this,
+                                    result.getCuratedPosts(), TabPostsListActivity.this);
+                            lv.setAdapter(curatedPostListAdapter);
+                        } else {
+                            curatedPostListAdapter.updatePostList(result.getCuratedPosts());
+                        }
+                        progresshasBeenShown = true;
+                    } catch (JSONException e) {}
+                }
+                
                 if (!progresshasBeenShown) {
                     progresshasBeenShown = true;
                     progress = ProgressDialog.show(TabPostsListActivity.this, "Please Wait", "Loading your posts...",
@@ -189,27 +207,30 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                     String jsonOutput = NetworkingUtils.sendRestfullRequest(Constants.CURATED_POST_REQUEST + "?id=" + topicId,
                             OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(TabPostsListActivity.this)));
                     System.out.println("jsonOutput : " + jsonOutput);
-                    JSONObject jsonResponse;
-                    jsonResponse = new JSONObject(jsonOutput);
-
-                    Topic topic = new Topic();
-                    topic.popupateFromJsonObject(jsonResponse.getJSONObject("topic"));
-                    return topic;
+                    
+                    ScoopItApp.INSTANCE.cache.setCacheForUrl(jsonOutput, Constants.CURATED_POST_REQUEST + "?id=" + topicId);
+                    
+                    return Topic.getTopicFromJson(jsonOutput);
+                    
                 } catch (JSONException e) {
                     // TODO
                 }
                 return null;
             }
-
+        
             @Override
             protected void onPostExecute(Topic result) {
                 super.onPostExecute(result);
                 // populate
                 final PullToRefreshListView lv = views[1];
-
-                lv.setAdapter(new PostListAdapter(R.layout.curated_post_list_adapter, R.id.btn_edit, TabPostsListActivity.this,
-                        result.getCuratedPosts(), TabPostsListActivity.this));
-
+                
+                if (curatedPostListAdapter == null) {
+                    curatedPostListAdapter = new PostListAdapter(R.layout.curated_post_list_adapter, R.id.btn_edit, TabPostsListActivity.this,
+                            result.getCuratedPosts(), TabPostsListActivity.this);
+                    lv.setAdapter(curatedPostListAdapter);
+                } else {
+                    curatedPostListAdapter.updatePostList(result.getCuratedPosts());
+                }
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                     public void onItemClick(AdapterView< ? > parent, View view, int position, long id) {
@@ -227,7 +248,9 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                 });
                 lv.onRefreshComplete();
                 
-                progress.hide();
+                if (progress != null) {
+                    progress.hide();
+                }
             }
         }.execute();
     }
@@ -237,6 +260,23 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 
             @Override
             protected void onPreExecute() {
+                //read from cache
+                String cache = ScoopItApp.INSTANCE.cache.getCachedForUrl(Constants.CURABLE_POST_REQUEST + "&id=" + topicId);
+                if (cache != null) {
+                    try {
+                        Topic result = Topic.getTopicFromJson(cache);
+                        final PullToRefreshListView lv = views[CURABLE_LIST_INDEX];
+                        if (curablePostListAdapter == null) {
+                            curablePostListAdapter = new PostListAdapter(R.layout.curable_post_list_adapter, R.id.btn_discard, TabPostsListActivity.this,
+                                    result.getCurablePosts(), TabPostsListActivity.this);
+                            lv.setAdapter(curablePostListAdapter);
+                        } else {
+                            curablePostListAdapter.updatePostList(result.getCurablePosts());
+                        }
+                        progresshasBeenShown = true;
+                    } catch (JSONException e) {}
+                }
+                
                 if (!progresshasBeenShown) {
                     progresshasBeenShown = true;
                     progress = ProgressDialog.show(TabPostsListActivity.this, "Please Wait", "Loading your posts...",
@@ -252,12 +292,10 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                     String jsonOutput = NetworkingUtils.sendRestfullRequest(Constants.CURABLE_POST_REQUEST + "&id=" + topicId,
                             OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(TabPostsListActivity.this)));
                     System.out.println("jsonOutput : " + jsonOutput);
-                    JSONObject jsonResponse;
-                    jsonResponse = new JSONObject(jsonOutput);
 
-                    Topic topic = new Topic();
-                    topic.popupateFromJsonObject(jsonResponse.getJSONObject("topic"));
-                    return topic;
+                    ScoopItApp.INSTANCE.cache.setCacheForUrl(jsonOutput, Constants.CURABLE_POST_REQUEST + "&id=" + topicId);
+                    
+                    return Topic.getTopicFromJson(jsonOutput);
                 } catch (JSONException e) {
                     System.out.println(e);
                 }
@@ -269,9 +307,13 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                 super.onPostExecute(result);
                 // populate
                 final PullToRefreshListView lv = views[CURABLE_LIST_INDEX];
-                curablePostListAdapter = new PostListAdapter(R.layout.curable_post_list_adapter, R.id.btn_discard, TabPostsListActivity.this,
-                        result.getCurablePosts(), TabPostsListActivity.this);
-                lv.setAdapter(curablePostListAdapter);
+                if (curablePostListAdapter == null) {
+                    curablePostListAdapter = new PostListAdapter(R.layout.curable_post_list_adapter, R.id.btn_discard, TabPostsListActivity.this,
+                            result.getCurablePosts(), TabPostsListActivity.this);
+                    lv.setAdapter(curablePostListAdapter);
+                } else {
+                    curablePostListAdapter.updatePostList(result.getCurablePosts());
+                }
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView< ? > parent, View view, int position, long id) {
                         Post p = (Post) lv.getAdapter().getItem(position);
@@ -287,7 +329,9 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                 });
                 lv.onRefreshComplete();
 
-                progress.hide();
+                if (progress != null) {
+                    progress.hide();
+                }
             }
 
         }.execute();
