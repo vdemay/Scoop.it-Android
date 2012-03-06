@@ -180,7 +180,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                 if (cache != null) {
                     try {
                         Topic result = Topic.getTopicFromJson(cache);
-                        final PullToRefreshListView lv = views[1];
+                        final PullToRefreshListView lv = views[CURATED_LIST_INDEX];
                         if (curatedPostListAdapter == null) {
                             curatedPostListAdapter = new PostListAdapter(R.layout.curated_post_list_adapter, R.id.btn_edit, TabPostsListActivity.this,
                                     result.getCuratedPosts(), TabPostsListActivity.this);
@@ -222,7 +222,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
             protected void onPostExecute(Topic result) {
                 super.onPostExecute(result);
                 // populate
-                final PullToRefreshListView lv = views[1];
+                final PullToRefreshListView lv = views[CURATED_LIST_INDEX];
                 
                 if (curatedPostListAdapter == null) {
                     curatedPostListAdapter = new PostListAdapter(R.layout.curated_post_list_adapter, R.id.btn_edit, TabPostsListActivity.this,
