@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.odeval.scoopit.model.Post;
 import com.odeval.scoopit.model.Topic;
 import com.odeval.scoopit.ui.list.adapater.OnButtonClickedListener;
 import com.odeval.scoopit.ui.list.adapater.PostListAdapter;
+import com.odeval.scoopit.ui.topic.CuratedTopicListActivity;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitleProvider;
 
@@ -51,6 +53,9 @@ import com.viewpagerindicator.TitleProvider;
  */
 public class TabPostsListActivity extends Activity implements OnButtonClickedListener {
 
+    private ProgressDialog progress;
+    private boolean progresshasBeenShown;
+    
     /**
      * This class is also in charge of managing bothe curated and curable list of topic Result of other activity are handled here
      */
@@ -169,6 +174,11 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 
             @Override
             protected void onPreExecute() {
+                if (!progresshasBeenShown) {
+                    progresshasBeenShown = true;
+                    progress = ProgressDialog.show(TabPostsListActivity.this, "Please Wait", "Loading your posts...",
+                            true);
+                }
                 super.onPreExecute();
             }
 
@@ -216,6 +226,8 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                     }
                 });
                 lv.onRefreshComplete();
+                
+                progress.hide();
             }
         }.execute();
     }
@@ -225,6 +237,11 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 
             @Override
             protected void onPreExecute() {
+                if (!progresshasBeenShown) {
+                    progresshasBeenShown = true;
+                    progress = ProgressDialog.show(TabPostsListActivity.this, "Please Wait", "Loading your posts...",
+                            true);
+                }
                 super.onPreExecute();
             }
 
@@ -269,6 +286,8 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                     }
                 });
                 lv.onRefreshComplete();
+
+                progress.hide();
             }
 
         }.execute();
