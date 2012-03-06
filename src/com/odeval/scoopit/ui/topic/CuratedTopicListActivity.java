@@ -12,14 +12,17 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 
 import com.odeval.scoopit.Constants;
+import com.odeval.scoopit.OAuth.LoginActivity;
 import com.odeval.scoopit.OAuth.OAutHelper;
 import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.model.Topic;
 import com.odeval.scoopit.model.User;
 import com.odeval.scoopit.ui.list.adapater.TopicListAdapter;
 import com.odeval.scoopit.ui.post.TabPostsListActivity;
+import com.odeval.scoopit.ui.profile.ProfileActivity;
 
 public class CuratedTopicListActivity extends ListActivity {
 
@@ -93,7 +96,18 @@ public class CuratedTopicListActivity extends ListActivity {
                 CuratedTopicListActivity.this.startActivity(i);
             }
         });
+        
 
+
+        ((Button)findViewById(com.odeval.scoopit.R.id.topic_list_profile)).setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CuratedTopicListActivity.this, ProfileActivity.class);
+                CuratedTopicListActivity.this.startActivity(intent);
+            }
+        });
+        
     }
 
 }
