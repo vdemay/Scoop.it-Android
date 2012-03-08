@@ -177,7 +177,7 @@
                 >
             </com.odeval.scoopit.ui.layout.InlineLayout>
             
-			<LinearLayout 
+			<RelativeLayout 
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
 			    android:orientation="horizontal"
@@ -185,27 +185,29 @@
 			    
 	           <EditText
 	               android:id="@+id/editText_add_tag"
-	               android:layout_width="0dp"
-				   android:layout_height="44dp"
-				   android:layout_marginLeft="5dp"
-				   android:layout_marginTop="3dp"
-	               android:layout_weight="1"
+	               android:layout_width="match_parent"
+	               android:layout_height="44dp"
+	               android:layout_marginLeft="5dp"
+	               android:layout_marginRight="5dp"
+	               android:layout_marginTop="0dp"
+	               android:layout_toLeftOf="@+id/button_add_tag"
 	               android:gravity="left" >
+
 	           </EditText>
-			    
+
 				<Button
 				    android:id="@+id/button_add_tag"
 				    android:layout_width="40dp"
-				    android:layout_height="40dp"
-				    android:layout_gravity="center_vertical"
-				    android:layout_marginLeft="5dp"
+				    android:layout_height="38dp"
+				    android:layout_alignParentRight="true"
+				    android:layout_alignParentTop="true"
 				    android:layout_marginRight="5dp"
 				    android:background="@drawable/add_tag_button"
+				    android:text="+"
 				    android:textColor="@color/white"
-				    android:textSize="30dp" 
-				    android:text="+"/>
+				    android:textSize="30dp" />
 			    
-			</LinearLayout>
+			</RelativeLayout>
 
             
         </LinearLayout>

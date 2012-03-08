@@ -1,7 +1,6 @@
 package com.odeval.scoopit.ui.post;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -30,7 +29,6 @@ import com.odeval.scoopit.model.Post;
 import com.odeval.scoopit.model.Topic;
 import com.odeval.scoopit.ui.list.adapater.OnButtonClickedListener;
 import com.odeval.scoopit.ui.list.adapater.PostListAdapter;
-import com.odeval.scoopit.ui.topic.CuratedTopicListActivity;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitleProvider;
 
