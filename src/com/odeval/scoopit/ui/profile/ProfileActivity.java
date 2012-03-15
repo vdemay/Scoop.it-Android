@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,6 +38,12 @@ public class ProfileActivity extends Activity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                
+                //clear cookie
+                CookieManager cookieManager = CookieManager.getInstance();
+                cookieManager.setCookie("http://www.scoop.it", "auth");
+                cookieManager.setCookie("https://www.scoop.it", "auth");
+                
                 startActivity(intent);
                 finish();
             }
