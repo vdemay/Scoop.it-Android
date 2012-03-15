@@ -2,6 +2,8 @@ package com.odeval.scoopit.OAuth;
 
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -56,9 +58,26 @@ public class OAuthRequestTokenTask extends AsyncTask<Void, Void, Void> {
 			//call an inner Browser : not the default browser!
 		} catch (Exception e) {
 			Log.e(TAG, "Error during OAUth retrieve request token", e);
+			cancel(false);
 		}
 
 		return null;
+	}
+	
+	@Override
+	protected void onCancelled() {
+	    
+	    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Sorry! An error occured please try later!")
+               .setCancelable(false)
+               .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       context.finish();
+                   }
+               });
+        AlertDialog alert = builder.create();
+        alert.show();
+        super.onCancelled();
 	}
 	
 	@Override

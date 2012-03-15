@@ -86,10 +86,12 @@ public class NetworkingCache {
         }
 
         Writer output = new BufferedWriter(new FileWriter(aFile));
-        try {
-            output.write(aContents);
-        } finally {
-            output.close();
+        if (aContents != null) {
+            try {
+                output.write(aContents);
+            } finally {
+                output.close();
+            }
         }
     }
 

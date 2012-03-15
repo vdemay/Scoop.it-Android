@@ -37,8 +37,10 @@ public class PostViewBeforeCurateActivity extends Activity {
         ((TextView)findViewById(R.id.post_title)).setText(post.getTitle());
         ((TextView)findViewById(R.id.post_content)).setText(post.getContent());
         
-        if (post.getImageUrls() != null && !post.getImageUrls().isEmpty()) {
-        	ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrls().get(0), (ImageView)findViewById(R.id.post_image));
+        if (post.getImageUrl() != null) {
+            ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrl(), (ImageView)findViewById(R.id.post_image));
+        } else if (post.getImageUrls() != null && post.getImageUrls().size() > 0) {
+            ScoopItApp.INSTANCE.imageLoader.displayImage(post.getImageUrls().get(0), (ImageView)findViewById(R.id.post_image));
         } else {
         	((ImageView)findViewById(R.id.post_image)).setVisibility(View.GONE);
         }
