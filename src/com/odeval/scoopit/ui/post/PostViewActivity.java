@@ -109,17 +109,30 @@ public class PostViewActivity extends Activity {
     
     private void showSharerMenu() {
         AlertDialog.Builder builder = new AlertDialog.Builder(PostViewActivity.this);
-        builder.setTitle("Share to...");
+        builder.setTitle("Share");
         
         final User user = User.readFromFile(PostViewActivity.this);
-        
+
         ArrayList<CharSequence> items = new ArrayList<CharSequence>();
+        items.add("Email");
+        
         for (Sharer sharer : user.getSharers()) {
             items.add(sharer.getSharerName());
         }
                 
         builder.setItems(items.toArray(new CharSequence[0]), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
+                if (item==0) {
+                    //email
+                    Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                    emailIntent.setType("plain/text");
+                    emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "I found out this article on Scoop.it");
+                    emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, post.getScoopUrl());
+                    PostViewActivity.this.startActivity(Intent.createChooser(emailIntent, "Email"));
+                    return;
+                }
+                //slice for sharers
+                item++;
                 Sharer sharer = user.getSharers().get(item);
                 if (sharer.isMustSpecifyShareText()) {
                     showSharerInput(sharer);
