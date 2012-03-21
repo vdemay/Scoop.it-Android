@@ -8,6 +8,7 @@ import oauth.signpost.signature.HmacSha1MessageSigner;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -106,6 +107,12 @@ public class LoginActivity extends Activity {
                 loadIndicator.setVisibility(View.VISIBLE);
                 return false; // then it is not handled by default action
            }
+            
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                loadIndicator.setVisibility(View.VISIBLE);
+            }
             
             @Override
             public void onPageFinished(WebView view, String url) {
