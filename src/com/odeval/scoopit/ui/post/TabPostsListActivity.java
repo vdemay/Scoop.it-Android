@@ -196,6 +196,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                                 lv.setAdapter(curatedPostListAdapter);
                             } else {
                                 curatedPostListAdapter.updatePostList(result.getCuratedPosts());
+                                lv.setAdapter(curatedPostListAdapter);
                             }
                             progresshasBeenShown = true;
                             
@@ -245,6 +246,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                     lv.setAdapter(curatedPostListAdapter);
                 } else {
                     curatedPostListAdapter.updatePostList(result.getCuratedPosts());
+                    lv.setAdapter(curatedPostListAdapter);
                 }
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -297,6 +299,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                                 lv.setAdapter(curablePostListAdapter);
                             } else {
                                 curablePostListAdapter.updatePostList(result.getCurablePosts());
+                                lv.setAdapter(curablePostListAdapter);
                             };
                             
                             if (progress != null) {
@@ -343,6 +346,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                     lv.setAdapter(curablePostListAdapter);
                 } else {
                     curablePostListAdapter.updatePostList(result.getCurablePosts());
+                    lv.setAdapter(curablePostListAdapter);
                 }
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView< ? > parent, View view, int position, long id) {

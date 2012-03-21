@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +39,7 @@ public class PostListAdapter extends ArrayAdapter<Post>{
     }
     
     public void updatePostList(List<Post> list) {
-        if (list != null) {
+        if (list != null && !list.isEmpty()) {
             this.posts = new ArrayList<Post>(list);
         } else {
             this.posts = new ArrayList<Post>();
@@ -87,20 +85,14 @@ public class PostListAdapter extends ArrayAdapter<Post>{
             postView.postDate.setText(ScoopItApp.INSTANCE.dateTimeFormatShortShort.format(postDate));
             
             //and image
-            DisplayMetrics metrics = new DisplayMetrics();
-            ((Activity)getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
-            float logicalDensity = metrics.density;
-            int px = (int) (50 * logicalDensity + 0.5);
-
-            postView.image.getLayoutParams().height = px;
-            postView.image.getLayoutParams().width = px;
+            postView.image.setVisibility(View.VISIBLE);
+            
             if (postView.post.getImageUrl() != null) {
                 ScoopItApp.INSTANCE.imageLoader.displayImage(postView.post.getImageUrl(), postView.image);
             } else if (postView.post.getImageUrls() != null && postView.post.getImageUrls().size() > 0) {
                 ScoopItApp.INSTANCE.imageLoader.displayImage(postView.post.getImageUrls().get(0), postView.image);
             } else {
-                postView.image.getLayoutParams().height = 0;
-                postView.image.getLayoutParams().width = 0;
+                postView.image.setVisibility(View.GONE);
             }
         }
         

@@ -8,15 +8,17 @@
         android:id="@+id/scrollView1"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp" >
+        android:layout_above="@+id/linearLayout1"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="50dp" >
 
         <RelativeLayout
             android:id="@+id/layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+	        android:paddingLeft="20dp"
+	        android:paddingRight="20dp"
             android:orientation="vertical" >
 
             <ImageView
@@ -167,51 +169,44 @@
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:background="@color/white"
-			android:orientation="vertical">
+            android:orientation="vertical" >
 
-
-			<com.odeval.scoopit.ui.layout.InlineLayout
+            <com.odeval.scoopit.ui.layout.InlineLayout
                 android:id="@+id/post_tag_container"
                 android:layout_width="fill_parent"
-                android:layout_height="100dp"
-                >
+                android:layout_height="100dp" >
             </com.odeval.scoopit.ui.layout.InlineLayout>
-            
-			<RelativeLayout 
-			    android:layout_width="fill_parent"
-			    android:layout_height="wrap_content"
-			    android:orientation="horizontal"
-			    android:layout_gravity="center">
-			    
-	           <EditText
-	               android:id="@+id/editText_add_tag"
-	               android:layout_width="match_parent"
-	               android:layout_height="44dp"
-	               android:layout_marginLeft="5dp"
-	               android:layout_marginRight="5dp"
-	               android:layout_marginTop="0dp"
-	               android:layout_toLeftOf="@+id/button_add_tag"
-	               android:gravity="left" >
 
-	           </EditText>
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal" >
 
-				<Button
-				    android:id="@+id/button_add_tag"
-				    android:layout_width="40dp"
-				    android:layout_height="38dp"
-				    android:layout_alignParentRight="true"
-				    android:layout_alignParentTop="true"
-				    android:layout_marginRight="5dp"
-				    android:background="@drawable/add_tag_button"
-				    android:text="+"
-				    android:textColor="@color/white"
-				    android:textSize="30dp" />
-			    
-			</RelativeLayout>
+                <EditText
+                    android:id="@+id/editText_add_tag"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_toLeftOf="@+id/button_add_tag"
+                    android:gravity="left" >
+                </EditText>
 
-            
+                <Button
+                    android:id="@+id/button_add_tag"
+                    android:layout_width="40dp"
+                    android:layout_height="38dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/add_tag_button"
+                    android:text="+"
+                    android:textColor="@color/white"
+                    android:textSize="30dp" />
+            </RelativeLayout>
         </LinearLayout>
-        
     </LinearLayout>
 
 </RelativeLayout>

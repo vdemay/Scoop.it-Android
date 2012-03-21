@@ -93,6 +93,7 @@ public class LoginActivity extends Activity {
         });
         
         wv.loadUrl(url);
+        wv.getSettings().setUserAgentString("Android");
         wv.setVisibility(View.GONE);
         wv.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         wv.setWebViewClient(new WebViewClient() {
