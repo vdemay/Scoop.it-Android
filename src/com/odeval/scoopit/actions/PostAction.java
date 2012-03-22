@@ -25,6 +25,65 @@ public class PostAction {
     public interface OnActionComplete {
         public void onActionComplete(Post in, Post out);
     };
+    
+    // ------------------------------------------ PREPARE
+    
+    public static void preparePost(final String url, final Context context, final boolean showDialog) {
+        preparePost(url, context, showDialog, null);
+    }
+
+    public static void preparePost(
+            final String url, final Context context, final boolean showDialog, final OnActionComplete onActionComplete) {
+        new AsyncTask<Void, Void, Post>() {
+            ProgressDialog dialog;
+
+            @Override
+            protected void onPreExecute() {
+                if (showDialog)
+                    dialog = ProgressDialog.show(context, "Please Wait", "Preparing post...", true);
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Post doInBackground(Void... params) {
+                try {
+                    Post p = doPreparePost(url, context);
+                    return p;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Post result) {
+                super.onPostExecute(result);
+                if (showDialog)
+                    dialog.dismiss();
+                if (onActionComplete != null) {
+                    onActionComplete.onActionComplete(null, result);
+                }
+            }
+
+        }.execute();
+    }
+
+    private static Post doPreparePost(String url, Context context) throws JSONException {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("url", url);
+        params.put("action", "prepare");
+        String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
+                OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(context)), params);
+        System.out.println("jsonOutput : " + jsonOutput);
+        JSONObject jsonPost = new JSONObject(jsonOutput);
+
+        Post ret = null;
+        if (jsonPost.has("post")) {
+            ret = new Post();
+            ret.popupateFromJsonObject(jsonPost.getJSONObject("post"));
+        }
+        return ret;
+    }
 
     // ------------------------------------------ DELETE
 
@@ -186,6 +245,74 @@ public class PostAction {
         return ret;
     }
     
+    
+    // ------------------------------------- CREATE
+    public static void createPost(final Post post, final String topicId,  final String shareOn, final Context context, final boolean showDialog) {
+        createPost(post, topicId, shareOn, context, showDialog, null);
+    }
+
+    public static void createPost(
+            final Post post, final String topicId, final String shareOn, final Context context, final boolean showDialog,
+            final OnActionComplete onActionComplete) {
+        new AsyncTask<Void, Void, Post>() {
+            ProgressDialog progress;
+
+            @Override
+            protected void onPreExecute() {
+                if (showDialog)
+                    progress = ProgressDialog.show(context, "Please Wait", "Creating post...", true);
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Post doInBackground(Void... params) {
+                try {
+                    return doCreatePost(post, topicId, shareOn, context);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Post result) {
+                super.onPostExecute(result);
+                if (showDialog)
+                    progress.dismiss();
+                if (onActionComplete != null) {
+                    onActionComplete.onActionComplete(null, result);
+                }
+            }
+
+        }.execute();
+
+    }
+
+    private static Post doCreatePost(Post post,String topicId, final String shareOn, Context context) throws JSONException {
+        HashMap<String, String> params = new HashMap<String, String>();
+
+        params.put("action", "create");
+        
+        params.put("imageUrl", post.getImageUrl());
+        params.put("title", post.getTitle());
+        params.put("content", post.getContent());
+        params.put("topicId", topicId);
+        if (shareOn != null) {
+            params.put("shareOn", shareOn);
+        }
+        
+        String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
+                OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(context)), params);
+        System.out.println("jsonOutput : " + jsonOutput);
+        JSONObject jsonPost = new JSONObject(jsonOutput);
+
+        Post ret = null;
+        if (jsonPost.has("post")) {
+            ret = new Post();
+            ret.popupateFromJsonObject(jsonPost.getJSONObject("post"));
+        }
+        return ret;
+    }   
     
     // ------------------------------------- EDIT
     public static void editPost(final Post post, final Context context, final boolean showDialog) {

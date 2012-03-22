@@ -126,8 +126,10 @@ public class PostViewActivity extends Activity {
                     //email
                     Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
                     emailIntent.setType("plain/text");
-                    emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "I found out this article on Scoop.it");
-                    emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, post.getScoopUrl());
+                    emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Scoop.it | " + post.getTitle());
+                    emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "I thought you may find this information interesting :\n"
+                            + post.getContent() + "\n"
+                            + "Reed more on Scoop.it: " + post.getUrl());
                     PostViewActivity.this.startActivity(Intent.createChooser(emailIntent, "Email"));
                     return;
                 }

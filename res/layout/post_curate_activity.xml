@@ -28,6 +28,27 @@
 	               android:textSize="20sp"
 	               android:textStyle="bold" 
 	               android:text="Loading..."/>
+	        
+	        <!-- URL -->
+            <TextView
+                android:id="@+id/curate_url_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="5dip"
+                android:paddingRight="5dip"
+                android:text="Url" 
+                android:visibility="gone"/>
+
+            <EditText
+                android:id="@+id/curate_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:inputType="textUri"
+                android:text="Loading..." 
+                android:visibility="gone"/>
             
             
             <!-- TITLE -->
@@ -130,6 +151,7 @@
                     android:id="@+id/curate"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/rcgreen"

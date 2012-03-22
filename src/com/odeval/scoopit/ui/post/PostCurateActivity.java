@@ -42,21 +42,21 @@ public class PostCurateActivity extends Activity {
     protected LinearLayout shareEditContainer;
 
     protected void populateFormFromIntent(Intent intent) {
-        post = intent.getExtras().getParcelable("post");
-        setContentView(R.layout.post_curate_activity);
-
+        if (intent.getExtras() != null) {
+            post = intent.getExtras().getParcelable("post");
+            populateFormFromPost(post);
+        } else {
+            populateFormFromPost(null);
+        }
+    }
+    
+    protected void populateFormFromPost(Post p) {
         titleEditText = ((EditText) findViewById(R.id.post_list_title));
         descriptionEditText = ((EditText) findViewById(R.id.post_list_content));
         action = ((Button) findViewById(R.id.curate));
         gallery = (Gallery) findViewById(R.id.gallery);
         pageTitle = ((TextView) findViewById(R.id.curate_title));
-
-        GalleryPostImageAdapter adapter = new GalleryPostImageAdapter(post, this);
-        gallery.setUnselectedAlpha(0.5f);
-        gallery.setAdapter(adapter);
-        titleEditText.setText(post.getTitle());
-        descriptionEditText.setText(post.getContent());
-
+        
         shareContainer = (LinearLayout) findViewById(R.id.shareContainer);
         shareEditContainer = (LinearLayout) findViewById(R.id.shareEditContainer);
 
@@ -69,9 +69,20 @@ public class PostCurateActivity extends Activity {
         } else {
             shareContainer.setVisibility(View.GONE);
         }
+        
+        post = p;
+        if (post != null) {
+
+            titleEditText.setText(post.getTitle());
+            descriptionEditText.setText(post.getContent());
+
+            GalleryPostImageAdapter adapter = new GalleryPostImageAdapter(post, this);
+            gallery.setUnselectedAlpha(0.5f);
+            gallery.setAdapter(adapter);
+        }
     }
 
-    private void addSharer2UI(final Sharer sharer) {
+    protected void addSharer2UI(final Sharer sharer) {
         CheckBox checkBox = new CheckBox(this);
         checkBox.setText(sharer.getSharerName());
         if (sharer.isMustSpecifyShareText()) {
@@ -112,7 +123,7 @@ public class PostCurateActivity extends Activity {
         findViewById(R.id.shareScroll).invalidate();
     }
 
-    private String jsonForSelectedSharers() {
+    protected String jsonForSelectedSharers() {
         if (shareContainer.getChildCount() > 0) {
             String toReturn = "[";
             for (int i = 0; i < shareContainer.getChildCount(); i++) {
@@ -135,7 +146,11 @@ public class PostCurateActivity extends Activity {
                 }
             }
             //remove last ","
-            toReturn = toReturn.substring(0, toReturn.length() - 1) + "]";
+            if (toReturn.length() > 1) { // at least one item
+                toReturn = toReturn.substring(0, toReturn.length() - 1) + "]";
+            } else {
+                toReturn = null;
+            }
             return toReturn;
         } else {
             return null;
@@ -146,6 +161,7 @@ public class PostCurateActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
+        setContentView(R.layout.post_curate_activity);
         populateFormFromIntent(intent);
 
         pageTitle.setText("Accept a Post");

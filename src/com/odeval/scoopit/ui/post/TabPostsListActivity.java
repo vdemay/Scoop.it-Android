@@ -13,6 +13,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -140,6 +141,17 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
 
         setContentView(R.layout.tab_posts_list_activity);
 
+        ((Button)findViewById(R.id.new_postButton)).setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TabPostsListActivity.this, PostCreateActivity.class);
+                i.putExtra("topicId", topicId);
+                TabPostsListActivity.this.startActivityForResult(i, 1);
+            }
+        });
+        
+        
         views = new PullToRefreshListView[2];
         views[CURABLE_LIST_INDEX] = new PullToRefreshListView(this);
         views[CURATED_LIST_INDEX] = new PullToRefreshListView(this);
@@ -412,6 +424,10 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
                     if (postToAdd != null && postToRemove != null) {
                         curablePla.remove(postToRemove);
                         curablePla.notifyDataSetChanged();
+                        curatedPla.add(postToAdd);
+                        curatedPla.notifyDataSetChanged();
+                    } else if (postToAdd != null){
+                        //post created : no post to remove from lists
                         curatedPla.add(postToAdd);
                         curatedPla.notifyDataSetChanged();
                     }

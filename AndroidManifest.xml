@@ -45,6 +45,11 @@
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
+            android:name=".ui.post.PostCreateActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+        <activity
             android:name=".ui.post.PostEditActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar" >
