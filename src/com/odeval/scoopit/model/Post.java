@@ -39,8 +39,8 @@ public class Post implements Parcelable {
     private boolean isUserSuggestion;
     private Long pageViews;
     private boolean edited;
-    private int publicationDate;
-    private int curationDate;
+    private long publicationDate;
+    private long curationDate;
     // comments
     // thanked
     private Topic topic;
@@ -245,19 +245,19 @@ public class Post implements Parcelable {
         this.edited = edited;
     }
 
-    public int getPublicationDate() {
+    public long getPublicationDate() {
         return publicationDate;
     }
 
-    public void setPublicationDate(int publicationDate) {
+    public void setPublicationDate(long publicationDate) {
         this.publicationDate = publicationDate;
     }
 
-    public int getCurationDate() {
+    public long getCurationDate() {
         return curationDate;
     }
 
-    public void setCurationDate(int curationDate) {
+    public void setCurationDate(long curationDate) {
         this.curationDate = curationDate;
     }
 
@@ -311,8 +311,8 @@ public class Post implements Parcelable {
         isUserSuggestion = obj.optBoolean("isUserSuggestion");
         pageViews = obj.optLong("pageViews");
         edited = obj.optBoolean("edited");
-        publicationDate = obj.optInt("publicationDate");
-        curationDate = obj.optInt("curationDate");
+        publicationDate = obj.optLong("publicationDate");
+        curationDate = obj.optLong("curationDate");
         topic = new Topic();
         topic.popupateFromJsonObject(obj.optJSONObject("topic"));
     }
@@ -364,8 +364,8 @@ public class Post implements Parcelable {
         dest.writeStringList(tags);
         dest.writeInt(commentsCount);
         //TODO edited
-        dest.writeInt(publicationDate);
-        dest.writeInt(curationDate);
+        dest.writeLong(publicationDate);
+        dest.writeLong(curationDate);
         //TODO comments
         //TODO thanked
         //TODO topic
@@ -415,8 +415,8 @@ public class Post implements Parcelable {
         in.readStringList(tags);
         commentsCount = in.readInt();
         //TODO edited
-        publicationDate = in.readInt();
-        curationDate = in.readInt();
+        publicationDate = in.readLong();
+        curationDate = in.readLong();
         //TODO comments
         //TODO thanked
         //TODO topic

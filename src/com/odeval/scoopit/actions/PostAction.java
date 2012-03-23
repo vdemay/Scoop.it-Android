@@ -9,8 +9,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
@@ -57,6 +59,10 @@ public class PostAction {
 
             @Override
             protected void onPostExecute(Post result) {
+                if (isCancelled()) {
+                    onCancelled();
+                    return;
+                }
                 super.onPostExecute(result);
                 if (showDialog)
                     dialog.dismiss();
@@ -105,12 +111,35 @@ public class PostAction {
 
             @Override
             protected Post doInBackground(Void... params) {
-                doDeletePost(post, context);
+                try {
+                    doDeletePost(post, context);
+                } catch (JSONException e) {
+                    cancel(true);
+                }
                 return null;
             }
+            
+            protected void onCancelled() {
+                if (showDialog)
+                    dialog.dismiss();
+                
+                final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                alertDialog.setTitle("Error");
+                alertDialog.setMessage("Sorry can not get data from server");
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int which) {
+                       alertDialog.cancel();
+                   }
+                });
+                alertDialog.show();
+            };
 
             @Override
             protected void onPostExecute(Post result) {
+                if (isCancelled()) {
+                    onCancelled();
+                    return;
+                }
                 super.onPostExecute(result);
                 if (showDialog)
                     dialog.dismiss();
@@ -122,13 +151,16 @@ public class PostAction {
         }.execute();
     }
 
-    private static void doDeletePost(Post post, Context context) {
+    private static void doDeletePost(Post post, Context context) throws JSONException {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("id", post.getId().toString());
         params.put("action", "delete");
         String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
                 OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(context)), params);
         System.out.println("jsonOutput : " + jsonOutput);
+        if (jsonOutput == null) {
+            throw new JSONException("json is null");
+        }
     }
 
     
@@ -151,12 +183,36 @@ public class PostAction {
 
             @Override
             protected Post doInBackground(Void... params) {
-                doDiscardPost(post, context);
+                try {
+                    doDiscardPost(post, context);
+                } catch (JSONException e) {
+                    cancel(true);
+                }
                 return null;
             }
+            
+            @Override
+            protected void onCancelled() {
+                if (showDialog)
+                    dialog.dismiss();
+                
+                final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                alertDialog.setTitle("Error");
+                alertDialog.setMessage("Sorry can not get data from server");
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int which) {
+                       alertDialog.cancel();
+                   }
+                });
+                alertDialog.show();
+            };
 
             @Override
             protected void onPostExecute(Post result) {
+                if (isCancelled()) {
+                    onCancelled();
+                    return;
+                }
                 super.onPostExecute(result);
                 if (showDialog)
                     dialog.dismiss();
@@ -168,13 +224,16 @@ public class PostAction {
         }.execute();
     }
 
-    private static void doDiscardPost(Post post, Context context) {
+    private static void doDiscardPost(Post post, Context context) throws JSONException {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("id", post.getId().toString());
         params.put("action", "refuse");
         String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
                 OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(context)), params);
         System.out.println("jsonOutput : " + jsonOutput);
+        if (jsonOutput == null) {
+            throw new JSONException("output is null");
+        }
     }
 
     // ------------------------------------- ACCEPT
@@ -200,13 +259,32 @@ public class PostAction {
                 try {
                     return doCuratePost(post, shareOn, context);
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    cancel(true);
                 }
                 return null;
             }
+            
+            protected void onCancelled() {
+                if (showDialog)
+                    progress.dismiss();
+                
+                final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                alertDialog.setTitle("Error");
+                alertDialog.setMessage("Sorry can not get data from server");
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int which) {
+                       alertDialog.cancel();
+                   }
+                });
+                alertDialog.show();
+            };
 
             @Override
             protected void onPostExecute(Post result) {
+                if (isCancelled()) {
+                    onCancelled();
+                    return;
+                }
                 super.onPostExecute(result);
                 if (showDialog)
                     progress.dismiss();
@@ -269,13 +347,32 @@ public class PostAction {
                 try {
                     return doCreatePost(post, topicId, shareOn, context);
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    cancel(true);
                 }
                 return null;
             }
+            
+            protected void onCancelled() {
+                if (showDialog)
+                    progress.dismiss();
+                
+                final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                alertDialog.setTitle("Error");
+                alertDialog.setMessage("Sorry can not get data from server");
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int which) {
+                       alertDialog.cancel();
+                   }
+                });
+                alertDialog.show();
+            };
 
             @Override
             protected void onPostExecute(Post result) {
+                if (isCancelled()) {
+                    onCancelled();
+                    return;
+                }
                 super.onPostExecute(result);
                 if (showDialog)
                     progress.dismiss();
@@ -337,13 +434,32 @@ public class PostAction {
                 try {
                     return doEditPost(post, context);
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    cancel(true);
                 }
                 return null;
             }
+            
+            protected void onCancelled() {
+                if (showDialog)
+                    progress.dismiss();
+                
+                final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                alertDialog.setTitle("Error");
+                alertDialog.setMessage("Sorry can not get data from server");
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int which) {
+                       alertDialog.cancel();
+                   }
+                });
+                alertDialog.show();
+            };
 
             @Override
             protected void onPostExecute(Post result) {
+                if (isCancelled()) {
+                    onCancelled();
+                    return;
+                }
                 super.onPostExecute(result);
                 if (showDialog)
                     progress.dismiss();
@@ -401,13 +517,32 @@ public class PostAction {
                 try {
                     return doSetTags(post, tags, context);
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    cancel(true);
                 }
                 return null;
             }
+            
+            protected void onCancelled() {
+                if (showDialog)
+                    progress.dismiss();
+                
+                final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                alertDialog.setTitle("Error");
+                alertDialog.setMessage("Sorry can not get data from server");
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int which) {
+                       alertDialog.cancel();
+                   }
+                });
+                alertDialog.show();
+            };
 
             @Override
             protected void onPostExecute(Post result) {
+                if (isCancelled()) {
+                    onCancelled();
+                    return;
+                }
                 super.onPostExecute(result);
                 if (showDialog)
                     progress.dismiss();
@@ -472,13 +607,32 @@ public class PostAction {
                     doSharePost(post, sharer, text, context);
                     return null;
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    cancel(true);
                 }
                 return null;
             }
+            
+            protected void onCancelled() {
+                if (showDialog)
+                    progress.dismiss();
+                
+                final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                alertDialog.setTitle("Error");
+                alertDialog.setMessage("Sorry can not get data from server");
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int which) {
+                       alertDialog.cancel();
+                   }
+                });
+                alertDialog.show();
+            };
 
             @Override
             protected void onPostExecute(Post result) {
+                if (isCancelled()) {
+                    onCancelled();
+                    return;
+                }
                 super.onPostExecute(result);
                 if (showDialog)
                     progress.dismiss();
@@ -501,7 +655,9 @@ public class PostAction {
         
         String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
                 OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(context)), params);
-        //JSONObject jsonPost = new JSONObject(jsonOutput);
+        if (jsonOutput == null) {
+            throw new JSONException("json is null");
+        }
 
     }
 }

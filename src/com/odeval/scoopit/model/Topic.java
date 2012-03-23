@@ -233,6 +233,7 @@ public class Topic {
     }
     
     public static Topic getTopicFromJson(String json) throws JSONException {
+        if (json == null) return null;
         JSONObject jsonResponse;
         jsonResponse = new JSONObject(json);
 

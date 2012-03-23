@@ -225,6 +225,7 @@ public class User implements /*Parcelable,*/ Serializable {
     
 
     public static User getUserFromJson(String json) throws JSONException {
+        if (json == null) return null;
         JSONObject jsonResponse;
         jsonResponse = new JSONObject(json);
 
