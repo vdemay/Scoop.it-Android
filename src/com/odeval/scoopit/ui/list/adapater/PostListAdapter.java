@@ -48,6 +48,11 @@ public class PostListAdapter extends ArrayAdapter<Post>{
     }
     
     @Override
+    public int getCount() {
+        return posts.size();
+    }
+    
+    @Override
     public Post getItem(int position) {
         return posts.get(position);
     }
