@@ -79,7 +79,12 @@ public class PostListAdapter extends ArrayAdapter<Post>{
             } else {
             	postView.content.setVisibility(View.GONE);
             }
-            postView.sourceTitle.setText(postView.post.getSource().getName());
+            if (postView.post.getTwitterAuthor() != null) {
+                postView.sourceTitle.setText("@"  + postView.post.getTwitterAuthor());
+            } else {
+                postView.sourceTitle.setText(postView.post.getSource().getName());
+            }
+            
             ScoopItApp.INSTANCE.imageLoader.displayImage(postView.post.getSource().getIconUrl(), postView.sourceIcon);
             Date postDate = new Date(postView.post.getPublicationDate());
             postView.postDate.setText(ScoopItApp.INSTANCE.dateTimeFormatShortShort.format(postDate));
