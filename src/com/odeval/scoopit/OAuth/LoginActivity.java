@@ -15,6 +15,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
@@ -46,13 +48,6 @@ public class LoginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //FIXME: put this method into oauth Helper
-        //FIXME: false because credentials can be experied -> need more check
-        /*if ( OAuthFlowApp.getConsumer(PreferenceManager.getDefaultSharedPreferences(this)) != null) {
-        	startActivity(new Intent(this, CuratedTopicListActivity.class));
-        	finish();
-        	return;
-        }*/
         try {
             System.setProperty("debug", "true");
             this.consumer = new CommonsHttpOAuthConsumer(PrivateConstants.CONSUMER_KEY, PrivateConstants.CONSUMER_SECRET);
@@ -68,6 +63,7 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.login_activity);
         
         loadIndicator = (LinearLayout)findViewById(R.id.loginLayout);
+        
         
         new OAuthRequestTokenTask(this, consumer, provider).execute();
     }
@@ -92,9 +88,8 @@ public class LoginActivity extends Activity {
                 return false;
             }
         });
-        
+       
         wv.loadUrl(url);
-        wv.getSettings().setUserAgentString("Android");
         wv.setVisibility(View.GONE);
         wv.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         wv.setWebViewClient(new WebViewClient() {

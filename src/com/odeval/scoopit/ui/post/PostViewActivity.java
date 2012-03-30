@@ -21,11 +21,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.odeval.scoopit.R;
-import com.odeval.scoopit.model.User;
-import com.odeval.scoopit.model.Sharer;
 import com.odeval.scoopit.ScoopItApp;
 import com.odeval.scoopit.actions.PostAction;
 import com.odeval.scoopit.model.Post;
+import com.odeval.scoopit.model.Sharer;
+import com.odeval.scoopit.model.User;
 import com.odeval.scoopit.ui.animation.ExpandCollapseAnimation;
 import com.odeval.scoopit.ui.layout.InlineLayout;
 

@@ -3,6 +3,9 @@ package com.odeval.scoopit;
 import java.text.DateFormat;
 import java.util.Locale;
 
+import org.acra.ACRA;
+import org.acra.annotation.ReportsCrashes;
+
 import android.app.Application;
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -11,6 +14,8 @@ import android.view.WindowManager;
 import com.odeval.scoopit.helper.NetworkingCache;
 import com.odeval.scoopit.image.ImageLoader;
 
+
+@ReportsCrashes(formKey = "dGQ4bXBIbk0wSzliRm1XNENOS05TN0E6MQ") 
 public class ScoopItApp extends Application {
 	
 	public static ScoopItApp INSTANCE;
@@ -26,6 +31,9 @@ public class ScoopItApp extends Application {
 	
 	@Override
 	public void onCreate() {
+	    // The following line triggers the initialization of ACRA
+        ACRA.init(this);
+
 		super.onCreate();
 		DisplayMetrics dm = new DisplayMetrics();
 	    (((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()).getMetrics(dm);

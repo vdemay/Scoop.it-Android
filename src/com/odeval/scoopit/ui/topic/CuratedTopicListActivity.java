@@ -1,11 +1,12 @@
 package com.odeval.scoopit.ui.topic;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -85,9 +86,15 @@ public class CuratedTopicListActivity extends ListActivity {
                         tla.updateTopics(result.getCuratedTopics());
                     }
                 } else {
-                    Dialog d = new Dialog(CuratedTopicListActivity.this);
-                    d.setTitle("An Error Occured");
-                    d.show();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(CuratedTopicListActivity.this).create();
+                    alertDialog.setTitle("Error");
+                    alertDialog.setMessage("Sorry, can not get data from server");
+                    alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                       public void onClick(DialogInterface dialog, int which) {
+                           alertDialog.cancel();
+                       }
+                    });
+                    alertDialog.show();
                 }
             }
 

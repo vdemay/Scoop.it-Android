@@ -10,5 +10,7 @@
 	<classpathentry kind="lib" path="libs/android-support-v4.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ViewPagerIndicator"/>
 	<classpathentry kind="src" path="ViewPagerIndicator_src"/>
+	<classpathentry kind="lib" path="lib/acra-4.2.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/acra-4.2.3.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
