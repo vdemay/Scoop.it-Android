@@ -134,7 +134,7 @@ public class PostViewActivity extends Activity {
                     return;
                 }
                 //slice for sharers
-                item++;
+                item--;
                 Sharer sharer = user.getSharers().get(item);
                 if (sharer.isMustSpecifyShareText()) {
                     showSharerInput(sharer);
