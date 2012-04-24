@@ -278,7 +278,12 @@ public class PostCurateActivity extends Activity {
 	    					success = true;
 	    					String uploadedImage = json.getString("image");
 	    					if (post != null) {
-	    						post.getImageUrls().add(0, uploadedImage);
+	    						if (post.getImageUrl() != null) {
+	    							post.setImageUrl(uploadedImage);
+	    							post.getImageUrls().add(uploadedImage);
+	    						} else {
+	    							post.getImageUrls().add(0, uploadedImage);
+	    						}
 	    					} else {
 	    						post = new Post();
 	    						ArrayList<String> imageList = new ArrayList<String>();
