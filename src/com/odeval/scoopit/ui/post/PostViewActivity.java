@@ -38,13 +38,17 @@ public class PostViewActivity extends Activity {
     private InlineLayout tl;
     
     private void populateFields(final Post post) {
-       
-        ((Button)findViewById(R.id.post_original)).setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(post.getUrl()));
-                startActivity(browserIntent);
-            }
-        });
+        
+    	if (post.getUrl() == null) {
+    		((Button)findViewById(R.id.post_original)).setVisibility(View.INVISIBLE);
+    	} else {
+	        ((Button)findViewById(R.id.post_original)).setOnClickListener(new OnClickListener() {
+	            public void onClick(View v) {
+	                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(post.getUrl()));
+	                startActivity(browserIntent);
+	            }
+	        });
+    	}
         
         //data
         ((TextView)findViewById(R.id.post_source_title)).setText(post.getSource().getName());

@@ -1,10 +1,23 @@
 package com.odeval.scoopit.ui.post;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -16,7 +29,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.odeval.scoopit.R;
+import com.odeval.scoopit.OAuth.OAutHelper;
 import com.odeval.scoopit.actions.PostAction;
+import com.odeval.scoopit.helper.NetworkingUtils;
 import com.odeval.scoopit.model.Post;
 import com.odeval.scoopit.model.Sharer;
 import com.odeval.scoopit.model.User;
@@ -29,6 +44,10 @@ import com.odeval.scoopit.ui.list.adapater.GalleryPostImageAdapter;
  * 
  */
 public class PostCurateActivity extends Activity {
+	
+	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+	private static final int PICK_IMAGE_ACTIVITY_REQUEST_CODE = 101;
+	
     protected Post post;
     protected User user;
 
@@ -186,6 +205,137 @@ public class PostCurateActivity extends Activity {
                 });
             }
         });
+        
+        findViewById(R.id.post_image_upload).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showImageSelectorMenu();
+			}
+		});
     }
 
+    protected void showImageSelectorMenu() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(PostCurateActivity.this);
+        builder.setTitle("Upload");
+        builder.setCancelable(true);
+        builder.setItems(new String[]{"Choose a picture", "Take a picture"}, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                if (item==0) {
+                	Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            		photoPickerIntent.setType("image/*");
+            		startActivityForResult(photoPickerIntent, PICK_IMAGE_ACTIVITY_REQUEST_CODE);
+            		
+                } else if (item==1) {
+                	// create Intent to take a picture and return control to the calling application
+    				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    				// start the image capture Intent
+    				startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	        @Override
+	        public void onClick(DialogInterface dialog, int which) {
+	        	dialog.cancel();
+	        }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+    
+    @Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Bitmap image = null; 
+		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE || requestCode == PICK_IMAGE_ACTIVITY_REQUEST_CODE) {
+			if (resultCode == RESULT_OK) {
+				// Image captured and saved
+				try {
+					image = decodeUri(data.getData(), 500); // 500px size is enough for scoop.it's 2-column layout
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		final Bitmap finalImage = image;
+		// if an image was uploaded or picked, upload it to our image server
+		if (image != null) {
+			new AsyncTask<Void, Void, Void>() {
+	            ProgressDialog dialog;
+	            boolean success = false;
+
+	            @Override
+	            protected void onPreExecute() {
+                    dialog = ProgressDialog.show(PostCurateActivity.this, "Please Wait", "Uploading...", true);
+	                super.onPreExecute();
+	            }
+
+	            @Override
+	            protected Void doInBackground(Void... params) {
+	                try {
+	                	String response = NetworkingUtils.uploadImage(OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(PostCurateActivity.this)), finalImage);
+	    				JSONObject json = new JSONObject(response);
+	    				if (json.has("image")) {
+	    					success = true;
+	    					String uploadedImage = json.getString("image");
+	    					if (post != null) {
+	    						post.getImageUrls().add(0, uploadedImage);
+	    					} else {
+	    						post = new Post();
+	    						ArrayList<String> imageList = new ArrayList<String>();
+	    						imageList.add(uploadedImage);
+	    						post.setImageUrls(imageList);
+	    					}
+	    				}
+	                } catch (JSONException e) {
+	                    e.printStackTrace();
+	                }
+	                return null;
+	            }
+
+	            @Override
+	            protected void onPostExecute(Void result) {
+	                if (isCancelled()) {
+	                    onCancelled();
+	                    return;
+	                }
+	                super.onPostExecute(result);
+                    dialog.dismiss();
+                    if (success) {
+	                    // refresh gallery
+	                    GalleryPostImageAdapter adapter = new GalleryPostImageAdapter(post, PostCurateActivity.this);
+	                    gallery.setAdapter(adapter);
+                    }
+	            }
+
+	        }.execute();
+		}
+	}
+    
+    /**
+     * Downsample an image to avoid OutOfMemory errors.
+     */
+    private Bitmap decodeUri(Uri selectedImage, int size) throws FileNotFoundException {
+        // Decode image size
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o);
+
+        // Find the correct scale value. It should be the power of 2.
+        int width_tmp = o.outWidth, height_tmp = o.outHeight;
+        int scale = 1;
+        while (true) {
+            if (width_tmp / 2 < size
+               || height_tmp / 2 < size) {
+                break;
+            }
+            width_tmp /= 2;
+            height_tmp /= 2;
+            scale *= 2;
+        }
+
+        // Decode with inSampleSize
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        return BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o2);
+    }
 }

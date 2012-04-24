@@ -70,15 +70,33 @@
                 android:text="Loading..." />
 
             <!-- IMAGE -->
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:text="Image" />
-
+            
+            <LinearLayout
+                android:id="@+id/image_horizontal_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" 
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:orientation="horizontal">
+                
+	            <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_marginLeft="5dp"
+	                android:layout_marginRight="5dp"
+	                android:layout_marginTop="5dp"
+	                android:text="Image"
+	                android:layout_gravity="center_vertical"/>
+	            
+	            <Button
+	                android:id="@+id/post_image_upload"
+	                android:layout_width="48dip"
+	                android:layout_height="48dip"
+	                android:layout_marginLeft="20dip"
+	                android:background="@drawable/photo"/>
+	            
+	        </LinearLayout>
+            
             <Gallery
                 android:id="@+id/gallery"
                 android:layout_width="match_parent"
