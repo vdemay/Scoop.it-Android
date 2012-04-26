@@ -20,8 +20,8 @@ import android.widget.TextView;
 
 import com.markupartist.android.widget.PullToRefreshListView;
 import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
-import com.scoopit.android.curation.R;
 import com.scoopit.android.curation.Constants;
+import com.scoopit.android.curation.R;
 import com.scoopit.android.curation.ScoopItApp;
 import com.scoopit.android.curation.OAuth.OAutHelper;
 import com.scoopit.android.curation.actions.PostAction;
@@ -494,7 +494,7 @@ public class TabPostsListActivity extends Activity implements OnButtonClickedLis
     public void onEdit(Post p, int index) {
         Intent i = new Intent(TabPostsListActivity.this, PostEditActivity.class);
         i.putExtra("post", p);
-        TabPostsListActivity.this.startActivity(i);
+        TabPostsListActivity.this.startActivityForResult(i, 1);
     }
 
     public void onDiscard(final Post p, int index) {
