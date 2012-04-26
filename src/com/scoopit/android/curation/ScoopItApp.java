@@ -32,7 +32,7 @@ public class ScoopItApp extends Application {
 	@Override
 	public void onCreate() {
 	    // The following line triggers the initialization of ACRA
-        ACRA.init(this);
+        //ACRA.init(this);
 
 		super.onCreate();
 		DisplayMetrics dm = new DisplayMetrics();
