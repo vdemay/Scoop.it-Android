@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="preferExternal"
-    package="com.odeval.scoopit"
+    package="com.scoopit.android.curation"
     android:versionCode="7"
     android:versionName="1.0.4" >
 
@@ -13,12 +13,7 @@
     <supports-screens />
 
     <application
-        android:name=".ScoopItApp"
-        android:debuggable="true"
-        android:icon="@drawable/icon"
-        android:label="@string/app_name" >
-
-        <!-- Login and oauth -->
+        android:name=".ScoopItApp">
         <activity
             android:name=".OAuth.LoginActivity"
             android:noHistory="true"
@@ -69,6 +64,5 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
-    </application>
-
+	</application>
 </manifest>

@@ -171,11 +171,11 @@
             android:background="@color/white"
             android:orientation="vertical" >
 
-            <com.odeval.scoopit.ui.layout.InlineLayout
+            <com.scoopit.android.curation.ui.layout.InlineLayout
                 android:id="@+id/post_tag_container"
                 android:layout_width="fill_parent"
                 android:layout_height="100dp" >
-            </com.odeval.scoopit.ui.layout.InlineLayout>
+            </com.scoopit.android.curation.ui.layout.InlineLayout>
 
             <RelativeLayout
                 android:layout_width="fill_parent"
