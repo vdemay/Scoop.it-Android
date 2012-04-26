@@ -29,6 +29,27 @@
 	               android:textStyle="bold" 
 	               android:text="Loading..."/>
 	        
+	        <!-- THEME SELECTOR -->
+	        
+	        <TextView
+                android:id="@+id/curate_select_topic_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="5dip"
+                android:paddingRight="5dip"
+                android:text="Destination Topic" 
+                android:visibility="gone"/>
+	        
+	        <Spinner 
+		        android:id="@+id/curate_select_topic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:visibility="gone"/>
+	        
+	        
 	        <!-- URL -->
             <TextView
                 android:id="@+id/curate_url_label"

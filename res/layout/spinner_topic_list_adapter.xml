@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:gravity="top">
+
+    <ImageView
+        android:id="@+id/list_adapter_topic_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/image_white_border"
+        android:padding="2dp"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/default_icon" />
+
+    <LinearLayout
+        android:id="@+id/titleDescLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@id/arrow"
+        android:layout_toRightOf="@id/list_adapter_topic_image"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/list_adapter_topic_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="top"
+            android:singleLine="true"
+            android:text="Title"
+            android:textColor="@color/curable_text_selector"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/list_adapter_topic_description"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="2"
+            android:text="Description"
+            android:textColor="@color/curable_text_selector"
+            android:textSize="14dp" />
+    </LinearLayout>
+
+</RelativeLayout>

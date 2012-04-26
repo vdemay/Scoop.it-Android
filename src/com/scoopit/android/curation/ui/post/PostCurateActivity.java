@@ -76,10 +76,14 @@ public class PostCurateActivity extends Activity {
         gallery = (Gallery) findViewById(R.id.gallery);
         pageTitle = ((TextView) findViewById(R.id.curate_title));
         
+        
         shareContainer = (LinearLayout) findViewById(R.id.shareContainer);
         shareEditContainer = (LinearLayout) findViewById(R.id.shareEditContainer);
 
         user = User.readFromFile(this);
+        
+        shareContainer.removeAllViews();
+        shareEditContainer.removeAllViews();
         if (user.getSharers() != null && user.getSharers().size() > 0) {
             shareContainer.setVisibility(View.VISIBLE);
             for (Sharer sharer : user.getSharers()) {
