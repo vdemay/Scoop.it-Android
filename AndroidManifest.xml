@@ -12,8 +12,12 @@
 
     <supports-screens />
 
-    <application
-        android:name=".ScoopItApp">
+    <application android:name=".ScoopItApp"
+        android:debuggable="true"
+		android:icon="@drawable/icon"
+		android:label="@string/app_name" >
+		
+		 <!-- Login and oauth -->
         <activity
             android:name=".OAuth.LoginActivity"
             android:noHistory="true"
@@ -63,6 +67,17 @@
             android:name=".ui.profile.ProfileActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+        
+        <activity
+            android:name=".ui.profile.bookmarklet.BookmarkletActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar" >
+            <intent-filter>
+            	<action android:name="android.intent.action.SEND" />
+            	<category android:name="android.intent.category.DEFAULT" />
+            	<data android:mimeType="text/plain" />
+       		</intent-filter>
         </activity>
 	</application>
 </manifest>
