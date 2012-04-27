@@ -45,14 +45,16 @@ public class SpinnerTopicListAdapter extends ArrayAdapter<Topic> {
             //assign view
             v = li.inflate(R.layout.spinner_topic_list_adapter, null);
         }
-        
         //populate view
         Topic t = topics.get(position);
         if (t != null) {
-            TextView userName = (TextView) v.findViewById(R.id.list_adapter_topic_name);
+            TextView name = (TextView) v.findViewById(R.id.list_adapter_topic_name);
             TextView content = (TextView) v.findViewById(R.id.list_adapter_topic_description);
             
-            userName.setText(t.getName());
+            name.setTextColor(Color.DKGRAY);
+            content.setTextColor(Color.DKGRAY);
+            
+            name.setText(t.getName());
             content.setText(t.getDescription());
             
             ScoopItApp.INSTANCE.imageLoader.displayImage(t.getMediumImageUrl(), (ImageView)v.findViewById(R.id.list_adapter_topic_image));
@@ -63,17 +65,6 @@ public class SpinnerTopicListAdapter extends ArrayAdapter<Topic> {
     
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-    	if(convertView == null) {
-            convertView = View.inflate(getContext(),
-                                       android.R.layout.simple_list_item_1,
-                                       null);
-    	}
-    	convertView.setBackgroundColor(Color.BLACK);
-        TextView tvText1 = (TextView)convertView.findViewById(android.R.id.text1);
-        tvText1.setText(getItem(position).getName());
-        return convertView;
-
-    	
-    	//return super.getDropDownView(position, convertView, parent);
+    	return getView(position, convertView, parent);
     }
 }

@@ -15,9 +15,6 @@ public class PostEditActivity extends PostCurateActivity {
     
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Intent intent = getIntent();
-        populateFormFromIntent(intent);
         
         pageTitle.setText("Edit a Post");
         

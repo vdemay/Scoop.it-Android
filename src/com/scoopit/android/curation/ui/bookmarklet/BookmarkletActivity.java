@@ -117,6 +117,7 @@ public class BookmarkletActivity extends PostCurateActivity {
                 if (cache != null) {
                     try {
                         onPostExecute(User.getUserFromJson(cache).getCuratedTopics());
+                        this.cancel(false);
                         return;
                     } catch (JSONException e) {} //ok fail : it is just cache
                 } 

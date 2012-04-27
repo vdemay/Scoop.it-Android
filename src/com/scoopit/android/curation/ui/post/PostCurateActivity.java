@@ -63,15 +63,6 @@ public class PostCurateActivity extends Activity {
 
     protected LinearLayout shareContainer;
     protected LinearLayout shareEditContainer;
-
-    protected void populateFormFromIntent(Intent intent) {
-        if (intent.getExtras() != null) {
-            post = intent.getExtras().getParcelable("post");
-            populateFormFromPost(post);
-        } else {
-            populateFormFromPost(null);
-        }
-    }
     
     protected void populateFormFromPost(Post p) {
         titleEditText = ((EditText) findViewById(R.id.post_list_title));
@@ -184,12 +175,36 @@ public class PostCurateActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+    	super.onSaveInstanceState(outState);
+    	outState.putParcelable("post", post);
+    }
+    
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    	super.onRestoreInstanceState(savedInstanceState);
+    	 if (savedInstanceState!= null && savedInstanceState.containsKey("post")) {
+    		 post = (Post) savedInstanceState.get("post");
+    	 }
+    }
+    
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
 
-        Intent intent = getIntent();
         setContentView(R.layout.post_curate_activity);
-        populateFormFromIntent(intent);
+                
+        if (savedInstanceState!= null && savedInstanceState.containsKey("post")) {
+        	post =  (Post) savedInstanceState.get("post");
+        } else {
+	        Intent intent = getIntent();
+	        if (intent.getExtras() != null && post == null) {
+	        	//get post from intent only if it is null
+	        	post = intent.getExtras().getParcelable("post");
+	        }
+        }
+	    populateFormFromPost(post);
 
         pageTitle.setText("Accept a Post");
 

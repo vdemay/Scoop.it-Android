@@ -48,7 +48,6 @@ public class PostCreateActivity extends PostCurateActivity {
 			}
 		});
 
-		populateFormFromPost(post);
 		if (post == null) {
 			// empty fields
 			urlEditText.setText("");
