@@ -62,7 +62,6 @@ public class LoginActivity extends Activity {
         
         loadIndicator = (LinearLayout)findViewById(R.id.loginLayout);
         
-        
         new OAuthRequestTokenTask(this, consumer, provider).execute();
     }
     
