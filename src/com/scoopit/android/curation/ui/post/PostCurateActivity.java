@@ -1,5 +1,6 @@
 package com.scoopit.android.curation.ui.post;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
@@ -16,6 +17,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.View;
@@ -47,6 +49,8 @@ public class PostCurateActivity extends Activity {
 	
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 	private static final int PICK_IMAGE_ACTIVITY_REQUEST_CODE = 101;
+	
+	private Uri capturedImageUri;
 	
     protected Post post;
     protected User user;
@@ -216,6 +220,8 @@ public class PostCurateActivity extends Activity {
 				showImageSelectorMenu();
 			}
 		});
+        
+        capturedImageUri = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "scoopit_capture.jpg"));
     }
 
     protected void showImageSelectorMenu() {
@@ -232,6 +238,7 @@ public class PostCurateActivity extends Activity {
                 } else if (item==1) {
                 	// create Intent to take a picture and return control to the calling application
     				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri); // set the image file name
     				// start the image capture Intent
     				startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
                 }
@@ -254,7 +261,8 @@ public class PostCurateActivity extends Activity {
 			if (resultCode == RESULT_OK) {
 				// Image captured and saved
 				try {
-					image = decodeUri(data.getData(), 500); // 500px size is enough for scoop.it's 2-column layout
+					Uri imageUri = requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE ? capturedImageUri : data.getData();
+					image = decodeUri(imageUri, 500); // 500px size is enough for scoop.it's 2-column layout
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}

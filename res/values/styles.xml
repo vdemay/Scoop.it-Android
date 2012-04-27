@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="StyledIndicators" parent="@android:style/Theme.Light">
-        <item name="vpiTitlePageIndicatorStyle">@style/CustomTitlePageIndicator</item>
     </style>
 
     <style name="CustomTitlePageIndicator">
         <item name="android:background">#00000000</item>
-        <item name="footerColor">#FF509DEB</item>
-        <item name="footerLineHeight">2dp</item>
-<!--         <item name="footerIndicatorStyle">triangle</item> -->
-        <item name="footerIndicatorStyle">underline</item>
-
-        <item name="textColor">#FFffffff</item>
-        <item name="textSize">13sp</item>
-        <item name="selectedColor">#FFffffff</item>
-        <item name="selectedBold">true</item>
     </style>
     
     <style name="ActivityAsPopup">
