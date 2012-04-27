@@ -3,7 +3,7 @@
     android:installLocation="preferExternal"
     package="com.scoopit.android.curation"
     android:versionCode="9"
-    android:versionName="1.0.4" >
+    android:versionName="1.1.0" >
 
     <uses-sdk android:minSdkVersion="8" />
 
