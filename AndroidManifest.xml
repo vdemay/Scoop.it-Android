@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="preferExternal"
     package="com.scoopit.android.curation"
-    android:versionCode="7"
-    android:versionName="1.0.4" >
+    android:versionCode="9"
+    android:versionName="1.1.0" >
 
     <uses-sdk android:minSdkVersion="8" />
 

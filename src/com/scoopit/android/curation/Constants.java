@@ -4,28 +4,28 @@ package com.scoopit.android.curation;
 public class Constants {
 
 	// PROD
-//	public static final String REQUEST_URL 		= "http://www.scoop.it/oauth/request";
-//	public static final String ACCESS_URL 		= "http://www.scoop.it/oauth/access";  
-//	public static final String AUTHORIZE_URL 	= "https://www.scoop.it/oauth/authorize";
-//	
-//	public static final String PROFILE_REQUEST 		= "http://www.scoop.it/api/1/profile?getFollowedTopics=false";
-//	public static final String CURATED_POST_REQUEST = "http://www.scoop.it/api/1/topic";
-//	public static final String CURABLE_POST_REQUEST = "http://www.scoop.it/api/1/topic?curated=0&curable=30";
-//	public static final String POST_ACTION_REQUEST = "http://www.scoop.it/api/1/post";
-//	
-//	public static final String UPLOAD_IMAGE_REQUEST = "http://www.scoop.it/api/1/upload";
+	public static final String REQUEST_URL 		= "http://www.scoop.it/oauth/request";
+	public static final String ACCESS_URL 		= "http://www.scoop.it/oauth/access";  
+	public static final String AUTHORIZE_URL 	= "https://www.scoop.it/oauth/authorize";
+	
+	public static final String PROFILE_REQUEST 		= "http://www.scoop.it/api/1/profile?getFollowedTopics=false";
+	public static final String CURATED_POST_REQUEST = "http://www.scoop.it/api/1/topic";
+	public static final String CURABLE_POST_REQUEST = "http://www.scoop.it/api/1/topic?curated=0&curable=30";
+	public static final String POST_ACTION_REQUEST = "http://www.scoop.it/api/1/post";
+	
+	public static final String UPLOAD_IMAGE_REQUEST = "http://www.scoop.it/api/1/upload";
 	
 	// QA
-	public static final String REQUEST_URL 		= "http://qa.scoop.it/oauth/request";
-	public static final String ACCESS_URL 		= "http://qa.scoop.it/oauth/access";  
-	public static final String AUTHORIZE_URL 	= "https://qa.scoop.it/oauth/authorize";
+//	public static final String REQUEST_URL 		= "http://qa.scoop.it/oauth/request";
+//	public static final String ACCESS_URL 		= "http://qa.scoop.it/oauth/access";  
+//	public static final String AUTHORIZE_URL 	= "https://qa.scoop.it/oauth/authorize";
 	
-	public static final String PROFILE_REQUEST 		= "http://qa.scoop.it/api/1/profile?getFollowedTopics=false";
-	public static final String CURATED_POST_REQUEST = "http://qa.scoop.it/api/1/topic";
-	public static final String CURABLE_POST_REQUEST = "http://qa.scoop.it/api/1/topic?curated=0&curable=30";
-	public static final String POST_ACTION_REQUEST = "http://qa.scoop.it/api/1/post";
+//	public static final String PROFILE_REQUEST 		= "http://qa.scoop.it/api/1/profile?getFollowedTopics=false";
+//	public static final String CURATED_POST_REQUEST = "http://qa.scoop.it/api/1/topic";
+///	public static final String CURABLE_POST_REQUEST = "http://qa.scoop.it/api/1/topic?curated=0&curable=30";
+//	public static final String POST_ACTION_REQUEST = "http://qa.scoop.it/api/1/post";
 	
-	public static final String UPLOAD_IMAGE_REQUEST = "http://qa.scoop.it/api/1/upload";
+//	public static final String UPLOAD_IMAGE_REQUEST = "http://qa.scoop.it/api/1/upload";
 	
 	// Local
 //	public static final String REQUEST_URL 		= "http://fbertin.integration.scoop.it/oauth/request";
