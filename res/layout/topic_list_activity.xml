@@ -45,7 +45,8 @@
         android:background="#5FA5ED"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:paddingLeft="15dp" >
+        android:paddingLeft="15dp" 
+        android:id="@+id/info_layout">
 
         <ImageView
             android:id="@+id/icon_info"

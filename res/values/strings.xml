@@ -11,5 +11,5 @@
     <string name="post_list_activity_delete_confirm_title">Are you sure?</string>
     <string name="post_list_activity_delete_confirm_message">You are about to delete \"%1$s\".\nDo you want to proceed?</string>
     
-    <string name="topic_list_activity_info_label">Populate your topic list from the \nScoop.it! website</string>
+    <string name="topic_list_activity_info_label">Create and manage your topics from the web. http://www.scoop.it</string>
 </resources>

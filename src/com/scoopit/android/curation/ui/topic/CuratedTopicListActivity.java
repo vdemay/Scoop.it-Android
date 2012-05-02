@@ -7,6 +7,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 
 import com.scoopit.android.curation.Constants;
+import com.scoopit.android.curation.R;
 import com.scoopit.android.curation.ScoopItApp;
 import com.scoopit.android.curation.OAuth.OAutHelper;
 import com.scoopit.android.curation.helper.NetworkingUtils;
@@ -120,6 +122,16 @@ public class CuratedTopicListActivity extends ListActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(CuratedTopicListActivity.this, ProfileActivity.class);
                 CuratedTopicListActivity.this.startActivity(intent);
+            }
+        });
+        
+        findViewById(com.scoopit.android.curation.R.id.info_layout).setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+            	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.scoop.it"));
+            	startActivity(browserIntent);
+
             }
         });
         
