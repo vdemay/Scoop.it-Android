@@ -42,6 +42,9 @@ public class LoginActivity extends Activity {
     private OAuthProvider provider;
     
     private LinearLayout loadIndicator;
+    
+    // if urlToBookmark is set, then back to the bookmarklet
+    private String urlToBookmark = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,11 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.login_activity);
         
         loadIndicator = (LinearLayout)findViewById(R.id.loginLayout);
+        
+        //is there a urlToBookmark
+        if (getIntent()!= null) {
+        	urlToBookmark = getIntent().getStringExtra("url");
+		} 
         
         new OAuthRequestTokenTask(this, consumer, provider).execute();
     }
@@ -125,8 +133,16 @@ public class LoginActivity extends Activity {
             
             new RetrieveAccessTokenTask(consumer, provider, prefs){
                 protected void onPostExecute(Void result) {
-                    LoginActivity.this.startActivity(
+                	if (urlToBookmark != null) {
+                		//back to the bookmarklet
+                		Intent outData=new Intent();
+                		outData.putExtra("url", urlToBookmark);
+                		setResult(Activity.RESULT_OK,outData);
+                		finish();
+                	} else {
+                		LoginActivity.this.startActivity(
                             new Intent(LoginActivity.this, CuratedTopicListActivity.class));
+                	}
                 };
             }.execute(uri);
             //finish();
@@ -142,6 +158,5 @@ public class LoginActivity extends Activity {
         super.onNewIntent(intent);
         final Uri uri = intent.getData();
         executeStoringForConnectedUser(uri);
-       
     }
 }

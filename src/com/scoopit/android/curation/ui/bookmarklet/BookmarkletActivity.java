@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import com.scoopit.android.curation.Constants;
 import com.scoopit.android.curation.R;
 import com.scoopit.android.curation.ScoopItApp;
+import com.scoopit.android.curation.OAuth.LoginActivity;
 import com.scoopit.android.curation.OAuth.OAutHelper;
 import com.scoopit.android.curation.actions.PostAction;
 import com.scoopit.android.curation.helper.NetworkingUtils;
@@ -55,47 +56,76 @@ public class BookmarkletActivity extends PostCurateActivity {
 		} 
 	}
 	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		String urlBack = data.getStringExtra("url");
+		if (urlBack != null) {
+			url = urlBack;
+			run();
+		}
+	}
+	
 	public void run() {
 		if (url != null) {
-			//lauch get Process
-			launchProcess();
-			//set Click Listener
-			action.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View v) {
-					// start to update the post
-					post.setTitle(titleEditText.getText().toString());
-					post.setContent(descriptionEditText.getText().toString());
-					post.setImageUrl((String) gallery.getSelectedItem());
-					
-					//get topicLid
-					Long id = ((Topic)selectTopic.getSelectedItem()).getId();
+			if (OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(BookmarkletActivity.this)) != null) {
+				//lauch get Process
+				launchProcess();
+				//set Click Listener
+				action.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {
+						// start to update the post
+						post.setTitle(titleEditText.getText().toString());
+						post.setContent(descriptionEditText.getText().toString());
+						post.setImageUrl((String) gallery.getSelectedItem());
+						
+						//get topicLid
+						Long id = ((Topic)selectTopic.getSelectedItem()).getId();
+		
+						PostAction.createPost(post, id.toString(), jsonForSelectedSharers(),
+							BookmarkletActivity.this, true,
+							new PostAction.OnActionComplete() {
 	
-					PostAction.createPost(post, id.toString(), jsonForSelectedSharers(),
-						BookmarkletActivity.this, true,
-						new PostAction.OnActionComplete() {
-
-							@Override
-							public void onActionComplete(Post in, Post out) {
-								final AlertDialog alertDialog = new AlertDialog.Builder(BookmarkletActivity.this).create();
-				                alertDialog.setTitle("Congrats");
-				                alertDialog.setMessage("Post has been scooped");
-				                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-				                   public void onClick(DialogInterface dialog, int which) {
-				                	   //quit
-				                	   BookmarkletActivity.this.finish();
-				                   }
-				                });
-				                alertDialog.show();
-							}
-						});
-				}
-			});
-			
+								@Override
+								public void onActionComplete(Post in, Post out) {
+									final AlertDialog alertDialog = new AlertDialog.Builder(BookmarkletActivity.this).create();
+					                alertDialog.setTitle("Congrats");
+					                alertDialog.setMessage("Post has been scooped");
+					                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+					                   public void onClick(DialogInterface dialog, int which) {
+					                	   //quit
+					                	   BookmarkletActivity.this.finish();
+					                   }
+					                });
+					                alertDialog.show();
+								}
+							});
+					}
+				});
+			} else {
+				//User is not yet logged in
+				final AlertDialog alertDialog = new AlertDialog.Builder(BookmarkletActivity.this).create();
+	            alertDialog.setTitle("Sorry");
+	            alertDialog.setMessage("Your are not yet connected to Scoop.it");
+	            alertDialog.setButton("Cancel", new DialogInterface.OnClickListener() {
+	               public void onClick(DialogInterface dialog, int which) {
+	            	   //quit
+	            	   BookmarkletActivity.this.finish();
+	               }
+	            });
+	            alertDialog.setButton("Connect", new DialogInterface.OnClickListener() {
+	               public void onClick(DialogInterface dialog, int which) {
+	            	   //quit
+	            	   Intent i = new Intent(BookmarkletActivity.this, LoginActivity.class);
+	            	   i.putExtra("url", url);
+	            	   startActivityForResult(i, 1);
+	               }
+		         });
+	            alertDialog.show();
+			}
 		} else {
 			//Should never appear
 			final AlertDialog alertDialog = new AlertDialog.Builder(BookmarkletActivity.this).create();
             alertDialog.setTitle("Error");
-            alertDialog.setMessage("Sorry, can not get data from previous page");
+            alertDialog.setMessage("Sorry, can not get data from this page");
             alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
                public void onClick(DialogInterface dialog, int which) {
             	   //quit
