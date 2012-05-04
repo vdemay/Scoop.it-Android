@@ -76,6 +76,7 @@ public class BookmarkletActivity extends PostCurateActivity {
 						post.setTitle(titleEditText.getText().toString());
 						post.setContent(descriptionEditText.getText().toString());
 						post.setImageUrl((String) gallery.getSelectedItem());
+						post.setUrl(url);
 						
 						//get topicLid
 						Long id = ((Topic)selectTopic.getSelectedItem()).getId();
