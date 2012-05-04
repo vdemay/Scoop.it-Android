@@ -50,12 +50,33 @@ public class PostAction {
             protected Post doInBackground(Void... params) {
                 try {
                     Post p = doPreparePost(url, context);
+                    if (p == null) {
+                    	if (showDialog) {
+                            dialog.dismiss();
+                    	}
+                    	cancel(false);
+                    }
                     return p;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 return null;
             }
+            
+            @Override
+        	protected void onCancelled() {
+        	    AlertDialog.Builder builder = new AlertDialog.Builder(dialog.getContext());
+                builder.setMessage("Sorry! An error occured. Please check your internet connexion and try later! ")
+                       .setCancelable(false)
+                       .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                           public void onClick(DialogInterface dialog, int id) {
+                               
+                           }
+                       });
+                AlertDialog alert = builder.create();
+                alert.show();
+                super.onCancelled();
+        	}
 
             @Override
             protected void onPostExecute(Post result) {
@@ -80,7 +101,11 @@ public class PostAction {
         params.put("action", "prepare");
         String jsonOutput = NetworkingUtils.sendRestfullPostRequest(Constants.POST_ACTION_REQUEST,
                 OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(context)), params);
-        System.out.println("jsonOutput : " + jsonOutput);
+        
+        if (jsonOutput == null) {
+        	return null;
+        }
+        
         JSONObject jsonPost = new JSONObject(jsonOutput);
 
         Post ret = null;

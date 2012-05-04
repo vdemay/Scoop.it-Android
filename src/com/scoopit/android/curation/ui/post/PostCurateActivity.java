@@ -47,8 +47,8 @@ import com.scoopit.android.curation.ui.list.adapater.GalleryPostImageAdapter;
  */
 public class PostCurateActivity extends Activity {
 	
-	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-	private static final int PICK_IMAGE_ACTIVITY_REQUEST_CODE = 101;
+	protected static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+	protected static final int PICK_IMAGE_ACTIVITY_REQUEST_CODE = 101;
 	
 	private Uri capturedImageUri;
 	
@@ -300,6 +300,12 @@ public class PostCurateActivity extends Activity {
 	            protected Void doInBackground(Void... params) {
 	                try {
 	                	String response = NetworkingUtils.uploadImage(OAutHelper.getConsumer(PreferenceManager.getDefaultSharedPreferences(PostCurateActivity.this)), finalImage);
+	                	if (response == null) {
+	                		// error uploading image
+	                		dialog.dismiss();
+	                		cancel(false);
+	                		return null;
+	                	}
 	    				JSONObject json = new JSONObject(response);
 	    				if (json.has("image")) {
 	    					success = true;
@@ -338,6 +344,21 @@ public class PostCurateActivity extends Activity {
 	                    gallery.setAdapter(adapter);
                     }
 	            }
+	            
+	            @Override
+	        	protected void onCancelled() {
+	        	    AlertDialog.Builder builder = new AlertDialog.Builder(dialog.getContext());
+	                builder.setMessage("Sorry! An error occured. Please check your internet connexion and try later! ")
+	                       .setCancelable(false)
+	                       .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+	                           public void onClick(DialogInterface dialog, int id) {
+	                               
+	                           }
+	                       });
+	                AlertDialog alert = builder.create();
+	                alert.show();
+	                super.onCancelled();
+	        	}
 
 	        }.execute();
 		}

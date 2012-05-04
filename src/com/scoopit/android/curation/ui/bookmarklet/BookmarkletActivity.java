@@ -57,10 +57,14 @@ public class BookmarkletActivity extends PostCurateActivity {
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		String urlBack = data.getStringExtra("url");
-		if (urlBack != null) {
-			url = urlBack;
-			run();
+		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE || requestCode == PICK_IMAGE_ACTIVITY_REQUEST_CODE) {
+			super.onActivityResult(requestCode, resultCode, data);
+		} else {
+			String urlBack = data.getStringExtra("url");
+			if (urlBack != null) {
+				url = urlBack;
+				run();
+			}
 		}
 	}
 	
