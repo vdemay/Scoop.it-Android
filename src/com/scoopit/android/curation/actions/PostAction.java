@@ -394,6 +394,9 @@ public class PostAction {
         params.put("title", post.getTitle());
         params.put("content", post.getContent());
         params.put("topicId", topicId);
+        if (post.getUrl() != null) {
+        	params.put("url", post.getUrl());
+        }
         if (shareOn != null) {
             params.put("shareOn", shareOn);
         }
