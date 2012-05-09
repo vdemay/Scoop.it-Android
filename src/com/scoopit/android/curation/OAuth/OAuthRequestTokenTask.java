@@ -1,5 +1,7 @@
 package com.scoopit.android.curation.OAuth;
 
+import java.util.Date;
+
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.exception.OAuthCommunicationException;
@@ -106,7 +108,7 @@ public class OAuthRequestTokenTask extends AsyncTask<Void, Void, Void> {
 	    	mess = "Sorry! Authentification fail, Try later!";
 	    }
 	    
-	    final String errorMess = mess + "[" + respBody + "]";
+	    final String errorMess = mess + "[" + new Date().getTime() + " - " + respBody + "]";
 	    
         builder.setMessage(mess)
                .setCancelable(false)
