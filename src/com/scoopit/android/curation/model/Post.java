@@ -426,10 +426,14 @@ public class Post implements Parcelable {
         String suffix = " | @scoopit http://bit.ly/...";
         int textLengthMax = 140 - suffix.length();
         String editTitle = title;
-        if (editTitle.length() > textLengthMax) {
-            editTitle = editTitle.substring(0, textLengthMax -1);
+        if (editTitle != null) {
+	        if (editTitle.length() > textLengthMax) {
+	            editTitle = editTitle.substring(0, textLengthMax -1);
+	        }
+	        return editTitle + suffix;
+        } else {
+        	return "@scoopit http://bit.ly/...";
         }
-        return editTitle + suffix;
     }
 
 }

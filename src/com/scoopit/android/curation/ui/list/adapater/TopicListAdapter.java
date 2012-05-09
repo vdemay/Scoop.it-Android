@@ -34,7 +34,11 @@ public class TopicListAdapter extends ArrayAdapter<Topic>{
     
     @Override
     public Topic getItem(int position) {
-        return topics.get(position);
+    	Topic t = null;
+        if (topics.size() > position) {
+        	topics.get(position);
+        }
+        return t;
     }
     
     @Override
@@ -47,15 +51,25 @@ public class TopicListAdapter extends ArrayAdapter<Topic>{
         }
         
         //populate view
-        Topic t = topics.get(position);
+        Topic t = null;
+        if (topics.size() > position) {
+        	t = topics.get(position);
+        }
+        
+        TextView userName = (TextView) v.findViewById(R.id.list_adapter_topic_name);
+        TextView content = (TextView) v.findViewById(R.id.list_adapter_topic_description);
+        ImageView imageView = (ImageView)v.findViewById(R.id.list_adapter_topic_image);
         if (t != null) {
-            TextView userName = (TextView) v.findViewById(R.id.list_adapter_topic_name);
-            TextView content = (TextView) v.findViewById(R.id.list_adapter_topic_description);
             
             userName.setText(t.getName());
             content.setText(t.getDescription());
-            
-            ScoopItApp.INSTANCE.imageLoader.displayImage(t.getMediumImageUrl(), (ImageView)v.findViewById(R.id.list_adapter_topic_image));
+
+            imageView.setVisibility(View.VISIBLE);
+            ScoopItApp.INSTANCE.imageLoader.displayImage(t.getMediumImageUrl(), imageView);
+        } else {
+        	userName.setText("");
+        	content.setText("");
+        	imageView.setVisibility(View.GONE);
         }
         
         return v;

@@ -75,7 +75,7 @@ public class LoginActivity extends Activity {
     
     public void loadScoopItUrlForLogin(String url) {
         WebView wv = (WebView)findViewById(R.id.login_webview);
-        
+
         //FIX FOR BUG IN ORDER TO SHOW THE KEYBOARD
         wv.requestFocus(View.FOCUS_DOWN);
         wv.setOnTouchListener(new View.OnTouchListener() {
@@ -93,10 +93,11 @@ public class LoginActivity extends Activity {
                 return false;
             }
         });
-       
+
         wv.loadUrl(url);
         wv.setVisibility(View.GONE);
         wv.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+
         wv.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url){
                 if (url.startsWith("x-oauthflow")) {
@@ -110,6 +111,7 @@ public class LoginActivity extends Activity {
             
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            	
                 super.onPageStarted(view, url, favicon);
                 loadIndicator.setVisibility(View.VISIBLE);
             }
@@ -120,6 +122,7 @@ public class LoginActivity extends Activity {
                 if (url.contains("/login")) {
                     view.setVisibility(View.VISIBLE);
                 }
+                
                 loadIndicator.setVisibility(View.GONE);
             }
         });
