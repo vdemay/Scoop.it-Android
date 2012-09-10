@@ -36,7 +36,7 @@ public class TopicListAdapter extends ArrayAdapter<Topic>{
     public Topic getItem(int position) {
     	Topic t = null;
         if (topics.size() > position) {
-        	topics.get(position);
+        	t = topics.get(position);
         }
         return t;
     }
